@@ -106,6 +106,42 @@ def page_path(key, F):
     return 'index.html' if key == F['home'] else f'designs/{key}.html'
 
 
+
+# ---------------------------------------------------------------- the company's own identity
+def logo(F, depth, cls='logo', force_plate=False):
+    i = F.get('identity') or {}
+    if i.get('logo_html'):
+        return f'<span class="{cls}" role="img" aria-label="{e(i["logo_alt"])}">{i["logo_html"]}</span>'
+    if i.get('logo_img'):
+        src = rel(depth, i['logo_img'])
+        dark = f'<source srcset="{rel(depth, i["logo_img_dark"])}" media="(prefers-color-scheme: dark)">' if i.get('logo_img_dark') and not force_plate else ''
+        img = f'<picture>{dark}<img src="{src}" width="{i["logo_w"]}" height="{i["logo_h"]}" alt="{e(i["logo_alt"])}"></picture>'
+        plate = ' plate' if i.get('logo_plate') or force_plate else ''
+        return f'<span class="{cls}{plate}">{img}</span>'
+    return ''
+
+
+def shot(F, depth, n=0, cls='shot', lazy=True):
+    i = F.get('identity') or {}
+    shots = i.get('shots') or []
+    if n >= len(shots):
+        return ''
+    x = shots[n]
+    host = re.sub(r'^https?://', '', x['url']).rstrip('/')
+    ld = ' loading="lazy" decoding="async"' if lazy else ''
+    return (f'<figure class="{cls}"><a href="{e(x["url"])}" class="frame" aria-label="{e(x["caption"])}: open the real page">'
+            f'<span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>{e(host)}</span></span>'
+            f'<img src="{rel(depth, x["file"])}" width="1200" height="750" alt="Screenshot: {e(x["caption"])}"{ld}></a>'
+            f'<figcaption>{e(x["caption"])}. Screenshot taken {e(fmt_date(F["updated"]))}; '
+            f'<a href="{e(x["url"])}">open the real page &#8599;</a></figcaption></figure>')
+
+
+def gallery(F, depth, start=0, cls='gallery'):
+    shots = (F.get('identity') or {}).get('shots') or []
+    if len(shots) <= start:
+        return ''
+    return f'<div class="{cls}">' + ''.join(shot(F, depth, k) for k in range(start, len(shots))) + '</div>'
+
 # ---------------------------------------------------------------- visuals
 def svg_timeline(F, cls='tl-svg'):
     ev = sorted(F.get('timeline', []), key=lambda x: x['date'])
@@ -286,6 +322,26 @@ sup.cites a:hover{text-decoration:underline}
 .foot{font:.85rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted);max-width:76rem;margin:0 auto;padding:1rem 1rem 2.5rem}
 .foot p{margin:0 0 .4rem}
 .foot a{color:var(--muted)}
+
+/* the company's own identity: logos and framed screenshots of the real site */
+.logo{display:inline-flex;align-items:center}
+.logo img{height:2.6rem;width:auto}
+.logo.plate{background:#fff;border-radius:10px;padding:.45rem .7rem}
+.wm-sgit{font:800 2.2rem/1 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.02em}
+.wm-sgit b{color:#0f766e}
+.wm-ac,.wm-sw{display:inline-flex;align-items:center;gap:.5rem;font:700 1.5rem/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wm-sw{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
+.shot{margin:0}
+.shot .frame{display:block;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.28),0 0 0 1px rgba(127,127,127,.25);text-decoration:none;transition:transform .2s}
+.shot .frame:hover{transform:translateY(-3px)}
+.shot .bar{display:flex;align-items:center;gap:.35rem;padding:.45rem .7rem;background:#e9e9ec;color:#3b3b40;font:.75rem/1.2 ui-monospace,Menlo,Consolas,monospace}
+.shot .bar i{width:.6rem;height:.6rem;border-radius:50%;background:#c4c4ca;display:inline-block}
+.shot .bar i:first-child{background:#ff5f57}.shot .bar i:nth-child(2){background:#febc2e}.shot .bar i:nth-child(3){background:#28c840}
+.shot .bar span{margin-left:.5rem;background:#fff;border-radius:6px;padding:.15rem .6rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shot img{width:100%;height:auto}
+.shot figcaption{font-size:.85rem;color:var(--muted);margin-top:.6rem}
+.gallery{display:grid;gap:1.6rem;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr))}
+@media (prefers-reduced-motion:reduce){.shot .frame{transition:none}.shot .frame:hover{transform:none}}
 @media print{.top,.pick{display:none}}
 @media (max-width:40rem){.tl-svg{display:none}.map-svg{padding:.4rem!important}.map-svg .nlabel{font-size:27px!important}.map-svg .hlabel{font-size:32px!important}}
 """
@@ -413,8 +469,20 @@ def d_brochure(F, depth):
                   f'--bg:#121315;--card:#1c1e21;--fg:#ececea;--muted:#a9abb0;--line:#33363b;--link:{b["accent_dark"]};--acc:{b["accent_dark"]};--acc-ink:#0b0c0e;--soft:{b["soft_dark"]}') + """
 body{font:1.0625rem/1.62 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 main{max-width:76rem;margin:0 auto;padding:0 1rem}
-.hero{display:grid;gap:1.5rem;padding:2.5rem 0 2rem;align-items:center}
-@media (min-width:56rem){.hero{grid-template-columns:1.25fr 1fr;padding:4rem 0 3rem;gap:3rem}}
+.hero-band{background:radial-gradient(120% 140% at 0% 0%,var(--hero1) 0%,var(--hero2) 55%,var(--hero3) 100%);color:#fff;overflow:hidden}
+.hero{max-width:76rem;margin:0 auto;display:grid;gap:2rem;padding:2.5rem 1rem 3rem;align-items:center}
+@media (min-width:56rem){.hero{grid-template-columns:1fr 1.1fr;padding:4.5rem 1rem 5rem;gap:3.5rem}}
+.hero .eyebrow{color:#fff;opacity:.9;margin-top:1.4rem}
+.hero h1{color:#fff}
+.hero .lede{color:rgba(255,255,255,.9)}
+.hero .cta{background:#fff;color:var(--hero2)}
+.hero .wm-sgit b{color:#99f6e4}
+.hero .logo{color:#fff}
+@media (min-width:56rem){.hero-shot .shot{transform:perspective(1400px) rotateY(-7deg) rotateX(2deg)}}
+.hero-shot .shot figcaption{color:rgba(255,255,255,.85)}
+.hero-shot .shot figcaption a{color:#fff}
+.sub{color:var(--muted);margin:-.4rem 0 1.4rem}
+blockquote.quote{margin:2.5rem 0 1rem}
 .eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;font-weight:700;color:var(--acc);margin:0 0 .6rem}
 h1{font-size:clamp(2.2rem,6vw,3.7rem);line-height:1.04;margin:0 0 1rem;letter-spacing:-.02em}
 .lede{font-size:clamp(1.1rem,2.2vw,1.3rem);line-height:1.5;margin:0 0 1.4rem;max-width:38rem;color:var(--muted)}
@@ -425,6 +493,7 @@ h1{font-size:clamp(2.2rem,6vw,3.7rem);line-height:1.04;margin:0 0 1rem;letter-sp
 .quote footer{font-size:.9rem;color:var(--muted)}
 section{padding:2.2rem 0;border-top:1px solid var(--line)}
 h2{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.15;margin:0 0 1rem;letter-spacing:-.01em}
+section>h2::before,.two h2::before{content:"";display:block;width:2.4rem;height:5px;border-radius:3px;background:var(--acc);margin-bottom:.7rem}
 .two{display:grid;gap:1.5rem}
 @media (min-width:56rem){.two{grid-template-columns:1fr 1fr;gap:3rem}}
 .two ul{padding-left:1.2rem;margin:0}.two li{margin:.35rem 0}
@@ -443,7 +512,7 @@ h2{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.15;margin:0 0 1rem;letter-
 .map-svg .hlabel{fill:var(--acc-ink);font:800 28px system-ui,sans-serif}
 figcaption{font-size:.85rem;color:var(--muted);margin-top:.5rem}
 .cards{list-style:none;padding:0;margin:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr))}
-.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem}
+.cards li{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--acc);border-radius:14px;padding:1.1rem 1.2rem;box-shadow:0 6px 18px rgba(0,0,0,.06)}
 .cards h3{margin:0 0 .35rem;font-size:1.15rem}
 .cards p{margin:0;color:var(--muted);font-size:.97rem}
 .tl-svg{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1rem;margin-bottom:1rem}
@@ -477,12 +546,14 @@ figcaption{font-size:.85rem;color:var(--muted);margin-top:.5rem}
 """
     p = 'b-'
     q = F['quote']
+    css += ':root{--hero1:%s;--hero2:%s;--hero3:%s}' % (b.get('hero1', b['accent']), b.get('hero2', b['accent']), b.get('hero3', '#0b0d10'))
     body = [head(F, 'brochure', depth, f'{F["name"]}: {F["kicker"]}', F['description'], css),
             nav(F, 'brochure', depth, std_links(p)),
+            f'<div class="hero-band"><div class="hero"><div class="hero-text">{logo(F, depth, force_plate=True)}<p class="eyebrow">{e(F["kicker"])}</p><h1>{md(F["headline"])}</h1>'
+            f'<p class="lede">{md(F["lede"])}</p><a class="cta" href="{e(F["url"])}">Go to {e(F["url_label"])} &#8599;</a></div>'
+            f'<div class="hero-shot">{shot(F, depth, 0, lazy=False)}</div></div></div>',
             '<main id="main">',
-            f'<div class="hero"><div><p class="eyebrow">{e(F["kicker"])}</p><h1>{md(F["headline"])}</h1>'
-            f'<p class="lede">{md(F["lede"])}</p><a class="cta" href="{e(F["url"])}">Go to {e(F["url_label"])}</a></div>'
-            f'<blockquote class="quote"><p>&ldquo;{e(q["q"])}&rdquo;</p><footer>{md(q["who"])}{cite(F, q.get("s"), p)}</footer></blockquote></div>',
+            f'<blockquote class="quote"><p>&ldquo;{e(q["q"])}&rdquo;</p><footer>{md(q["who"])}{cite(F, q.get("s"), p)}</footer></blockquote>',
             f'<section id="{p}what"><div class="two"><div><h2>What it is</h2>{paras(F, F["what"], p)}</div>'
             f'<div><h2>Who it is for</h2>{bullets(F, F["for_whom"], p)}</div></div></section>',
             f'<section id="{p}how"><h2>How it works</h2>{flow(F, p)}</section>',
@@ -492,6 +563,8 @@ figcaption{font-size:.85rem;color:var(--muted);margin-top:.5rem}
         body.append(f'<section id="{p}figures"><h2>In figures</h2>{figures(F, p)}{chart(F, p)}</section>')
     if F.get('people'):
         body.append(f'<section><h2>People</h2>{people(F, p)}</section>')
+    if (F.get('identity') or {}).get('shots', [])[1:]:
+        body.append(f'<section id="{p}real"><h2>On the real site</h2><p class="sub">Pages from {e(F["url_label"])} itself. Each one opens the real page.</p>{gallery(F, depth, 1)}</section>')
     body.append(f'<div class="visit-box"><h2>See it for yourself</h2><p>{md(F["visit"])}</p>'
                 f'<a class="cta" href="{e(F["url"])}">Visit {e(F["url_label"])} &#8599;</a></div>')
     body.append(sources(F, p))
@@ -604,6 +677,9 @@ main{max-width:46rem;margin:0 auto;padding:0 1.1rem}
 .open{padding:3rem 0 1.5rem;text-align:center}
 .open p.k{font:700 .8rem/1 system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--acc)}
 h1{font-size:clamp(2.3rem,7vw,3.8rem);line-height:1.05;margin:.5rem 0 1rem;font-weight:700}
+.open .logo{margin-bottom:1.2rem}
+.story-shot{margin:2.5rem -1rem}
+@media (min-width:60rem){.story-shot{margin:3rem -8rem}}
 .open .lede{font-size:1.25rem;color:var(--muted);font-style:italic}
 h2{font-size:1.6rem;margin:2.5rem 0 1rem;text-align:center}
 h2::after{content:"";display:block;width:3rem;height:2px;background:var(--acc);margin:.6rem auto 0}
@@ -648,8 +724,9 @@ h2::after{content:"";display:block;width:3rem;height:2px;background:var(--acc);m
             nav(F, 'story', depth, [('Beginnings', f'#{p}what'), ('Timeline', f'#{p}story'), ('How it works', f'#{p}how'),
                                      ('Products', f'#{p}products'), ('Sources', f'#{p}h-src')]),
             '<main id="main">',
-            f'<div class="open"><p class="k">The story of</p><h1>{e(F["name"])}</h1><p class="lede">{md(F["lede"])}</p></div>',
+            f'<div class="open">{logo(F, depth)}<p class="k">The story of</p><h1>{e(F["name"])}</h1><p class="lede">{md(F["lede"])}</p></div>',
             f'<div class="prose" id="{p}what">{paras(F, F.get("story", F["what"]), p)}</div>',
+            f'<div class="story-shot">{shot(F, depth, 0)}</div>',
             f'<h2 id="{p}story">Date by date</h2><ol class="chap">{chap}</ol>',
             f'<blockquote class="pull">&ldquo;{e(q["q"])}&rdquo;<footer>{md(q["who"])}{cite(F, q.get("s"), p)}</footer></blockquote>',
             f'<h2 id="{p}how">How it works</h2>{flow(F, p)}',
@@ -678,6 +755,9 @@ h1{font:900 clamp(2.2rem,6.5vw,4.4rem)/1.02 Georgia,serif;margin:0 0 1rem;letter
 .stand{font-size:clamp(1.15rem,2.4vw,1.45rem);line-height:1.45;color:var(--muted);max-width:50rem;margin:0 0 1rem}
 .by{font:.85rem system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:.5rem 0;margin:0 0 1.6rem}
 .band{background:var(--band);height:10px;margin:0 0 1.8rem}
+.lead{margin:0 0 2.2rem}
+.lead .shot{max-width:60rem}
+.lead .shot figcaption{font-family:system-ui,sans-serif}
 .grid{display:grid;gap:2rem}
 @media (min-width:60rem){.grid{grid-template-columns:1fr 20rem;gap:3rem}}
 .body p{margin:0 0 1.1rem}
@@ -687,6 +767,7 @@ h1{font:900 clamp(2.2rem,6.5vw,4.4rem)/1.02 Georgia,serif;margin:0 0 1rem;letter
 .pq footer{font:normal .85rem system-ui,sans-serif;color:var(--muted);margin-top:.5rem}
 aside{font-family:system-ui,sans-serif;font-size:.95rem}
 aside .box{background:var(--card);padding:1.1rem 1.2rem;margin:0 0 1.4rem;border-top:4px solid var(--fg)}
+aside .brandbox p{margin:.6rem 0 0}
 aside h2{font:800 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.14em;margin:0 0 .8rem}
 .figs{list-style:none;margin:0;padding:0}
 .figs li{display:flex;flex-direction:column;padding:.5rem 0;border-bottom:1px solid var(--line)}
@@ -720,7 +801,9 @@ figcaption{font:.82rem system-ui,sans-serif;color:var(--muted)}
             '<main id="main">',
             f'<p class="kick">{e(nw["kicker"])}</p><h1>{md(nw["headline"])}</h1><p class="stand">{md(nw["standfirst"])}</p>',
             f'<p class="by">Written by startups.b, the agent that keeps this site, from {e(F["name"])}\'s own public pages. Every claim is linked to its source.</p>',
-            '<div class="band" role="presentation"></div><div class="grid"><article class="body" id="' + p + 'what">',
+            '<div class="band" role="presentation"></div>',
+            f'<div class="lead">{shot(F, depth, 0, lazy=False)}</div>',
+            '<div class="grid"><article class="body" id="' + p + 'what">',
             paras(F, F.get('story', F['what']), p),
             f'<blockquote class="pq">&ldquo;{e(q["q"])}&rdquo;<footer>{md(q["who"])}{cite(F, q.get("s"), p)}</footer></blockquote>',
             paras(F, F['what'], p),
@@ -729,6 +812,7 @@ figcaption{font:.82rem system-ui,sans-serif;color:var(--muted)}
             f'<h2 id="{p}story">The timeline</h2>{svg_timeline(F)}',
             f'<p>{md(F["visit"])}</p><p><a class="more" href="{e(F["url"])}">Read more at {e(F["url_label"])} &#8599;</a></p>',
             '</article><aside>']
+    body.append(f'<div class="box brandbox">{logo(F, depth)}<p><a href="{e(F["url"])}">{e(F["url_label"])} &#8599;</a></p></div>')
     if F.get('figures'):
         body.append(f'<div class="box"><h2>At a glance</h2>{figures(F, p)}</div>')
     body.append(f'<div class="box"><h2>Who it is for</h2>{bullets(F, F["for_whom"], p)}</div>')
@@ -750,6 +834,8 @@ def d_brief(F, depth):
                   '--bg:#161616;--card:#1e1e1e;--fg:#eee;--muted:#bbb;--line:#555;--link:#8ab4f8') + """
 body{font:1rem/1.55 "Helvetica Neue",Helvetica,Arial,sans-serif}
 main{max-width:52rem;margin:0 auto;padding:1.5rem 1rem 1rem}
+main>.logo{margin-bottom:.6rem}
+main>.logo img{height:2.2rem}
 h1{font-size:1.9rem;margin:0 0 .2rem}
 .sub{margin:0 0 1rem;color:var(--muted)}
 h2{font-size:1.05rem;text-transform:uppercase;letter-spacing:.06em;margin:1.4rem 0 .4rem;border-bottom:1px solid var(--line);padding-bottom:.2rem}
@@ -776,7 +862,7 @@ ul,ol{padding-left:1.3rem}
     body = [head(F, 'brief', depth, f'{F["name"]}: the brief', F['description'], css),
             nav(F, 'brief', depth, std_links(p)),
             '<main id="main">',
-            f'<h1>{e(F["name"])}</h1><p class="sub">{e(F["kicker"])}. Official site: <a href="{e(F["url"])}">{e(F["url_label"])}</a>. Checked {e(fmt_date(F["updated"]))}.</p>',
+            f'{logo(F, depth)}<h1>{e(F["name"])}</h1><p class="sub">{e(F["kicker"])}. Official site: <a href="{e(F["url"])}">{e(F["url_label"])}</a>. Checked {e(fmt_date(F["updated"]))}.</p>',
             '<p class="printnote">This design prints on A4 as a one-page brief with its sources.</p>',
             f'<h2 id="{p}what">In one line</h2><p>&ldquo;{e(F["quote"]["q"])}&rdquo; ({md(F["quote"]["who"])}){cite(F, F["quote"].get("s"), p)}</p>',
             f'<h2>What it is</h2>{paras(F, F["what"], p)}',

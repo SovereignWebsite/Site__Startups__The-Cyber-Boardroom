@@ -24,4 +24,4 @@ Every fact on this site comes from these public pages. This file is written by t
 
 ## Images
 
-No images from the company are used: its logo, favicon and videos carry no stated licence for reuse. Every diagram and the favicon here were drawn for this site.
+Used with Dinis Cruz's agreement (20 November 2026, relayed by sites.b): these are his own companies, so their published brand assets may be used. Logo: from https://static.dev.aws.cyber-boardroom.com/cbr-static/latest/assets/cbr/cbr-logo-beta.png. Screenshots of the company's live site, taken by startups.b with Playwright on 20 November 2026 and linked to the page each shows: https://thecyberboardroom.com/web/home; https://thecyberboardroom.com/web/athena. Every diagram, the favicon and the share card were drawn for this site.

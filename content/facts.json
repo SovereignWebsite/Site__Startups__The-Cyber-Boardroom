@@ -1,92 +1,423 @@
 {
-  "slug": "the-cyber-boardroom",
-  "name": "The Cyber Boardroom",
-  "mark": "CB",
-  "kicker": "Cyber readiness for boards of directors",
-  "domain": "the-cyber-boardroom.startups.sovereignweb.site",
-  "url": "https://thecyberboardroom.com/web/home",
-  "url_label": "thecyberboardroom.com",
-  "repo": "https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom",
-  "updated": "2026-11-20",
-  "home": "newsroom",
-  "description": "An independent brochure about The Cyber Boardroom, an AI cyber security advisor and content for boards of directors, made from its own public pages.",
-  "headline": "Cyber security, explained to the board",
-  "lede": "The Cyber Boardroom gives board members an AI cyber security advisor called Athena, short videos and curated articles, so they can understand their organisation's cyber security agenda and fulfil their duties as directors.",
-  "quote": {"q": "Welcome to The Cyber Boardroom, the one-stop shop that boards of directors rely on for their cyber readiness.", "who": "The welcome on thecyberboardroom.com", "s": [1]},
-  "what": [
-    {"t": "The Cyber Boardroom is built for boards of directors. Its stated mission is \"to help you understand your organisation's cyber security agenda, as well as fulfil your duties as a board member.\"", "s": [1]},
-    {"t": "At its centre is Athena, an AI advisor built on large language models to answer board members' questions about cyber security and the risks their organisation faces.", "s": [2]},
-    {"t": "Around Athena sit curated articles and a library of 60-second videos on key cyber security topics, which frame cyber security as \"a risk management conversation\", not an IT one.", "s": [3, 4, 5]},
-    {"t": "The site is labelled \"community edition\" and \"beta\". A Community Edition can be installed with pip or Docker.", "s": [1, 6]}
-  ],
-  "story": [
-    {"t": "The Cyber Boardroom came from a question every director faces: what does cyber security mean for my organisation, and what should I do about it? Its own content answers that it is \"a risk management conversation.\"", "s": [5]},
-    {"t": "The first videos, introducing the platform and its advisor Athena, are dated February 2024. On 8 April 2024 its founder Dinis Cruz posted that \"The Cyber Boardroom LTD has been created, it's official now\".", "s": [7, 8]},
-    {"t": "In an interview published by SC Media UK on 22 April 2024, the platform was described as \"serverless and driven by GenAI bots and agents\".", "s": [9]},
-    {"t": "July 2024 brought the first MVP write-up and the Community Edition, which anyone can install. The open-source packages behind the site kept being released until January 2025.", "s": [8, 10, 11]},
-    {"t": "Today The Cyber Boardroom Limited, registered in the UK, is named on sgit.ai as the commercial vehicle behind sgit.ai and RiskMandate.ai.", "s": [12]}
-  ],
-  "for_whom": [
-    {"t": "Boards of directors and individual board members.", "s": [1]},
-    {"t": "Directors and executives who need to understand cyber risk without being technical, through CFO and CISO personas among others.", "s": [9, 13]},
-    {"t": "Anyone who wants to run it themselves: the Community Edition installs with pip or Docker.", "s": [6]}
-  ],
-  "how": [
-    {"title": "Ask Athena", "t": "A board member asks a question; Athena, built on large language models, answers about cyber security only.", "s": [2]},
-    {"title": "Make it yours", "t": "Board members personalise Athena by adding prompts in their profile.", "s": [1]},
-    {"title": "Choose a model", "t": "The site works with several LLM platforms, including Groq, Mistral, OpenAI and Ollama.", "s": [14]},
-    {"title": "Learn in minutes", "t": "Curated articles and 60-second videos cover the topics boards need.", "s": [3, 4]}
-  ],
-  "products": [
-    {"name": "Athena", "short": "Athena", "url": "https://thecyberboardroom.com/web/athena", "t": "\"Your AI cyber security advisor\", named after the Greek goddess of wisdom, courage and strategic warfare.", "s": [2, 15]},
-    {"name": "Curated content", "short": "Articles", "url": "https://thecyberboardroom.com/web/content", "t": "Articles including Cyber security in the boardroom, Incident management and The importance of digital trust.", "s": [3]},
-    {"name": "60-second videos", "short": "Videos", "url": "https://thecyberboardroom.com/web/content/videos", "t": "A library of short videos on key cyber security topics.", "s": [4]},
-    {"name": "Board personas", "short": "Personas", "t": "CFO and CISO personas to practise the conversation from each side.", "s": [13]},
-    {"name": "Chat with LLMs", "short": "Multi-LLM", "url": "https://thecyberboardroom.com/web/chat-with-llms", "t": "Try several large language models side by side, without a system prompt.", "s": [14]},
-    {"name": "Community Edition", "short": "Community", "url": "https://thecyberboardroom.com/web/docs/support/install-cbr-community", "t": "Install it yourself with pip or Docker; the packages are MIT licensed on PyPI.", "s": [6, 10]}
-  ],
-  "timeline": [
-    {"date": "2024-02-25", "label": "\"Meet Athena\" video.", "s": [7]},
-    {"date": "2024-04-08", "label": "\"The Cyber Boardroom LTD has been created\".", "s": [8]},
-    {"date": "2024-04-22", "label": "SC Media UK publishes an interview with Dinis Cruz on The Cyber Boardroom.", "s": [9]},
-    {"date": "2024-07-16", "label": "\"Why, How, and What (v0.4, First MVP)\" published.", "s": [8]},
-    {"date": "2024-07-30", "label": "The Community Edition is introduced.", "s": [8]},
-    {"date": "2024-12-13", "label": "Latest release of the website package on PyPI, 0.221.1.", "s": [10]},
-    {"date": "2025-01-29", "label": "Latest release of the content package on PyPI, 0.9.78.", "s": [11]}
-  ],
-  "figures": [
-    {"value": "60 s", "label": "length of each video in the library", "asof": "2026-11-20", "s": [4]},
-    {"value": "6", "label": "languages Athena was shown speaking, in a July 2024 demo", "asof": "2024-07-31", "s": [8, 16]},
-    {"value": "7", "label": "LLM platforms listed on the Chat with LLMs page", "asof": "2026-11-20", "s": [14]}
-  ],
-  "people": [
-    {"name": "Dinis Cruz", "role": "founder, described by SC Media UK as \"an experienced CISO for multiple businesses\"", "s": [9, 17]}
-  ],
-  "visit": "Athena, the videos and the articles are all on the site, and the Community Edition is free to install.",
-  "newsroom": {
-    "kicker": "Startup profile",
-    "headline": "The board's own cyber security advisor",
-    "standfirst": "The Cyber Boardroom built Athena, an AI advisor that answers directors' questions about cyber risk, with short videos and plain articles around it."
-  },
-  "brand": {"accent": "#2b5c60", "accent_dark": "#8fcfd4", "soft": "#e4efef", "soft_dark": "#142829"},
-  "images_note": "No images from the company are used: its logo, favicon and videos carry no stated licence for reuse. Every diagram and the favicon here were drawn for this site.",
-  "sources": [
-    {"id": 1, "title": "The Cyber Boardroom, home page", "url": "https://thecyberboardroom.com/web/home", "accessed": "2026-11-20"},
-    {"id": 2, "title": "The Cyber Boardroom, Athena", "url": "https://thecyberboardroom.com/web/athena", "accessed": "2026-11-20"},
-    {"id": 3, "title": "The Cyber Boardroom, content", "url": "https://thecyberboardroom.com/web/content", "accessed": "2026-11-20"},
-    {"id": 4, "title": "The Cyber Boardroom, videos", "url": "https://thecyberboardroom.com/web/content/videos", "accessed": "2026-11-20"},
-    {"id": 5, "title": "The Cyber Boardroom, cyber security in the boardroom", "url": "https://thecyberboardroom.com/web/content/cybersecurity-in-boardroom", "accessed": "2026-11-20"},
-    {"id": 6, "title": "The Cyber Boardroom, install the Community Edition", "url": "https://thecyberboardroom.com/web/docs/support/install-cbr-community", "accessed": "2026-11-20"},
-    {"id": 7, "title": "The Cyber Boardroom, home page layout (video files)", "url": "https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/layout.md", "accessed": "2026-11-20"},
-    {"id": 8, "title": "The Cyber Boardroom, blog posts", "url": "https://thecyberboardroom.com/web/docs/news/blog-posts", "accessed": "2026-11-20"},
-    {"id": 9, "title": "SC Media UK, Interview: Dinis Cruz on The Cyber Boardroom (22 April 2024)", "url": "https://insight.scmagazineuk.com/interview-dinis-cruz-on-the-cyber-boardoom", "accessed": "2026-11-20"},
-    {"id": 10, "title": "PyPI, cbr-website-beta", "url": "https://pypi.org/project/cbr-website-beta/#history", "accessed": "2026-11-20"},
-    {"id": 11, "title": "PyPI, cbr-content", "url": "https://pypi.org/project/cbr-content/#history", "accessed": "2026-11-20"},
-    {"id": 12, "title": "sgit.ai, about", "url": "https://sgit.ai/about/index.html", "accessed": "2026-11-20"},
-    {"id": 13, "title": "The Cyber Boardroom, CISO personas", "url": "https://thecyberboardroom.com/web/docs/demos/personas/ciso/index", "accessed": "2026-11-20"},
-    {"id": 14, "title": "The Cyber Boardroom, chat with LLMs", "url": "https://thecyberboardroom.com/web/chat-with-llms", "accessed": "2026-11-20"},
-    {"id": 15, "title": "The Cyber Boardroom, Athena card", "url": "https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/card-1.md", "accessed": "2026-11-20"},
-    {"id": 16, "title": "The Cyber Boardroom, speak in 6 languages", "url": "https://thecyberboardroom.com/web/docs/platforms/groq/speak-in-6-languages", "accessed": "2026-11-20"},
-    {"id": 17, "title": "Dinis Cruz, home page", "url": "https://diniscruz.ai/", "accessed": "2026-11-20"}
+ "slug": "the-cyber-boardroom",
+ "name": "The Cyber Boardroom",
+ "mark": "CB",
+ "kicker": "Cyber readiness for boards of directors",
+ "domain": "the-cyber-boardroom.startups.sovereignweb.site",
+ "url": "https://thecyberboardroom.com/web/home",
+ "url_label": "thecyberboardroom.com",
+ "repo": "https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom",
+ "updated": "2026-11-20",
+ "home": "newsroom",
+ "description": "An independent brochure about The Cyber Boardroom, an AI cyber security advisor and content for boards of directors, made from its own public pages.",
+ "headline": "Cyber security, explained to the board",
+ "lede": "The Cyber Boardroom gives board members an AI cyber security advisor called Athena, short videos and curated articles, so they can understand their organisation's cyber security agenda and fulfil their duties as directors.",
+ "quote": {
+  "q": "Welcome to The Cyber Boardroom, the one-stop shop that boards of directors rely on for their cyber readiness.",
+  "who": "The welcome on thecyberboardroom.com",
+  "s": [
+   1
   ]
+ },
+ "what": [
+  {
+   "t": "The Cyber Boardroom is built for boards of directors. Its stated mission is \"to help you understand your organisation's cyber security agenda, as well as fulfil your duties as a board member.\"",
+   "s": [
+    1
+   ]
+  },
+  {
+   "t": "At its centre is Athena, an AI advisor built on large language models to answer board members' questions about cyber security and the risks their organisation faces.",
+   "s": [
+    2
+   ]
+  },
+  {
+   "t": "Around Athena sit curated articles and a library of 60-second videos on key cyber security topics, which frame cyber security as \"a risk management conversation\", not an IT one.",
+   "s": [
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "t": "The site is labelled \"community edition\" and \"beta\". A Community Edition can be installed with pip or Docker.",
+   "s": [
+    1,
+    6
+   ]
+  }
+ ],
+ "story": [
+  {
+   "t": "The Cyber Boardroom came from a question every director faces: what does cyber security mean for my organisation, and what should I do about it? Its own content answers that it is \"a risk management conversation.\"",
+   "s": [
+    5
+   ]
+  },
+  {
+   "t": "The first videos, introducing the platform and its advisor Athena, are dated February 2024. On 8 April 2024 its founder Dinis Cruz posted that \"The Cyber Boardroom LTD has been created, it's official now\".",
+   "s": [
+    7,
+    8
+   ]
+  },
+  {
+   "t": "In an interview published by SC Media UK on 22 April 2024, the platform was described as \"serverless and driven by GenAI bots and agents\".",
+   "s": [
+    9
+   ]
+  },
+  {
+   "t": "July 2024 brought the first MVP write-up and the Community Edition, which anyone can install. The open-source packages behind the site kept being released until January 2025.",
+   "s": [
+    8,
+    10,
+    11
+   ]
+  },
+  {
+   "t": "Today The Cyber Boardroom Limited, registered in the UK, is named on sgit.ai as the commercial vehicle behind sgit.ai and RiskMandate.ai.",
+   "s": [
+    12
+   ]
+  }
+ ],
+ "for_whom": [
+  {
+   "t": "Boards of directors and individual board members.",
+   "s": [
+    1
+   ]
+  },
+  {
+   "t": "Directors and executives who need to understand cyber risk without being technical, through CFO and CISO personas among others.",
+   "s": [
+    9,
+    13
+   ]
+  },
+  {
+   "t": "Anyone who wants to run it themselves: the Community Edition installs with pip or Docker.",
+   "s": [
+    6
+   ]
+  }
+ ],
+ "how": [
+  {
+   "title": "Ask Athena",
+   "t": "A board member asks a question; Athena, built on large language models, answers about cyber security only.",
+   "s": [
+    2
+   ]
+  },
+  {
+   "title": "Make it yours",
+   "t": "Board members personalise Athena by adding prompts in their profile.",
+   "s": [
+    1
+   ]
+  },
+  {
+   "title": "Choose a model",
+   "t": "The site works with several LLM platforms, including Groq, Mistral, OpenAI and Ollama.",
+   "s": [
+    14
+   ]
+  },
+  {
+   "title": "Learn in minutes",
+   "t": "Curated articles and 60-second videos cover the topics boards need.",
+   "s": [
+    3,
+    4
+   ]
+  }
+ ],
+ "products": [
+  {
+   "name": "Athena",
+   "short": "Athena",
+   "url": "https://thecyberboardroom.com/web/athena",
+   "t": "\"Your AI cyber security advisor\", named after the Greek goddess of wisdom, courage and strategic warfare.",
+   "s": [
+    2,
+    15
+   ]
+  },
+  {
+   "name": "Curated content",
+   "short": "Articles",
+   "url": "https://thecyberboardroom.com/web/content",
+   "t": "Articles including Cyber security in the boardroom, Incident management and The importance of digital trust.",
+   "s": [
+    3
+   ]
+  },
+  {
+   "name": "60-second videos",
+   "short": "Videos",
+   "url": "https://thecyberboardroom.com/web/content/videos",
+   "t": "A library of short videos on key cyber security topics.",
+   "s": [
+    4
+   ]
+  },
+  {
+   "name": "Board personas",
+   "short": "Personas",
+   "t": "CFO and CISO personas to practise the conversation from each side.",
+   "s": [
+    13
+   ]
+  },
+  {
+   "name": "Chat with LLMs",
+   "short": "Multi-LLM",
+   "url": "https://thecyberboardroom.com/web/chat-with-llms",
+   "t": "Try several large language models side by side, without a system prompt.",
+   "s": [
+    14
+   ]
+  },
+  {
+   "name": "Community Edition",
+   "short": "Community",
+   "url": "https://thecyberboardroom.com/web/docs/support/install-cbr-community",
+   "t": "Install it yourself with pip or Docker; the packages are MIT licensed on PyPI.",
+   "s": [
+    6,
+    10
+   ]
+  }
+ ],
+ "timeline": [
+  {
+   "date": "2024-02-25",
+   "label": "\"Meet Athena\" video.",
+   "s": [
+    7
+   ]
+  },
+  {
+   "date": "2024-04-08",
+   "label": "\"The Cyber Boardroom LTD has been created\".",
+   "s": [
+    8
+   ]
+  },
+  {
+   "date": "2024-04-22",
+   "label": "SC Media UK publishes an interview with Dinis Cruz on The Cyber Boardroom.",
+   "s": [
+    9
+   ]
+  },
+  {
+   "date": "2024-07-16",
+   "label": "\"Why, How, and What (v0.4, First MVP)\" published.",
+   "s": [
+    8
+   ]
+  },
+  {
+   "date": "2024-07-30",
+   "label": "The Community Edition is introduced.",
+   "s": [
+    8
+   ]
+  },
+  {
+   "date": "2024-12-13",
+   "label": "Latest release of the website package on PyPI, 0.221.1.",
+   "s": [
+    10
+   ]
+  },
+  {
+   "date": "2025-01-29",
+   "label": "Latest release of the content package on PyPI, 0.9.78.",
+   "s": [
+    11
+   ]
+  }
+ ],
+ "figures": [
+  {
+   "value": "60 s",
+   "label": "length of each video in the library",
+   "asof": "2026-11-20",
+   "s": [
+    4
+   ]
+  },
+  {
+   "value": "6",
+   "label": "languages Athena was shown speaking, in a July 2024 demo",
+   "asof": "2024-07-31",
+   "s": [
+    8,
+    16
+   ]
+  },
+  {
+   "value": "7",
+   "label": "LLM platforms listed on the Chat with LLMs page",
+   "asof": "2026-11-20",
+   "s": [
+    14
+   ]
+  }
+ ],
+ "people": [
+  {
+   "name": "Dinis Cruz",
+   "role": "founder, described by SC Media UK as \"an experienced CISO for multiple businesses\"",
+   "s": [
+    9,
+    17
+   ]
+  }
+ ],
+ "visit": "Athena, the videos and the articles are all on the site, and the Community Edition is free to install.",
+ "newsroom": {
+  "kicker": "Startup profile",
+  "headline": "The board's own cyber security advisor",
+  "standfirst": "The Cyber Boardroom built Athena, an AI advisor that answers directors' questions about cyber risk, with short videos and plain articles around it."
+ },
+ "brand": {
+  "accent": "#2b5c60",
+  "accent_dark": "#8fcfd4",
+  "soft": "#e4efef",
+  "soft_dark": "#142829",
+  "hero1": "#2b5c60",
+  "hero2": "#0e2c2d",
+  "hero3": "#7a2a31"
+ },
+ "images_note": "Used with Dinis Cruz's agreement (20 November 2026, relayed by sites.b): these are his own companies, so their published brand assets may be used. Logo: from https://static.dev.aws.cyber-boardroom.com/cbr-static/latest/assets/cbr/cbr-logo-beta.png. Screenshots of the company's live site, taken by startups.b with Playwright on 20 November 2026 and linked to the page each shows: https://thecyberboardroom.com/web/home; https://thecyberboardroom.com/web/athena. Every diagram, the favicon and the share card were drawn for this site.",
+ "sources": [
+  {
+   "id": 1,
+   "title": "The Cyber Boardroom, home page",
+   "url": "https://thecyberboardroom.com/web/home",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 2,
+   "title": "The Cyber Boardroom, Athena",
+   "url": "https://thecyberboardroom.com/web/athena",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 3,
+   "title": "The Cyber Boardroom, content",
+   "url": "https://thecyberboardroom.com/web/content",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 4,
+   "title": "The Cyber Boardroom, videos",
+   "url": "https://thecyberboardroom.com/web/content/videos",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 5,
+   "title": "The Cyber Boardroom, cyber security in the boardroom",
+   "url": "https://thecyberboardroom.com/web/content/cybersecurity-in-boardroom",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 6,
+   "title": "The Cyber Boardroom, install the Community Edition",
+   "url": "https://thecyberboardroom.com/web/docs/support/install-cbr-community",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 7,
+   "title": "The Cyber Boardroom, home page layout (video files)",
+   "url": "https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/layout.md",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 8,
+   "title": "The Cyber Boardroom, blog posts",
+   "url": "https://thecyberboardroom.com/web/docs/news/blog-posts",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 9,
+   "title": "SC Media UK, Interview: Dinis Cruz on The Cyber Boardroom (22 April 2024)",
+   "url": "https://insight.scmagazineuk.com/interview-dinis-cruz-on-the-cyber-boardoom",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 10,
+   "title": "PyPI, cbr-website-beta",
+   "url": "https://pypi.org/project/cbr-website-beta/#history",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 11,
+   "title": "PyPI, cbr-content",
+   "url": "https://pypi.org/project/cbr-content/#history",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 12,
+   "title": "sgit.ai, about",
+   "url": "https://sgit.ai/about/index.html",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 13,
+   "title": "The Cyber Boardroom, CISO personas",
+   "url": "https://thecyberboardroom.com/web/docs/demos/personas/ciso/index",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 14,
+   "title": "The Cyber Boardroom, chat with LLMs",
+   "url": "https://thecyberboardroom.com/web/chat-with-llms",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 15,
+   "title": "The Cyber Boardroom, Athena card",
+   "url": "https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/card-1.md",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 16,
+   "title": "The Cyber Boardroom, speak in 6 languages",
+   "url": "https://thecyberboardroom.com/web/docs/platforms/groq/speak-in-6-languages",
+   "accessed": "2026-11-20"
+  },
+  {
+   "id": 17,
+   "title": "Dinis Cruz, home page",
+   "url": "https://diniscruz.ai/",
+   "accessed": "2026-11-20"
+  }
+ ],
+ "identity": {
+  "logo_img": "img/brand/logo.png",
+  "logo_w": 800,
+  "logo_h": 282,
+  "logo_plate": true,
+  "logo_alt": "The Cyber Boardroom logo",
+  "logo_from": "https://static.dev.aws.cyber-boardroom.com/cbr-static/latest/assets/cbr/cbr-logo-beta.png",
+  "shots": [
+   {
+    "file": "img/real/home.webp",
+    "url": "https://thecyberboardroom.com/web/home",
+    "caption": "The Cyber Boardroom home page, with its welcome and videos"
+   },
+   {
+    "file": "img/real/athena.webp",
+    "url": "https://thecyberboardroom.com/web/athena",
+    "caption": "Athena, the AI cyber security advisor, on thecyberboardroom.com"
+   }
+  ]
+ }
 }

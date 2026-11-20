@@ -1,0 +1,25 @@
+# The Cyber Boardroom
+
+> A brochure for The Cyber Boardroom, with links to its own site.
+
+This file is for AI agents and the people using them. The site is https://the-cyber-boardroom.startups.sovereignweb.site/, static files in the public repository https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom (served from site/ on the dev branch). Pick the section that matches who you are acting for, read it in full, then follow it.
+
+## If you act for a visitor (read-only)
+
+- Read the site's pages, starting at https://the-cyber-boardroom.startups.sovereignweb.site/.
+- Answer from what the site says, with a link for each point. When the site does not say something, say so plainly; never fill the gap with a guess.
+- Do not change anything.
+
+## If you act for the site's owner
+
+- The owner changes the site through the repository. You need write access, which the owner gets by accepting the repository invitation: https://the-cyber-boardroom.startups.sovereignweb.site/start/
+- Work on the dev branch only; main is locked. Read the repository's CLAUDE.md first and follow it.
+- Keep the site static: no server code, no cookies, no tracking. Never invent a fact, a price or a customer.
+- Every push to dev publishes the site in a minute or two.
+
+## More
+
+- Use this site with AI: https://the-cyber-boardroom.startups.sovereignweb.site/agents/
+- Start here (for the owner): https://the-cyber-boardroom.startups.sovereignweb.site/start/
+- How this site was made: https://the-cyber-boardroom.startups.sovereignweb.site/admin/
+- The agents that work on this site: https://the-cyber-boardroom.startups.sovereignweb.site/data/agents.json

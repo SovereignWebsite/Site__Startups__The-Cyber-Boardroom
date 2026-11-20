@@ -398,6 +398,12 @@
    "title": "Dinis Cruz, home page",
    "url": "https://diniscruz.ai/",
    "accessed": "2026-11-20"
+  },
+  {
+   "id": 18,
+   "title": "The Cyber Boardroom, side menu content (the Important Note)",
+   "url": "https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/side-menu/content.md",
+   "accessed": "2026-11-20"
   }
  ],
  "identity": {
@@ -411,12 +417,18 @@
    {
     "file": "img/real/home.webp",
     "url": "https://thecyberboardroom.com/web/home",
-    "caption": "The Cyber Boardroom home page, with its welcome and videos"
+    "caption": "The Cyber Boardroom home page, with its welcome and videos",
+    "phone": "img/real/home-phone.webp",
+    "phone_w": 720,
+    "phone_h": 470
    },
    {
     "file": "img/real/athena.webp",
     "url": "https://thecyberboardroom.com/web/athena",
-    "caption": "Athena, the AI cyber security advisor, on thecyberboardroom.com"
+    "caption": "Athena, the AI cyber security advisor, on thecyberboardroom.com",
+    "phone": "img/real/athena-phone.webp",
+    "phone_w": 760,
+    "phone_h": 470
    }
   ]
  },
@@ -518,7 +530,8 @@
       "kind": "people"
      }
     ],
-    "sig": "Prepared for this brochure from public sources only. The decision, as ever, is the board's."
+    "sig": "Prepared for this brochure from public sources only. The decision, as ever, is the board's.",
+    "variant": "boardpaper"
    }
   },
   {
@@ -737,12 +750,27 @@
      2
     ],
     "sub": "\"We have harnessed the power of large language models and created an AI advisor named Athena, designed to help board members with their cyber security concerns.\"",
-    "hero": "shot",
+    "hero": "athenacard",
     "shot": 1,
     "strip_below": [
      0
     ],
-    "strip_title": "The home page, with its two introduction videos"
+    "strip_title": "The home page, with its two introduction videos",
+    "athena": {
+     "greeting": "I'm Athena, your personal AI cyber security advisor. What cyber security topic would you like to explore today?",
+     "prompts": [
+      "Hello, what do you know about me?",
+      "What questions should I ask my CISO?",
+      "What is DORA?",
+      "What are my legal responsibilities?",
+      "What is the best way to learn more about cyber security?"
+     ],
+     "url": "https://thecyberboardroom.com/web/athena",
+     "host": "thecyberboardroom.com",
+     "s": [
+      2
+     ]
+    }
    }
   },
   {
@@ -751,5 +779,37 @@
    "blurb": "A newsroom feature, printable on A4",
    "engine": "newsroom"
   }
- ]
+ ],
+ "oneline": {
+  "t": "the one-stop shop that boards of directors rely on for their cyber readiness",
+  "s": [
+   1
+  ]
+ },
+ "band": {
+  "title": "A director asks. Athena answers.",
+  "cols": [
+   {
+    "k": "The director",
+    "t": "\"What questions should I ask my CISO?\" (one of the prompt examples on Athena's page)",
+    "s": [
+     2
+    ]
+   },
+   {
+    "k": "Athena",
+    "t": "\"I'm Athena, your personal AI cyber security advisor. What cyber security topic would you like to explore today?\"",
+    "s": [
+     2
+    ]
+   }
+  ],
+  "quote": {
+   "q": "Don't use any private or confidential data in the chats. There is no control over what happens inside the LLM platforms used, and all chat thread content is publicly available.",
+   "who": "The Important Note on thecyberboardroom.com",
+   "s": [
+    18
+   ]
+  }
+ }
 }

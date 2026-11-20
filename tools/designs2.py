@@ -9,6 +9,26 @@ import re
 
 B = None  # build.py module, set by setup()
 
+BAND_CSS = """
+.oneline{font:600 1.05rem/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:-.2rem 0 1rem;opacity:.9}
+.band-full{background:#0f1113;color:#f4f4f2;padding:3rem 0;margin:2.5rem 0}
+.band-full h2{color:#fff;margin:0 0 1.4rem;font:800 clamp(1.6rem,4vw,2.6rem)/1.1 system-ui,sans-serif}
+.band-full a{color:#9be7d8}
+.bcols,.bnums,.bkeys{display:grid;gap:1.2rem;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))}
+.bcol,.bkey{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:1.1rem 1.2rem}
+.bcol b,.bkey b{display:block;font-size:1.15rem;margin-bottom:.3rem}
+.bcol span,.bkey span{color:#d6d6d2}
+.bkey i{font-style:normal;font-size:1.6rem;display:block}
+.bnum b{display:block;font:900 clamp(2.6rem,7vw,4.4rem)/1 system-ui,sans-serif;color:var(--bandacc,#5eead4)}
+.bnum span{display:block;color:#e4e4e0;margin-top:.4rem}.bnum small{display:block;color:#a9a9a4;font-size:.78rem;margin-top:.3rem}
+.bcode{margin:1.6rem 0 0;max-width:40rem}.bcode pre{background:#000;border:1px solid #333;border-radius:10px;padding:1rem 1.2rem;overflow-x:auto;color:#7ee787;font:.95rem/1.6 ui-monospace,Menlo,monospace;margin:0}
+.bcode figcaption{color:#a9a9a4;font-size:.85rem;margin-top:.4rem}
+.bquote{margin:1.6rem 0 0;border-left:5px solid var(--bandacc,#5eead4);padding:.4rem 0 .4rem 1.2rem;max-width:46rem}
+.bquote p{font:600 1.3rem/1.45 system-ui,sans-serif;margin:0 0 .4rem}.bquote footer{color:#a9a9a4;font-size:.9rem}
+.band-full .people{margin-top:1.4rem;color:#e4e4e0}
+.bnote{color:#c9c9c4;margin-top:1rem}
+"""
+
 
 def setup(build):
     global B
@@ -94,7 +114,43 @@ COMMON = """
 .exhibit>*,.ihero .wrap>*,.stage>*,.ghero .wrap>*,.strip>*{min-width:0}
 .shot figcaption{overflow-wrap:anywhere}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-"""
+""" + BAND_CSS
+
+
+def oneline(F, p, h1=''):
+    """Under each h1, one plain line of what it is, in the company's own words (design.b round 2)."""
+    o = F.get('oneline')
+    if not o or o['t'].strip('."').lower() in re.sub(r'<[^>]+>', '', h1).lower():
+        return ''
+    return f'<p class="oneline">&ldquo;{e(o["t"])}&rdquo;{B.cite(F, o.get("s"), p)}</p>'
+
+
+def band(F, depth, d, p):
+    """One full-bleed band below the fold, on the home design only (design.b round 2)."""
+    b = F.get('band')
+    if not b or d['key'] != F['home']:
+        return ''
+    cols = ''.join(f'<div class="bcol"><b>{e(c["k"])}</b><span>{md(c["t"])}{B.cite(F, c.get("s"), p)}</span></div>' for c in b.get('cols', []))
+    nums = ''.join(f'<div class="bnum"><b>{e(n["n"])}</b><span>{md(n["l"])}{B.cite(F, n.get("s"), p)}</span><small>{e(n.get("when", ""))}</small></div>' for n in b.get('nums', []))
+    code = ''
+    if b.get('code'):
+        code = (f'<figure class="bcode"><pre><code>{e(chr(10).join(b["code"]["lines"]))}</code></pre>'
+                f'<figcaption>{md(b["code"]["caption"])}{B.cite(F, b["code"].get("s"), p)}</figcaption></figure>')
+    quote = ''
+    if b.get('quote'):
+        q = b['quote']
+        quote = f'<blockquote class="bquote"><p>&ldquo;{e(q["q"])}&rdquo;</p><footer>{md(q["who"])}{B.cite(F, q.get("s"), p)}</footer></blockquote>'
+    extra = B.people(F, p) if b.get('people') else ''
+    keys = ''
+    if b.get('keys'):
+        keys = '<div class="bkeys">' + ''.join(f'<div class="bkey"><i aria-hidden="true">&#128477;</i><b>{e(k)}</b><span>{md(v)}</span></div>' for k, v in b['keys']) + '</div>'
+        if b.get('keys_s'):
+            keys += f'<p class="bnote">{md(b["keys_note"])}{B.cite(F, b.get("keys_s"), p)}</p>'
+    return (f'<section class="band-full" aria-labelledby="{p}band"><div class="wrap"><h2 id="{p}band">{e(b["title"])}</h2>'
+            f'{"<div class=bcols>" + cols + "</div>" if cols else ""}{"<div class=bnums>" + nums + "</div>" if nums else ""}{keys}{code}{quote}{extra}</div></section>')
+
+
+
 
 
 # ---------------------------------------------------------------- engine: the terminal (sgit)
@@ -150,7 +206,7 @@ h2::before{content:"$ cat ";color:#8b949e}
         steps.append(f'<div class="step"><div class="you"><div class="cmd"><span class="typed"{delay}>{e(st["cmd"])}</span></div>{cmt}</div>'
                      f'<div class="srv">{st["server"]}</div></div>')
     fb = facts_blocks(F, p, depth)
-    body = (f'<div class="wrap"><section class="hero"><h1>{c["h1"]}</h1><p>{md(F["lede"])}</p>'
+    body = (f'<div class="wrap"><section class="hero"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p>'
             f'<div class="install"><label for="inst">Copy and run:</label><input id="inst" readonly value="pip install sgit-ai" aria-label="pip install sgit-ai"></div>'
             f'{next_step(F, depth, "nx")}</section>'
             f'<div class="sess" role="group" aria-label="A terminal session, drawn from sgit\'s documentation"><div class="sess-h"><span>Your machine</span><span>What the server sees</span></div>{"".join(steps)}</div>'
@@ -212,7 +268,7 @@ body{font:1.06rem/1.65 ui-serif,Georgia,"Times New Roman",serif}
         out.append(f'<section class="blk" id="{p}{k}"><p class="id">obj-{oid}</p><h2>{e(title)}</h2>{html}'
                    f'<div class="ct" aria-hidden="true">{cipher(plain, 900)}</div></section>')
     body = (f'<div class="seal"><div class="wrap"><div class="ct" aria-hidden="true">{cipher(F["lede"], 700)}</div>'
-            f'<h1>{c["h1"]}</h1><p>{e(c["sub"])}</p>'
+            f'<h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{e(c["sub"])}</p>'
             f'<a class="key" href="#{p}what">{e(c["key"])}</a></div></div>'
             f'<div class="wrap">{"".join(out)}{next_step(F, depth)}{fb["sources"]}</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
@@ -264,6 +320,19 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
 .stopcard:target{{border-style:dashed}}.stopcard:target .st::after{{content:" (stopped: the stop file is written)"}}
 .strip{{display:grid;gap:1.4rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}}
 .strip .shot .bar span{{font-size:.68rem}}
+.vcards{{list-style:none;margin:0;padding:0;display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr))}}
+.vcards a{{display:block;height:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-top:6px solid var(--acc);border-radius:12px;padding:1rem;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.08)}}
+.vcards small{{display:block;font:700 .72rem system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}}
+.vcards b{{display:block;font:700 1.2rem/1.2 ui-serif,Georgia,serif;margin:.3rem 0}}.vcards span{{display:block;color:var(--muted);font-size:.92rem}}.vcards em{{display:block;font-style:normal;font-weight:700;margin-top:.5rem;color:var(--acc)}}
+.acard{{background:#fff;color:#0e2c2d;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}}
+.acard-h{{background:#5b3fd6;color:#fff;font-weight:700;padding:.7rem 1.1rem}}
+.acard-m{{margin:1.1rem;background:#f1f4f4;border-radius:14px;padding:.9rem 1rem;font-size:1.05rem}}
+.acard-k{{margin:0 1.1rem .4rem;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:#4a5e5f}}
+.chips{{list-style:none;margin:0 1.1rem 1rem;padding:0;display:flex;flex-wrap:wrap;gap:.4rem}}.chips li{{border:1px solid #cfdcdc;border-radius:999px;padding:.25rem .7rem;font-size:.88rem}}
+.acard .btn{{margin:0 1.1rem;background:#c23a44;border-color:#c23a44;color:#fff}}.acard-c{{margin:.8rem 1.1rem 1rem;font-size:.8rem;color:#4a5e5f}}.acard-c a{{color:#2b5c60}}
+.excerpt{{margin:0;background:#f7f6f2;color:#1a1917;border-radius:4px;padding:1.6rem 1.6rem 1.2rem;box-shadow:0 20px 50px rgba(0,0,0,.4);border-top:8px solid #1a7f5a}}
+.excerpt .ex-id{{font:.8rem ui-monospace,Menlo,monospace;color:#4a4845;margin:0}}.excerpt .ex-t{{font:800 1.4rem/1.2 ui-sans-serif,system-ui,sans-serif;margin:.4rem 0 .8rem}}
+.excerpt blockquote{{margin:0;font-size:1.15rem;line-height:1.5;border-left:4px solid #1a7f5a;padding-left:1rem}}.excerpt figcaption{{font-size:.82rem;color:#4a4845;margin-top:1rem}}.excerpt a{{color:#1a7f5a}}
 .sharecard{{background:linear-gradient(135deg,#0f5a63,#0a3d44);color:#fff;border-radius:18px;padding:2.4rem 2rem;max-width:44rem}}
 .sharecard b{{display:block;font:700 clamp(2rem,6vw,3.4rem)/1.05 system-ui,sans-serif}}
 .sharecard span{{display:block;font-size:1.3rem;margin-top:.6rem;opacity:.92}}
@@ -276,6 +345,19 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
         hero_right = '<div class="strip">' + ''.join(B.shot(F, depth, k, lazy=False) for k in c['strip'][:2]) + '</div>'
     elif c.get('hero') == 'sharecard':
         hero_right = f'<div class="sharecard"><b>{e(F["name"])}</b><span>{e(c["share_line"])}</span><span style="font-size:1rem;margin-top:1.6rem">{e(F["url_label"])}</span></div>'
+    elif c.get('hero') == 'vaultcards':
+        hero_right = '<ul class="vcards">' + ''.join(
+            f'<li><a href="{e(v["url"])}"><small>{e(v["cat"])}</small><b>{e(v["title"])}</b><span>&ldquo;{e(v["line"])}&rdquo;</span><em>Open it &#8599;</em></a></li>' for v in c['vaults']) + '</ul>'
+    elif c.get('hero') == 'athenacard':
+        a = c['athena']
+        chips = ''.join(f'<li>{e(x)}</li>' for x in a['prompts'])
+        hero_right = (f'<div class="acard"><div class="acard-h">Athena</div><p class="acard-m">&ldquo;{e(a["greeting"])}&rdquo;</p>'
+                      f'<p class="acard-k">Prompt examples on its page</p><ul class="chips">{chips}</ul>'
+                      f'<a class="btn primary" href="{e(a["url"])}">Ask the real Athena &#8599;</a><p class="acard-c">Quoted from {e(a["host"])}, {e(B.fmt_date(F["updated"]))}{B.cite(F, a.get("s"), p)}</p></div>')
+    elif c.get('hero') == 'excerpt':
+        x = c['excerpt']
+        hero_right = (f'<figure class="excerpt"><p class="ex-id">{e(x["id"])}</p><p class="ex-t">{e(x["title"])}</p><blockquote>&ldquo;{e(x["q"])}&rdquo;</blockquote>'
+                      f'<figcaption>One of the sixteen example policies, quoted from <a href="{e(x["url"])}">riskmandate.ai</a>{B.cite(F, x.get("s"), p)}</figcaption></figure>')
     elif c.get('hero') == 'dial':
         hero_right = dial_svg(c['levels'], c.get('mark'))
         if c.get('mark_note'):
@@ -288,9 +370,9 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
         extra_left += f'<div class="offer"><span class="tag">{e(o["tag"])}</span><p style="margin:.2rem 0 0">{e(o["title"])}</p><b>{e(o["price"])}</b><p style="margin:.3rem 0 0">{md(o["text"])}{B.cite(F, o.get("s"), p)}</p></div>'
     hs = B.cite(F, c.get('h1_s'), p)
     body = [f'<div class="ihero"><div class="wrap"><div>{B.logo(F, depth, force_plate=c.get("plate", False))}'
-            f'<h1>{c["h1"]}{hs}</h1><p class="sub">{md(c["sub"])}</p>{extra_left}'
+            f'<h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p class="sub">{md(c["sub"])}{hs}</p>{extra_left}'
             f'<div class="btns">' + ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', []))) +
-            f'</div></div><div>{hero_right}</div></div></div><div class="wrap">']
+            f'</div></div><div>{hero_right}</div></div></div>{band(F, depth, d, p)}<div class="wrap">']
     if c.get('cards'):
         cards = ''.join(f'<li><b>{e(x["n"])}</b><span>{md(x["l"])}{B.cite(F, x.get("s"), p)}</span><small>{e(x["when"])}</small></li>' for x in c['cards'])
         body.append(f'<h2 id="{p}figs">{e(c.get("cards_title", "In its own numbers"))}</h2><ul class="bigfigs">{cards}</ul>')
@@ -372,6 +454,29 @@ h1{font-size:clamp(1.9rem,5.5vw,3rem);line-height:1.08;margin:0 0 1.2rem;max-wid
 .formf span{padding:.6rem .8rem}
 .sig{font-family:system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--line);padding-top:.8rem;font-size:.9rem}
 @media print{.sheet{box-shadow:none;border:0;margin:0}}
+/* the policy form: a ruled, numbered form */
+.sheet.policyform{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;border:2px solid var(--fg);box-shadow:8px 8px 0 var(--acc);border-radius:0}
+.sheet.policyform::before{height:2.4rem;background:var(--fg)}
+.sheet.policyform .kick{position:relative;color:var(--bg);margin-top:-1.55rem;margin-bottom:1.6rem}
+.sheet.policyform h1{font-family:ui-sans-serif,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em}
+.sheet.policyform .stamp{border-radius:0;transform:none;top:3.2rem}
+.sheet.policyform .formf{border:2px solid var(--fg)}.sheet.policyform .formf b{background:var(--fg);color:var(--bg)}
+.sheet.policyform .item h2 span{border-radius:0}
+.sheet.policyform .agenda{border:1px dashed var(--muted);background:transparent}
+/* the luggage tag: the whole page is a tag on a string */
+.sheet.luggage{max-width:46rem;border-radius:22px;clip-path:polygon(12% 0,88% 0,100% 7%,100% 100%,0 100%,0 7%);padding-top:6.5rem;border:3px solid var(--acc);background:linear-gradient(var(--card),var(--card)) padding-box}
+.sheet.luggage::before{left:50%;top:1.6rem;right:auto;width:3.2rem;height:3.2rem;margin-left:-1.6rem;border-radius:50%;background:var(--bg);border:5px solid var(--acc);box-sizing:border-box}
+.sheet.luggage::after{content:"";position:absolute;left:50%;top:-3rem;width:4px;height:4.8rem;margin-left:-2px;background:var(--acc);transform:rotate(18deg);transform-origin:bottom}
+.sheet.luggage .stamp{transform:rotate(-8deg);top:7rem;right:3rem}
+.sheet.luggage h1{text-align:center;margin-left:auto;margin-right:auto}
+.sheet.luggage .kick{text-align:center}
+.sheet.luggage .fields{grid-template-columns:auto 1fr;border-style:dashed}
+.wrapper-luggage{padding-top:3rem}
+/* the board paper: a minuted document with a margin rule */
+.sheet.boardpaper{border-left:2.6rem solid var(--bg);box-shadow:0 20px 60px rgba(0,0,0,.18),inset 1px 0 0 var(--line)}
+.sheet.boardpaper .item h2{border-bottom:1px solid var(--line);padding-bottom:.3rem}
+.sheet.boardpaper .agenda{border-left:5px solid var(--acc);border-radius:0}
+@media (max-width:40rem){.sheet.boardpaper{border-left-width:.8rem}.sheet.luggage{clip-path:polygon(16% 0,84% 0,100% 4%,100% 100%,0 100%,0 4%);padding-top:2.6rem}.sheet.luggage::before{top:.5rem;width:1.8rem;height:1.8rem;margin-left:-.9rem;border-width:3px}.sheet.luggage::after{display:none}.wrapper-luggage{padding-top:.3rem}.sheet.luggage .stamp{top:3rem;right:1rem}}
 """
     fb = facts_blocks(F, p, depth)
     fields = ''.join(f'<dt>{e(k)}</dt><dd>{md(v)}</dd>' for k, v in c['fields'])
@@ -390,9 +495,9 @@ h1{font-size:clamp(1.9rem,5.5vw,3rem);line-height:1.08;margin:0 0 1.2rem;max-wid
         else:
             inner = ''.join(fb[k] for k in it['kind'].split('+'))
         out.append(f'<section class="item" id="{p}i{i}"><h2><span>{i}</span>{e(it["title"])}</h2>{inner}</section>')
-    body = (f'<div class="sheet"><span class="stamp">{e(c["stamp"])}</span><p class="kick">{e(c["kick"])}</p><h1>{md(c["h1"])}</h1>'
+    body = (('<div class="wrapper-luggage">' if c.get('variant') == 'luggage' else '<div>') + f'<div class="sheet {c.get("variant", "")}"><span class="stamp">{e(c["stamp"])}</span><p class="kick">{e(c["kick"])}</p><h1>{md(c["h1"])}</h1>{oneline(F, p, c["h1"])}'
             f'<dl class="fields">{fields}</dl><nav class="agenda" aria-label="Contents"><b>{e(c.get("agenda", "Agenda"))}</b><ol>{agenda}</ol></nav>'
-            f'{"".join(out)}{next_step(F, depth)}<p class="sig">{md(c["sig"])}</p>{fb["sources"]}</div>')
+            f'{"".join(out)}{next_step(F, depth)}<p class="sig">{md(c["sig"])}</p>{fb["sources"]}</div></div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
                 [(it.get('short', it['title'].split(':')[0]), f'#{p}i{i}') for i, it in list(enumerate(items, 1))[:3]] + [('Sources', f'#{p}h-src')], body)
 
@@ -435,7 +540,7 @@ body{font:1.04rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
             anchor = f' id="{p}{m["id"]}"' if m.get('id') else ''
             msgs.append(f'<div class="m a"{anchor}{delay}><span class="who">{e(c["bot"])}</span>{inner}</div>')
     prompts = ''.join(f'<a href="{e(x["url"])}">{e(x["label"])}</a>' for x in c.get('prompts', []))
-    body = (f'<div class="chathead"><div class="wrap">{B.logo(F, depth, force_plate=True)}<h1>{e(c["h1"])}</h1><p>{md(c["sub"])}</p></div></div>'
+    body = (f'<div class="chathead"><div class="wrap">{B.logo(F, depth, force_plate=True)}<h1>{e(c["h1"])}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p></div></div>'
             f'<div class="wrap"><div class="win" role="group" aria-label="A conversation, answered from the company\'s own pages"><div class="win-h"><span>{e(c["bot"])}</span><span>{e(c["win_note"])}</span></div>'
             f'<div class="msgs">{"".join(msgs)}</div>' + (f'<p style="padding:0 1.2rem;margin:0 0 .4rem;font-size:.85rem;color:var(--muted)">{e(c["prompts_note"])}</p><div class="prompts">{prompts}</div>' if prompts else '') +
             f'</div><div class="shotwrap">{B.shot(F, depth, c.get("shot", 1))}</div>{next_step(F, depth)}{fb["sources"]}</div>')
@@ -496,8 +601,8 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
            '<text x="330" y="396" class="small" style="fill:#ffd166">the barrier</text></svg>'
            '<figcaption style="color:#cfccc4;font-size:.85rem">Drawn for this site from RiskMandate\'s four objects: mandate, grant, delta and barrier.</figcaption></figure>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
-    body = (f'<div class="ghero"><div class="wrap"><div><h1>{c["h1"]}</h1><p>{md(F["lede"])}</p><div class="btns">{btns}</div></div>{svg}</div></div>'
-            f'<div class="wrap"><div class="parts" id="{p}how">{parts}</div>'
+    body = (f'<div class="ghero"><div class="wrap"><div><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p><div class="btns">{btns}</div></div>{svg}</div></div>'
+            f'{band(F, depth, d, p)}<div class="wrap"><div class="parts" id="{p}how">{parts}</div>'
             f'<h2 id="{p}what">The gap, in plain words</h2>{fb["what"]}'
             f'<h2>Who looks at the gap</h2>{fb["for"]}'
             f'<h2 id="{p}products">What closes it</h2>{fb["products"]}'
@@ -550,12 +655,12 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
     fb = facts_blocks(F, p, depth)
     agents = ''.join(f'<li><b>{e(h["title"])}</b><span>{md(h["t"])}{B.cite(F, h.get("s"), p)}</span></li>' for h in F['how'])
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
-    body = (f'<div class="wrap"><section class="chero"><h1>{c["h1"]}</h1><p>{md(F["lede"])}</p><div class="btns">{btns}</div></section>'
+    body = (f'<div class="wrap"><section class="chero"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p><div class="btns">{btns}</div></section>'
             f'<section class="cellbox" id="cell-stop" aria-label="One cell, drawn: a conductor and its agents inside your environment"><span class="env">Your environment</span>'
             f'<div class="cond"><i>C</i><b>The conductor</b><span style="color:var(--muted)">hands out the work and keeps the record</span></div>'
             f'<ul class="agents">{agents}</ul><p class="halted">{e(c["halted"])}</p>'
             f'<div class="stopbar"><span>{e(c["stopline"])}</span><span><a class="go" href="#cell-stop">Stop</a><a class="resume" href="#{p}what">Resume</a></span></div></section>'
-            f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p>'
+            f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p></div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">What a cell is</h2>{fb["what"]}<h2>Who it is for</h2>{fb["for"]}'
             f'<h2 id="{p}products">Sizes and offers</h2>{fb["products"]}{fb["chart"]}'
             f'<h2 id="{p}story">How it started</h2>{fb["timeline"]}<h2>Counted</h2>{fb["figures"]}'
@@ -604,7 +709,7 @@ h2{font:800 1.6rem system-ui;margin:2.4rem 0 1rem}
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
     body = (f'<div class="wrap"><div class="stage"><div class="lanyard" aria-hidden="true"><div class="badge"><div class="hole"></div>'
             f'<small>{e(c["badge_event"])}</small><b>{e(F["name"])}</b><span>{e(c["badge_line"])}</span><div class="tier">{e(c["badge_tier"])}</div></div></div>'
-            f'<div><h1>{c["h1"]}</h1><p style="color:var(--muted);max-width:40rem">{md(c["sub"])}</p><div class="btns">{btns}</div>'
+            f'<div><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p style="color:var(--muted);max-width:40rem">{md(c["sub"])}</p><div class="btns">{btns}</div>'
             f'<div class="stat">{stats}</div></div></div>'
             f'<h2 id="{p}story">From the conference floor to a live site</h2><ol class="road">{road}</ol>'
             f'<h2 id="{p}what">What came out of it</h2>{fb["what"]}<h2 id="{p}products">The offers</h2>{fb["products"]}'
@@ -643,8 +748,8 @@ h2.s{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,serif;margin:2.6rem 0 1rem
                   f'<div><h2><a href="{e(x["url"])}" style="color:var(--fg)">{e(x["name"])}</a></h2><p class="role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>'
                   f'<p class="hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p>{md(x["credit"])}</p></div></article>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
-    body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1><p>{md(c["sub"])}</p><div class="btns">{btns}</div></section>'
-            f'<div class="wall" id="{p}sites">{"".join(ex)}</div>'
+    body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p><div class="btns">{btns}</div></section>'
+            f'<div class="wall" id="{p}sites">{"".join(ex)}</div></div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 class="s" id="{p}how">How each one was made</h2>{fb["how"]}'
             f'<h2 class="s" id="{p}what">What Sovereign Website is</h2>{fb["what"]}'
             f'<h2 class="s" id="{p}products">The family</h2>{fb["products"]}'

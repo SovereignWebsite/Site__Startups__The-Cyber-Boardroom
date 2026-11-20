@@ -21,6 +21,7 @@ Every fact on this site comes from these public pages. This file is written by t
 | 15 | [The Cyber Boardroom, Athena card](https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/card-1.md) | 2026-11-20 |
 | 16 | [The Cyber Boardroom, speak in 6 languages](https://thecyberboardroom.com/web/docs/platforms/groq/speak-in-6-languages) | 2026-11-20 |
 | 17 | [Dinis Cruz, home page](https://diniscruz.ai/) | 2026-11-20 |
+| 18 | [The Cyber Boardroom, side menu content (the Important Note)](https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/side-menu/content.md) | 2026-11-20 |
 
 ## Images
 

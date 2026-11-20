@@ -134,7 +134,9 @@ def shot(F, depth, n=0, cls='shot', lazy=True):
     ld = ' loading="lazy" decoding="async"' if lazy else ''
     return (f'<figure class="{cls}"><a href="{e(x["url"])}" class="frame" aria-label="{e(x["caption"])}: open the real page">'
             f'<span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>{e(host)}</span></span>'
-            f'<img src="{rel(depth, x["file"])}" width="1200" height="750" alt="Screenshot: {e(x["caption"])}"{ld}></a>'
+            + (f'<picture><source media="(max-width: 40rem)" srcset="{rel(depth, x["phone"])}" width="{x["phone_w"]}" height="{x["phone_h"]}">' if x.get('phone') else '')
+            + f'<img src="{rel(depth, x["file"])}" width="1200" height="750" alt="Screenshot: {e(x["caption"])}"{ld}>'
+            + ('</picture>' if x.get('phone') else '') + '</a>'
             f'<figcaption>{e(x["caption"])}. Screenshot taken {e(fmt_date(F["updated"]))}; '
             f'<a href="{e(x["url"])}">open the real page &#8599;</a></figcaption></figure>')
 
@@ -336,6 +338,10 @@ sup.cites a:hover{text-decoration:underline}
 /* FAMILY_CSS */
 .top .family-credit{position:relative;top:auto;right:auto;font-size:.8rem;margin-left:auto}
 .top .family-credit ul{min-width:14rem}
+.top .family-credit summary{font-size:1.3rem;line-height:1;padding:.2rem .5rem;opacity:.85}
+.top .family-credit summary::after{content:none}
+.family-credit .family-head{padding:.3rem .8rem .2rem;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--fam-fg)}
+.top .wm-sw .ag{display:none}
 .top .family-credit ul{display:block;right:0}
 .top .family-credit li a{color:var(--fam-fg);display:block;padding:.3rem .8rem;text-decoration:none}
 .top .family-credit li a:hover{text-decoration:none;color:var(--fam-strong)}
@@ -458,6 +464,8 @@ def fam_menu(F):
     shown = [(x, n) for x, n in STARTUPS if x in LIVE or x == F['slug']]
     st = ''.join(f'\n    <li{" class=" + chr(34) + "family-gap" + chr(34) if i == len(shown) - 1 else ""}><a href="https://{x}.startups.sovereignweb.site/"'
                  + (' aria-current="true"' if x == F['slug'] else '') + f'>{e(n)}</a></li>' for i, (x, n) in enumerate(shown))
+    block = block.replace('<summary>Sovereign Website</summary>', '<summary aria-label="Made with Sovereign Website: menu">&#8942;</summary>')
+    block = block.replace('<ul>', '<ul><li class="family-head">Made with Sovereign Website</li>', 1)
     return block.replace('<li class="family-gap"><a href="/admin/">How this site was made</a></li>',
                          '<li class="family-gap"><a href="/admin/">How this site was made</a></li>' + st)
 

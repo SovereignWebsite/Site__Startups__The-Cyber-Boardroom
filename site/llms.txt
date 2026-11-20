@@ -1,6 +1,6 @@
 # The Cyber Boardroom
 
-> A brochure for The Cyber Boardroom, with links to its own site.
+> An independent brochure about The Cyber Boardroom, an AI cyber security advisor and content for boards of directors, made from its own public pages.
 
 This file is for AI agents and the people using them. The site is https://the-cyber-boardroom.startups.sovereignweb.site/, static files in the public repository https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom (served from site/ on the dev branch). Pick the section that matches who you are acting for, read it in full, then follow it.
 
@@ -23,3 +23,33 @@ This file is for AI agents and the people using them. The site is https://the-cy
 - Start here (for the owner): https://the-cyber-boardroom.startups.sovereignweb.site/start/
 - How this site was made: https://the-cyber-boardroom.startups.sovereignweb.site/admin/
 - The agents that work on this site: https://the-cyber-boardroom.startups.sovereignweb.site/data/agents.json
+
+An independent brochure about The Cyber Boardroom, made from its own public pages. Official site: https://thecyberboardroom.com/web/home
+
+## Pages
+
+- [The Brochure](https://the-cyber-boardroom.startups.sovereignweb.site/designs/brochure.html): The company at a glance, with diagrams
+- [The Blueprint](https://the-cyber-boardroom.startups.sovereignweb.site/designs/blueprint.html): A dark technical spec sheet
+- [The Story](https://the-cyber-boardroom.startups.sovereignweb.site/designs/story.html): Told in order, date by date
+- [The Newsroom](https://the-cyber-boardroom.startups.sovereignweb.site/index.html): A magazine feature about the company
+- [The Brief](https://the-cyber-boardroom.startups.sovereignweb.site/designs/brief.html): Plain and printable on A4
+
+## Sources
+
+- The Cyber Boardroom, home page: https://thecyberboardroom.com/web/home (read 2026-11-20)
+- The Cyber Boardroom, Athena: https://thecyberboardroom.com/web/athena (read 2026-11-20)
+- The Cyber Boardroom, content: https://thecyberboardroom.com/web/content (read 2026-11-20)
+- The Cyber Boardroom, videos: https://thecyberboardroom.com/web/content/videos (read 2026-11-20)
+- The Cyber Boardroom, cyber security in the boardroom: https://thecyberboardroom.com/web/content/cybersecurity-in-boardroom (read 2026-11-20)
+- The Cyber Boardroom, install the Community Edition: https://thecyberboardroom.com/web/docs/support/install-cbr-community (read 2026-11-20)
+- The Cyber Boardroom, home page layout (video files): https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/layout.md (read 2026-11-20)
+- The Cyber Boardroom, blog posts: https://thecyberboardroom.com/web/docs/news/blog-posts (read 2026-11-20)
+- SC Media UK, Interview: Dinis Cruz on The Cyber Boardroom (22 April 2024): https://insight.scmagazineuk.com/interview-dinis-cruz-on-the-cyber-boardoom (read 2026-11-20)
+- PyPI, cbr-website-beta: https://pypi.org/project/cbr-website-beta/#history (read 2026-11-20)
+- PyPI, cbr-content: https://pypi.org/project/cbr-content/#history (read 2026-11-20)
+- sgit.ai, about: https://sgit.ai/about/index.html (read 2026-11-20)
+- The Cyber Boardroom, CISO personas: https://thecyberboardroom.com/web/docs/demos/personas/ciso/index (read 2026-11-20)
+- The Cyber Boardroom, chat with LLMs: https://thecyberboardroom.com/web/chat-with-llms (read 2026-11-20)
+- The Cyber Boardroom, Athena card: https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/card-1.md (read 2026-11-20)
+- The Cyber Boardroom, speak in 6 languages: https://thecyberboardroom.com/web/docs/platforms/groq/speak-in-6-languages (read 2026-11-20)
+- Dinis Cruz, home page: https://diniscruz.ai/ (read 2026-11-20)

@@ -4,33 +4,65 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Start here: The Cyber Boardroom</title>
-<meta name="description" content="Where to start, for the owner of this site: connecting GitHub, the first change, and asking for more.">
+<meta name="description" content="Start here, for the brochure about The Cyber Boardroom.">
+<link rel="canonical" href="https://the-cyber-boardroom.startups.sovereignweb.site/start/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="The Cyber Boardroom">
+<meta property="og:site_name" content="The Cyber Boardroom, a startup brochure">
 <meta property="og:locale" content="en_GB">
 <meta property="og:url" content="https://the-cyber-boardroom.startups.sovereignweb.site/start/">
 <meta property="og:title" content="Start here: The Cyber Boardroom">
-<meta property="og:description" content="Where to start, for the owner of this site: connecting GitHub, the first change, and asking for more.">
-<meta property="og:image" content="https://the-cyber-boardroom.startups.sovereignweb.site/assets/share/card-1200x630.jpg">
+<meta property="og:description" content="Start here, for the brochure about The Cyber Boardroom.">
+<meta property="og:image" content="https://the-cyber-boardroom.startups.sovereignweb.site/img/share-card.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The Cyber Boardroom">
+<meta property="og:image:alt" content="The Cyber Boardroom: Cyber readiness for boards of directors. An independent startup brochure made from its own public pages, pointing to thecyberboardroom.com.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Start here: The Cyber Boardroom">
-<meta name="twitter:description" content="Where to start, for the owner of this site: connecting GitHub, the first change, and asking for more.">
-<meta name="twitter:image" content="https://the-cyber-boardroom.startups.sovereignweb.site/assets/share/card-1200x630.jpg">
-<link rel="canonical" href="https://the-cyber-boardroom.startups.sovereignweb.site/start/">
+<meta name="twitter:description" content="Start here, for the brochure about The Cyber Boardroom.">
+<meta name="twitter:image" content="https://the-cyber-boardroom.startups.sovereignweb.site/img/share-card.jpg">
+<meta name="twitter:image:alt" content="The Cyber Boardroom: Cyber readiness for boards of directors. An independent startup brochure made from its own public pages, pointing to thecyberboardroom.com.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <style>
-:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#5d5c57;--accent:#2f6b4f;--line:#e4e1d8}
-@media (prefers-color-scheme:dark){:root{--bg:#141513;--fg:#ecebe6;--muted:#a8a69e;--accent:#7fc3a0;--line:#2c2d29}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}
-main{max-width:44rem;margin:0 auto;padding:10vh 1rem 4rem}
-.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem}
-.mark{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
-h1{font-size:clamp(2rem,6vw,3rem);line-height:1.1;margin:.4rem 0 1rem}
-p{color:var(--muted);margin:0 0 1rem}a{color:var(--accent)}
-footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);overflow-wrap:break-word}
+img,svg{max-width:100%;height:auto;display:block}
+figure{margin:0}
+a{color:var(--link)}
+:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0}
+.skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+sup.cites{font-size:.68em;line-height:0;margin-left:.15em;white-space:nowrap}
+sup.cites a{text-decoration:none;padding:0 .12em}
+sup.cites a:hover{text-decoration:underline}
+/* top navigation: the site's own */
+.top{background:var(--navbg,var(--bg));color:var(--navfg,var(--fg));border-bottom:1px solid var(--line);font:500 .95rem/1.4 var(--navfont,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif)}
+.top a{color:inherit}
+.top-row{max-width:76rem;margin:0 auto;padding:.55rem 1rem;display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.1rem}
+.top .brand{text-decoration:none;font-weight:700;font-size:1.05rem;display:flex;flex-direction:column;line-height:1.15;margin-right:auto}
+.top .brand small{font-weight:400;font-size:.78rem;opacity:.85}
+.top ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.2rem 1rem}
+.top li a{text-decoration:none;display:inline-block;padding:.25rem 0;min-height:24px}
+.top li a:hover{text-decoration:underline}
+.top .visit{font-weight:700}
+.pick{position:relative}
+.pick summary{cursor:pointer;list-style:none;border:1px solid currentColor;border-radius:999px;padding:.25rem .8rem;white-space:nowrap}
+.pick summary::-webkit-details-marker{display:none}
+.pick summary::after{content:" \25BE"}
+.pick[open] summary::after{content:" \25B4"}
+.pick-cards{position:absolute;right:0;top:calc(100% + .5rem);z-index:20;width:min(46rem,calc(100vw - 2rem));background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:1rem;box-shadow:0 12px 40px rgba(0,0,0,.25);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.pick-cards ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:.8rem}
+.pick-cards a{display:flex;flex-direction:column;gap:.15rem;text-decoration:none;color:var(--fg);font-size:.85rem;line-height:1.3}
+.pick-cards img{border-radius:6px;border:1px solid var(--line);aspect-ratio:8/5;object-fit:cover;object-position:top}
+.pick-cards a:hover strong{text-decoration:underline}
+.pick-cards span{color:var(--muted)}
+.pick-cards .now{color:var(--link);font-weight:600}
+.pick-cards .all{margin:.8rem 0 0;font-size:.9rem}
+.pick-cards .all a{display:inline;color:var(--link);text-decoration:underline}
+@media (max-width:40rem){.pick{width:100%}.pick-cards{position:static;width:100%;margin-top:.5rem}}
 /* The Sovereign Website credit on a customer's site: one small, muted control at the far top right that opens a
    pop-up menu of the family links. Not a strip and not a menu bar: the site is about its owner (Dinis, 20 November
    2026: "It needs to fundamentally be about the site and who is it about ... top right pop-up menu").
@@ -51,25 +83,37 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 .family-credit .family-gap{border-bottom:1px solid rgba(127,127,127,.25);padding-bottom:.3rem;margin-bottom:.3rem}
 [data-family-credit="off"] .family-credit{display:none}
 @media print{.family-credit{display:none}}
-.top{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;max-width:44rem;margin:0 auto;padding:2.2rem 1rem 0}
-.top .name{font-weight:600;color:var(--fg);text-decoration:none}
-.own{display:flex;gap:1rem;margin-left:auto;font-size:.95rem}
-.own a,.site-links a{color:var(--accent);font-weight:600}
-.site-links{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;margin-bottom:.8rem;font-size:.95rem}
-@media (max-width:40rem){.own{margin:0;width:100%}}
-h2{font-size:1.25rem;margin:2rem 0 .5rem}ol,ul.plain{color:var(--muted);padding-left:1.2rem}li{margin:.35rem 0}
-pre{background:rgba(127,127,127,.1);padding:.8rem 1rem;border-radius:6px;white-space:pre-wrap;font-size:.9rem;color:var(--fg)}
-code{font-size:.9em}main a,main code{overflow-wrap:anywhere}
+
+.top .family-credit{position:relative;top:auto;right:auto;font-size:.8rem;margin-left:auto}
+.top .family-credit ul{min-width:14rem}
+.top .family-credit ul{display:block;right:0}
+.top .family-credit li a{color:var(--fam-fg);display:block;padding:.3rem .8rem;text-decoration:none}
+.top .family-credit li a:hover{text-decoration:none;color:var(--fam-strong)}
+.foot{font:.85rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted);max-width:76rem;margin:0 auto;padding:1rem 1rem 2.5rem}
+.foot p{margin:0 0 .4rem}
+.foot a{color:var(--muted)}
+@media print{.top,.pick{display:none}}
+@media (max-width:40rem){.tl-svg{display:none}.map-svg{padding:.4rem!important}.map-svg .nlabel{font-size:27px!important}.map-svg .hlabel{font-size:32px!important}}
+:root{--bg:#f6f6f3;--card:#fff;--fg:#17181a;--muted:#4f5257;--line:#dcdcd6;--link:#2b5c60;--acc:#2b5c60}@media (prefers-color-scheme:dark){:root{--bg:#121315;--card:#1c1e21;--fg:#ececea;--muted:#a9abb0;--line:#33363b;--link:#8fcfd4;--acc:#8fcfd4}}
+body{font:1.0625rem/1.62 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:46rem;margin:0 auto;padding:2rem 1rem 2.5rem}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;font-weight:700;color:var(--acc);margin:0 0 .4rem}
+h1{font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.1;margin:0 0 1rem;letter-spacing:-.01em}
+h2{font-size:1.3rem;margin:2rem 0 .6rem}
+li{margin:.35rem 0}
+code{font:.92em ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:.05rem .3rem}
+pre,blockquote{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;white-space:pre-wrap;overflow-wrap:anywhere}
 </style>
 </head>
-<body>
+<body class="d-start">
 <a class="skip" href="#main">Skip to content</a>
-<details class="family-credit">
+<header class="top"><nav class="top-row" aria-label="The Cyber Boardroom"><a class="brand" href="../index.html">The Cyber Boardroom<small>Cyber readiness for boards of directors</small></a><ul><li><a href="/agents/">Use with your AI</a></li><li><a href="/admin/">How this site was made</a></li><li><a href="/">Home</a></li><li><a class="visit" href="https://thecyberboardroom.com/web/home">Visit thecyberboardroom.com &#8599;</a></li></ul><details class="pick"><summary>Choose a design</summary><div class="pick-cards"><p class="sr">The same facts in five designs.</p><ul><li><a href="../designs/brochure.html"><img src="../img/designs/brochure.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Brochure</strong><span>The company at a glance, with diagrams</span></a></li><li><a href="../designs/blueprint.html"><img src="../img/designs/blueprint.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Blueprint</strong><span>A dark technical spec sheet</span></a></li><li><a href="../designs/story.html"><img src="../img/designs/story.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Story</strong><span>Told in order, date by date</span></a></li><li><a href="../index.html"><img src="../img/designs/newsroom.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Newsroom</strong><span>A magazine feature about the company</span></a></li><li><a href="../designs/brief.html"><img src="../img/designs/brief.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Brief</strong><span>Plain and printable on A4</span></a></li></ul><p class="all"><a href="../designs/index.html">All designs</a> &middot; the home page uses The Newsroom.</p></div></details><details class="family-credit">
   <summary>Sovereign Website</summary>
   <ul>
     <li><a href="/start/">Start here</a></li>
     <li><a href="/agents/">Use with your AI</a></li>
     <li class="family-gap"><a href="/admin/">How this site was made</a></li>
+    <li class="family-gap"><a href="https://the-cyber-boardroom.startups.sovereignweb.site/" aria-current="true">The Cyber Boardroom</a></li>
     <li><a href="https://sovereignwebsite.ai/">Sovereign Website</a></li>
     <li><a href="https://sovereignwebsite.org/">Principles</a></li>
     <li><a href="https://sovereignwebsite.site/">Hosted</a></li>
@@ -80,18 +124,11 @@ code{font-size:.9em}main a,main code{overflow-wrap:anywhere}
     <li><a href="https://riskmandate.ai/">RiskMandate</a></li>
     <li><a href="https://newsroom.sgit.ai/">Newsroom</a></li>
   </ul>
-</details>
-<header class="top">
-  <a class="name" href="/">The Cyber Boardroom</a>
-  <nav class="own" aria-label="This site">
-    <a href="/start/">Start here</a>
-    <a href="/agents/">Use with your AI</a>
-  </nav>
-</header>
+</details></nav></header>
 <main id="main">
-<div class="mark">Start here</div>
+<p class="eyebrow">Start here</p>
 <h1>Your site, and how to take it over</h1>
-<p>This page is for the owner of The Cyber Boardroom. The site is static files in one GitHub repository, <a href="https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom">SovereignWebsite/Site__Startups__The-Cyber-Boardroom</a>. It is served at <a href="https://the-cyber-boardroom.startups.sovereignweb.site/">https://the-cyber-boardroom.startups.sovereignweb.site</a> from the <code>site/</code> folder on the <code>dev</code> branch.</p>
+<p>This page is for the owner of this brochure about The Cyber Boardroom, which Dinis Cruz keeps until it is handed over. The site is static files in one GitHub repository, <a href="https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom">SovereignWebsite/Site__Startups__The-Cyber-Boardroom</a>. It is served at <a href="https://the-cyber-boardroom.startups.sovereignweb.site/">https://the-cyber-boardroom.startups.sovereignweb.site</a> from the <code>site/</code> folder on the <code>dev</code> branch.</p>
 <h2>1. Connect GitHub</h2>
 <ol>
 <li>Make a GitHub account at <a href="https://github.com/signup">github.com/signup</a>, if you do not have one.</li>
@@ -112,14 +149,7 @@ code{font-size:.9em}main a,main code{overflow-wrap:anywhere}
 <h2>4. It is yours</h2>
 <p>The files, the history and the address are in a repository you control. You can move it anywhere, at any time: it is plain HTML with no server code, no cookies and no tracking.</p>
 
-<footer>
-<nav class="site-links" aria-label="About this site">
-  <a href="/start/">Start here</a>
-  <a href="/agents/">Use with your AI</a>
-  <a href="/admin/">How this site was made</a>
-</nav>
-A sovereign website, made with the <a href="https://sovereignwebsite.org/">open pattern</a>. Source: <a href="https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom">github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom</a>.
-</footer>
-</main>
+
+</main><footer class="foot"><p>An independent brochure about The Cyber Boardroom, made from its own public pages. For the real thing, go to <a href="https://thecyberboardroom.com/web/home">thecyberboardroom.com</a>.</p><p>Facts last checked 20 November 2026. Text licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; names and marks belong to their owners. No cookies, no tracking, no scripts. <a href="../designs/index.html">All designs</a> &middot; <a href="https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom">Source</a>.</p></footer>
 </body>
 </html>

@@ -3,34 +3,66 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Cyber Boardroom</title>
-<meta name="description" content="A brochure for The Cyber Boardroom, with links to its own site.">
+<title>The board&#x27;s own cyber security advisor</title>
+<meta name="description" content="The Cyber Boardroom built Athena, an AI advisor that answers directors&#x27; questions about cyber risk, with short videos and plain articles around it.">
+<link rel="canonical" href="https://the-cyber-boardroom.startups.sovereignweb.site/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="The Cyber Boardroom">
+<meta property="og:site_name" content="The Cyber Boardroom, a startup brochure">
 <meta property="og:locale" content="en_GB">
 <meta property="og:url" content="https://the-cyber-boardroom.startups.sovereignweb.site/">
-<meta property="og:title" content="The Cyber Boardroom">
-<meta property="og:description" content="A brochure for The Cyber Boardroom, with links to its own site.">
-<meta property="og:image" content="https://the-cyber-boardroom.startups.sovereignweb.site/assets/share/card-1200x630.jpg">
+<meta property="og:title" content="The board&#x27;s own cyber security advisor">
+<meta property="og:description" content="The Cyber Boardroom built Athena, an AI advisor that answers directors&#x27; questions about cyber risk, with short videos and plain articles around it.">
+<meta property="og:image" content="https://the-cyber-boardroom.startups.sovereignweb.site/img/share-card.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The Cyber Boardroom">
+<meta property="og:image:alt" content="The Cyber Boardroom: Cyber readiness for boards of directors. An independent startup brochure made from its own public pages, pointing to thecyberboardroom.com.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Cyber Boardroom">
-<meta name="twitter:description" content="A brochure for The Cyber Boardroom, with links to its own site.">
-<meta name="twitter:image" content="https://the-cyber-boardroom.startups.sovereignweb.site/assets/share/card-1200x630.jpg">
-<link rel="canonical" href="https://the-cyber-boardroom.startups.sovereignweb.site/">
+<meta name="twitter:title" content="The board&#x27;s own cyber security advisor">
+<meta name="twitter:description" content="The Cyber Boardroom built Athena, an AI advisor that answers directors&#x27; questions about cyber risk, with short videos and plain articles around it.">
+<meta name="twitter:image" content="https://the-cyber-boardroom.startups.sovereignweb.site/img/share-card.jpg">
+<meta name="twitter:image:alt" content="The Cyber Boardroom: Cyber readiness for boards of directors. An independent startup brochure made from its own public pages, pointing to thecyberboardroom.com.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
-:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#5d5c57;--accent:#2f6b4f;--line:#e4e1d8}
-@media (prefers-color-scheme:dark){:root{--bg:#141513;--fg:#ecebe6;--muted:#a8a69e;--accent:#7fc3a0;--line:#2c2d29}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}
-main{max-width:44rem;margin:0 auto;padding:10vh 1rem 4rem}
-.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem}
-.mark{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
-h1{font-size:clamp(2rem,6vw,3rem);line-height:1.1;margin:.4rem 0 1rem}
-p{color:var(--muted);margin:0 0 1rem}a{color:var(--accent)}
-footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);overflow-wrap:break-word}
+img,svg{max-width:100%;height:auto;display:block}
+figure{margin:0}
+a{color:var(--link)}
+:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0}
+.skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+sup.cites{font-size:.68em;line-height:0;margin-left:.15em;white-space:nowrap}
+sup.cites a{text-decoration:none;padding:0 .12em}
+sup.cites a:hover{text-decoration:underline}
+/* top navigation: the site's own */
+.top{background:var(--navbg,var(--bg));color:var(--navfg,var(--fg));border-bottom:1px solid var(--line);font:500 .95rem/1.4 var(--navfont,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif)}
+.top a{color:inherit}
+.top-row{max-width:76rem;margin:0 auto;padding:.55rem 1rem;display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.1rem}
+.top .brand{text-decoration:none;font-weight:700;font-size:1.05rem;display:flex;flex-direction:column;line-height:1.15;margin-right:auto}
+.top .brand small{font-weight:400;font-size:.78rem;opacity:.85}
+.top ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.2rem 1rem}
+.top li a{text-decoration:none;display:inline-block;padding:.25rem 0;min-height:24px}
+.top li a:hover{text-decoration:underline}
+.top .visit{font-weight:700}
+.pick{position:relative}
+.pick summary{cursor:pointer;list-style:none;border:1px solid currentColor;border-radius:999px;padding:.25rem .8rem;white-space:nowrap}
+.pick summary::-webkit-details-marker{display:none}
+.pick summary::after{content:" \25BE"}
+.pick[open] summary::after{content:" \25B4"}
+.pick-cards{position:absolute;right:0;top:calc(100% + .5rem);z-index:20;width:min(46rem,calc(100vw - 2rem));background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:1rem;box-shadow:0 12px 40px rgba(0,0,0,.25);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.pick-cards ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:.8rem}
+.pick-cards a{display:flex;flex-direction:column;gap:.15rem;text-decoration:none;color:var(--fg);font-size:.85rem;line-height:1.3}
+.pick-cards img{border-radius:6px;border:1px solid var(--line);aspect-ratio:8/5;object-fit:cover;object-position:top}
+.pick-cards a:hover strong{text-decoration:underline}
+.pick-cards span{color:var(--muted)}
+.pick-cards .now{color:var(--link);font-weight:600}
+.pick-cards .all{margin:.8rem 0 0;font-size:.9rem}
+.pick-cards .all a{display:inline;color:var(--link);text-decoration:underline}
+@media (max-width:40rem){.pick{width:100%}.pick-cards{position:static;width:100%;margin-top:.5rem}}
 /* The Sovereign Website credit on a customer's site: one small, muted control at the far top right that opens a
    pop-up menu of the family links. Not a strip and not a menu bar: the site is about its owner (Dinis, 20 November
    2026: "It needs to fundamentally be about the site and who is it about ... top right pop-up menu").
@@ -51,25 +83,70 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 .family-credit .family-gap{border-bottom:1px solid rgba(127,127,127,.25);padding-bottom:.3rem;margin-bottom:.3rem}
 [data-family-credit="off"] .family-credit{display:none}
 @media print{.family-credit{display:none}}
-.top{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;max-width:44rem;margin:0 auto;padding:2.2rem 1rem 0}
-.top .name{font-weight:600;color:var(--fg);text-decoration:none}
-.own{display:flex;gap:1rem;margin-left:auto;font-size:.95rem}
-.own a,.site-links a{color:var(--accent);font-weight:600}
-.site-links{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;margin-bottom:.8rem;font-size:.95rem}
-@media (max-width:40rem){.own{margin:0;width:100%}}
-h2{font-size:1.25rem;margin:2rem 0 .5rem}ol,ul.plain{color:var(--muted);padding-left:1.2rem}li{margin:.35rem 0}
-pre{background:rgba(127,127,127,.1);padding:.8rem 1rem;border-radius:6px;white-space:pre-wrap;font-size:.9rem;color:var(--fg)}
-code{font-size:.9em}main a,main code{overflow-wrap:anywhere}
+
+.top .family-credit{position:relative;top:auto;right:auto;font-size:.8rem;margin-left:auto}
+.top .family-credit ul{min-width:14rem}
+.top .family-credit ul{display:block;right:0}
+.top .family-credit li a{color:var(--fam-fg);display:block;padding:.3rem .8rem;text-decoration:none}
+.top .family-credit li a:hover{text-decoration:none;color:var(--fam-strong)}
+.foot{font:.85rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted);max-width:76rem;margin:0 auto;padding:1rem 1rem 2.5rem}
+.foot p{margin:0 0 .4rem}
+.foot a{color:var(--muted)}
+@media print{.top,.pick{display:none}}
+@media (max-width:40rem){.tl-svg{display:none}.map-svg{padding:.4rem!important}.map-svg .nlabel{font-size:27px!important}.map-svg .hlabel{font-size:32px!important}}
+:root{--bg:#ffffff;--card:#f4f1ea;--fg:#111;--muted:#555;--line:#d8d2c4;--link:#a3001b;--acc:#a3001b;--band:#2b5c60}@media (prefers-color-scheme:dark){:root{--bg:#121212;--card:#1d1b18;--fg:#f1efe9;--muted:#b3ada1;--line:#3b3730;--link:#ff8a8a;--acc:#ff8a8a;--band:#8fcfd4}}
+body{font:1.1rem/1.65 Georgia,"Times New Roman",serif}
+.mast{max-width:72rem;margin:0 auto;padding:1.4rem 1rem .6rem;border-bottom:4px double var(--fg);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.4rem}
+.mast b{font:900 clamp(1.6rem,4.5vw,2.6rem)/1 Georgia,serif;letter-spacing:-.02em}
+.mast span{font:600 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+main{max-width:72rem;margin:0 auto;padding:0 1rem}
+.kick{font:800 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.14em;color:var(--acc);margin:1.8rem 0 .4rem}
+h1{font:900 clamp(2.2rem,6.5vw,4.4rem)/1.02 Georgia,serif;margin:0 0 1rem;letter-spacing:-.02em;max-width:60rem}
+.stand{font-size:clamp(1.15rem,2.4vw,1.45rem);line-height:1.45;color:var(--muted);max-width:50rem;margin:0 0 1rem}
+.by{font:.85rem system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:.5rem 0;margin:0 0 1.6rem}
+.band{background:var(--band);height:10px;margin:0 0 1.8rem}
+.grid{display:grid;gap:2rem}
+@media (min-width:60rem){.grid{grid-template-columns:1fr 20rem;gap:3rem}}
+.body p{margin:0 0 1.1rem}
+.body>p:first-of-type::first-letter{float:left;font-size:4.3em;line-height:.85;margin:.08em .1em 0 0;font-weight:900;color:var(--acc)}
+.body h2{font:800 1.4rem/1.2 Georgia,serif;margin:2rem 0 .8rem}
+.pq{font:italic 700 1.55rem/1.3 Georgia,serif;margin:2rem 0;padding:0 0 0 1.2rem;border-left:6px solid var(--acc)}
+.pq footer{font:normal .85rem system-ui,sans-serif;color:var(--muted);margin-top:.5rem}
+aside{font-family:system-ui,sans-serif;font-size:.95rem}
+aside .box{background:var(--card);padding:1.1rem 1.2rem;margin:0 0 1.4rem;border-top:4px solid var(--fg)}
+aside h2{font:800 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.14em;margin:0 0 .8rem}
+.figs{list-style:none;margin:0;padding:0}
+.figs li{display:flex;flex-direction:column;padding:.5rem 0;border-bottom:1px solid var(--line)}
+.figs .n{font:900 1.7rem Georgia,serif;color:var(--acc)}
+.figs .d{font-size:.78rem;color:var(--muted)}
+.tl-list{padding-left:1.2rem;margin:0}.tl-list li{margin:0 0 .5rem}.tl-list time{font-weight:700;display:block}
+.flow{padding-left:1.3rem}.flow li{margin:0 0 .7rem}.flow b{display:block}
+.cards{list-style:none;padding:0;margin:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr))}
+.cards li{border-top:3px solid var(--fg);padding-top:.5rem}.cards h3{font:800 1.1rem Georgia,serif;margin:0}.cards p{margin:.2rem 0 0;font-size:1rem}
+.chart{font-family:system-ui,sans-serif;margin:1.5rem 0}
+.chart figcaption{margin-bottom:.5rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
+.chart ul{list-style:none;margin:0;padding:0}
+.chart li{display:grid;grid-template-columns:6.5rem 1fr 2.5rem;gap:.6rem;align-items:center;font-size:.85rem;margin:.25rem 0}
+.chart .bt{height:.9rem;background:var(--line)}.chart .bb{display:block;height:100%;background:var(--acc)}
+.chart .bv{text-align:right;font-weight:700}
+.tl-svg{margin:1.5rem 0}
+.tl-svg .axis{stroke:var(--fg);stroke-width:3}.tl-svg .tick{stroke:var(--muted);stroke-width:2}
+.tl-svg .dot{fill:var(--acc)}.tl-svg .num{fill:var(--fg);font:800 24px Georgia,serif}.tl-svg .yr{fill:var(--muted);font:700 24px system-ui,sans-serif}
+figcaption{font:.82rem system-ui,sans-serif;color:var(--muted)}
+.more{font:700 1rem system-ui,sans-serif;background:var(--fg);color:var(--bg);display:inline-block;padding:.7rem 1.1rem;text-decoration:none}
+.sources{font:.9rem/1.5 system-ui,sans-serif;border-top:4px double var(--fg);margin-top:2.5rem;padding-top:1rem}
+.sources h2{font-size:1rem;text-transform:uppercase;letter-spacing:.12em}.sources ol{padding-left:1.5rem}.sources .acc,.sources p{color:var(--muted)}
 </style>
 </head>
-<body>
+<body class="d-newsroom">
 <a class="skip" href="#main">Skip to content</a>
-<details class="family-credit">
+<header class="top"><nav class="top-row" aria-label="The Cyber Boardroom"><a class="brand" href="index.html">The Cyber Boardroom<small>Cyber readiness for boards of directors</small></a><ul><li><a href="#n-what">The feature</a></li><li><a href="#n-how">How it works</a></li><li><a href="#n-products">Products</a></li><li><a href="#n-story">Timeline</a></li><li><a href="#n-h-src">Sources</a></li><li><a class="visit" href="https://thecyberboardroom.com/web/home">Visit thecyberboardroom.com &#8599;</a></li></ul><details class="pick"><summary>Choose a design</summary><div class="pick-cards"><p class="sr">The same facts in five designs.</p><ul><li><a href="designs/brochure.html"><img src="img/designs/brochure.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Brochure</strong><span>The company at a glance, with diagrams</span></a></li><li><a href="designs/blueprint.html"><img src="img/designs/blueprint.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Blueprint</strong><span>A dark technical spec sheet</span></a></li><li><a href="designs/story.html"><img src="img/designs/story.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Story</strong><span>Told in order, date by date</span></a></li><li><a href="index.html" aria-current="page"><img src="img/designs/newsroom.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Newsroom</strong><span>A magazine feature about the company</span><span class="now">You are here</span></a></li><li><a href="designs/brief.html"><img src="img/designs/brief.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><strong>The Brief</strong><span>Plain and printable on A4</span></a></li></ul><p class="all"><a href="designs/index.html">All designs</a> &middot; the home page uses The Newsroom.</p></div></details><details class="family-credit">
   <summary>Sovereign Website</summary>
   <ul>
     <li><a href="/start/">Start here</a></li>
     <li><a href="/agents/">Use with your AI</a></li>
     <li class="family-gap"><a href="/admin/">How this site was made</a></li>
+    <li class="family-gap"><a href="https://the-cyber-boardroom.startups.sovereignweb.site/" aria-current="true">The Cyber Boardroom</a></li>
     <li><a href="https://sovereignwebsite.ai/">Sovereign Website</a></li>
     <li><a href="https://sovereignwebsite.org/">Principles</a></li>
     <li><a href="https://sovereignwebsite.site/">Hosted</a></li>
@@ -80,26 +157,7 @@ code{font-size:.9em}main a,main code{overflow-wrap:anywhere}
     <li><a href="https://riskmandate.ai/">RiskMandate</a></li>
     <li><a href="https://newsroom.sgit.ai/">Newsroom</a></li>
   </ul>
-</details>
-<header class="top">
-  <a class="name" href="/">The Cyber Boardroom</a>
-  <nav class="own" aria-label="This site">
-    <a href="/start/">Start here</a>
-    <a href="/agents/">Use with your AI</a>
-  </nav>
-</header>
-<main id="main">
-<div class="mark">the-cyber-boardroom.startups.sovereignweb.site</div>
-<h1>The Cyber Boardroom</h1>
-<p>A brochure for The Cyber Boardroom, with links to its own site.</p>
-<p>This site was made by one request to the Sovereign Website pipeline. Its files, its history and its address are in a repository its owner controls, and can move anywhere.</p>
-<footer>
-<nav class="site-links" aria-label="About this site">
-  <a href="/start/">Start here</a>
-  <a href="/agents/">Use with your AI</a>
-  <a href="/admin/">How this site was made</a>
-</nav>
-A sovereign website, made with the <a href="https://sovereignwebsite.org/">open pattern</a>. Source: <a href="https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom">github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom</a>.</footer>
-</main>
+</details></nav></header>
+<div class="mast"><b>Startups Newsroom</b><span>Sovereign Website family &middot; 20 November 2026</span></div><main id="main"><p class="kick">Startup profile</p><h1>The board&#x27;s own cyber security advisor</h1><p class="stand">The Cyber Boardroom built Athena, an AI advisor that answers directors&#x27; questions about cyber risk, with short videos and plain articles around it.</p><p class="by">Written by startups.b, the agent that keeps this site, from The Cyber Boardroom's own public pages. Every claim is linked to its source.</p><div class="band" role="presentation"></div><div class="grid"><article class="body" id="n-what"><p>The Cyber Boardroom came from a question every director faces: what does cyber security mean for my organisation, and what should I do about it? Its own content answers that it is &quot;a risk management conversation.&quot;<sup class="cites"><a href="#n-src-5" class="cite" aria-label="source 5">5</a></sup></p><p>The first videos, introducing the platform and its advisor Athena, are dated February 2024. On 8 April 2024 its founder Dinis Cruz posted that &quot;The Cyber Boardroom LTD has been created, it&#x27;s official now&quot;.<sup class="cites"><a href="#n-src-7" class="cite" aria-label="source 7">7</a> <a href="#n-src-8" class="cite" aria-label="source 8">8</a></sup></p><p>In an interview published by SC Media UK on 22 April 2024, the platform was described as &quot;serverless and driven by GenAI bots and agents&quot;.<sup class="cites"><a href="#n-src-9" class="cite" aria-label="source 9">9</a></sup></p><p>July 2024 brought the first MVP write-up and the Community Edition, which anyone can install. The open-source packages behind the site kept being released until January 2025.<sup class="cites"><a href="#n-src-8" class="cite" aria-label="source 8">8</a> <a href="#n-src-10" class="cite" aria-label="source 10">10</a> <a href="#n-src-11" class="cite" aria-label="source 11">11</a></sup></p><p>Today The Cyber Boardroom Limited, registered in the UK, is named on sgit.ai as the commercial vehicle behind sgit.ai and RiskMandate.ai.<sup class="cites"><a href="#n-src-12" class="cite" aria-label="source 12">12</a></sup></p><blockquote class="pq">&ldquo;Welcome to The Cyber Boardroom, the one-stop shop that boards of directors rely on for their cyber readiness.&rdquo;<footer>The welcome on thecyberboardroom.com<sup class="cites"><a href="#n-src-1" class="cite" aria-label="source 1">1</a></sup></footer></blockquote><p>The Cyber Boardroom is built for boards of directors. Its stated mission is &quot;to help you understand your organisation&#x27;s cyber security agenda, as well as fulfil your duties as a board member.&quot;<sup class="cites"><a href="#n-src-1" class="cite" aria-label="source 1">1</a></sup></p><p>At its centre is Athena, an AI advisor built on large language models to answer board members&#x27; questions about cyber security and the risks their organisation faces.<sup class="cites"><a href="#n-src-2" class="cite" aria-label="source 2">2</a></sup></p><p>Around Athena sit curated articles and a library of 60-second videos on key cyber security topics, which frame cyber security as &quot;a risk management conversation&quot;, not an IT one.<sup class="cites"><a href="#n-src-3" class="cite" aria-label="source 3">3</a> <a href="#n-src-4" class="cite" aria-label="source 4">4</a> <a href="#n-src-5" class="cite" aria-label="source 5">5</a></sup></p><p>The site is labelled &quot;community edition&quot; and &quot;beta&quot;. A Community Edition can be installed with pip or Docker.<sup class="cites"><a href="#n-src-1" class="cite" aria-label="source 1">1</a> <a href="#n-src-6" class="cite" aria-label="source 6">6</a></sup></p><h2 id="n-how">How it works</h2><ol class="flow"><li><b>Ask Athena</b><span>A board member asks a question; Athena, built on large language models, answers about cyber security only.<sup class="cites"><a href="#n-src-2" class="cite" aria-label="source 2">2</a></sup></span></li><li><b>Make it yours</b><span>Board members personalise Athena by adding prompts in their profile.<sup class="cites"><a href="#n-src-1" class="cite" aria-label="source 1">1</a></sup></span></li><li><b>Choose a model</b><span>The site works with several LLM platforms, including Groq, Mistral, OpenAI and Ollama.<sup class="cites"><a href="#n-src-14" class="cite" aria-label="source 14">14</a></sup></span></li><li><b>Learn in minutes</b><span>Curated articles and 60-second videos cover the topics boards need.<sup class="cites"><a href="#n-src-3" class="cite" aria-label="source 3">3</a> <a href="#n-src-4" class="cite" aria-label="source 4">4</a></sup></span></li></ol><h2 id="n-products">The parts</h2><ul class="cards"><li><h3><a href="https://thecyberboardroom.com/web/athena">Athena</a></h3><p>&quot;Your AI cyber security advisor&quot;, named after the Greek goddess of wisdom, courage and strategic warfare.<sup class="cites"><a href="#n-src-2" class="cite" aria-label="source 2">2</a> <a href="#n-src-15" class="cite" aria-label="source 15">15</a></sup></p></li><li><h3><a href="https://thecyberboardroom.com/web/content">Curated content</a></h3><p>Articles including Cyber security in the boardroom, Incident management and The importance of digital trust.<sup class="cites"><a href="#n-src-3" class="cite" aria-label="source 3">3</a></sup></p></li><li><h3><a href="https://thecyberboardroom.com/web/content/videos">60-second videos</a></h3><p>A library of short videos on key cyber security topics.<sup class="cites"><a href="#n-src-4" class="cite" aria-label="source 4">4</a></sup></p></li><li><h3>Board personas</h3><p>CFO and CISO personas to practise the conversation from each side.<sup class="cites"><a href="#n-src-13" class="cite" aria-label="source 13">13</a></sup></p></li><li><h3><a href="https://thecyberboardroom.com/web/chat-with-llms">Chat with LLMs</a></h3><p>Try several large language models side by side, without a system prompt.<sup class="cites"><a href="#n-src-14" class="cite" aria-label="source 14">14</a></sup></p></li><li><h3><a href="https://thecyberboardroom.com/web/docs/support/install-cbr-community">Community Edition</a></h3><p>Install it yourself with pip or Docker; the packages are MIT licensed on PyPI.<sup class="cites"><a href="#n-src-6" class="cite" aria-label="source 6">6</a> <a href="#n-src-10" class="cite" aria-label="source 10">10</a></sup></p></li></ul><h2 id="n-story">The timeline</h2><figure class="tl-svg"><svg viewBox="0 0 1000 185" role="img" aria-label="Timeline of 7 dated events from 25 February 2024 to 29 January 2025; the numbered list below gives each one."><line x1="40" x2="960" y1="74" y2="74" class="axis"/><line x1="884.0" x2="884.0" y1="60" y2="88" class="tick"/><text x="884.0" y="178" text-anchor="middle" class="yr">2025</text><circle cx="40.0" cy="74" r="9" class="dot"/><text x="40.0" y="48" text-anchor="middle" class="num">1</text><circle cx="156.7" cy="74" r="9" class="dot"/><text x="156.7" y="48" text-anchor="middle" class="num">2</text><circle cx="194.7" cy="74" r="9" class="dot"/><text x="194.7" y="48" text-anchor="middle" class="num">3</text><circle cx="425.4" cy="74" r="9" class="dot"/><text x="425.4" y="48" text-anchor="middle" class="num">4</text><circle cx="463.4" cy="74" r="9" class="dot"/><text x="463.4" y="48" text-anchor="middle" class="num">5</text><circle cx="832.4" cy="74" r="9" class="dot"/><text x="832.4" y="48" text-anchor="middle" class="num">6</text><circle cx="960.0" cy="74" r="9" class="dot"/><text x="960.0" y="48" text-anchor="middle" class="num">7</text></svg><figcaption>Spaced to scale by date. Drawn for this site from the dates the company publishes.</figcaption></figure><p>Athena, the videos and the articles are all on the site, and the Community Edition is free to install.</p><p><a class="more" href="https://thecyberboardroom.com/web/home">Read more at thecyberboardroom.com &#8599;</a></p></article><aside><div class="box"><h2>At a glance</h2><ul class="figs"><li><span class="n">60 s</span><span class="l">length of each video in the library</span><span class="d">as published 20 November 2026<sup class="cites"><a href="#n-src-4" class="cite" aria-label="source 4">4</a></sup></span></li><li><span class="n">6</span><span class="l">languages Athena was shown speaking, in a July 2024 demo</span><span class="d">as published 31 July 2024<sup class="cites"><a href="#n-src-8" class="cite" aria-label="source 8">8</a> <a href="#n-src-16" class="cite" aria-label="source 16">16</a></sup></span></li><li><span class="n">7</span><span class="l">LLM platforms listed on the Chat with LLMs page</span><span class="d">as published 20 November 2026<sup class="cites"><a href="#n-src-14" class="cite" aria-label="source 14">14</a></sup></span></li></ul></div><div class="box"><h2>Who it is for</h2><ul><li>Boards of directors and individual board members.<sup class="cites"><a href="#n-src-1" class="cite" aria-label="source 1">1</a></sup></li><li>Directors and executives who need to understand cyber risk without being technical, through CFO and CISO personas among others.<sup class="cites"><a href="#n-src-9" class="cite" aria-label="source 9">9</a> <a href="#n-src-13" class="cite" aria-label="source 13">13</a></sup></li><li>Anyone who wants to run it themselves: the Community Edition installs with pip or Docker.<sup class="cites"><a href="#n-src-6" class="cite" aria-label="source 6">6</a></sup></li></ul></div><div class="box"><h2>Key dates</h2><ol class="tl-list"><li><time datetime="2024-02-25">25 February 2024</time> <span>&quot;Meet Athena&quot; video.<sup class="cites"><a href="#n-src-7" class="cite" aria-label="source 7">7</a></sup></span></li><li><time datetime="2024-04-08">8 April 2024</time> <span>&quot;The Cyber Boardroom LTD has been created&quot;.<sup class="cites"><a href="#n-src-8" class="cite" aria-label="source 8">8</a></sup></span></li><li><time datetime="2024-04-22">22 April 2024</time> <span>SC Media UK publishes an interview with Dinis Cruz on The Cyber Boardroom.<sup class="cites"><a href="#n-src-9" class="cite" aria-label="source 9">9</a></sup></span></li><li><time datetime="2024-07-16">16 July 2024</time> <span>&quot;Why, How, and What (v0.4, First MVP)&quot; published.<sup class="cites"><a href="#n-src-8" class="cite" aria-label="source 8">8</a></sup></span></li><li><time datetime="2024-07-30">30 July 2024</time> <span>The Community Edition is introduced.<sup class="cites"><a href="#n-src-8" class="cite" aria-label="source 8">8</a></sup></span></li><li><time datetime="2024-12-13">13 December 2024</time> <span>Latest release of the website package on PyPI, 0.221.1.<sup class="cites"><a href="#n-src-10" class="cite" aria-label="source 10">10</a></sup></span></li><li><time datetime="2025-01-29">29 January 2025</time> <span>Latest release of the content package on PyPI, 0.9.78.<sup class="cites"><a href="#n-src-11" class="cite" aria-label="source 11">11</a></sup></span></li></ol></div><div class="box"><h2>People</h2><ul class="people"><li><b>Dinis Cruz</b>, founder, described by SC Media UK as &quot;an experienced CISO for multiple businesses&quot;<sup class="cites"><a href="#n-src-9" class="cite" aria-label="source 9">9</a> <a href="#n-src-17" class="cite" aria-label="source 17">17</a></sup></li></ul></div></aside></div><section class="sources" aria-labelledby="n-h-src"><h2 id="n-h-src">Sources</h2><p>Every fact on this page comes from the company's own public pages, listed here. Numbers in the text point to them. Diagrams were drawn for this site from those facts.</p><ol><li id="n-src-1"><a href="https://thecyberboardroom.com/web/home">The Cyber Boardroom, home page</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-2"><a href="https://thecyberboardroom.com/web/athena">The Cyber Boardroom, Athena</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-3"><a href="https://thecyberboardroom.com/web/content">The Cyber Boardroom, content</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-4"><a href="https://thecyberboardroom.com/web/content/videos">The Cyber Boardroom, videos</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-5"><a href="https://thecyberboardroom.com/web/content/cybersecurity-in-boardroom">The Cyber Boardroom, cyber security in the boardroom</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-6"><a href="https://thecyberboardroom.com/web/docs/support/install-cbr-community">The Cyber Boardroom, install the Community Edition</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-7"><a href="https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/layout.md">The Cyber Boardroom, home page layout (video files)</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-8"><a href="https://thecyberboardroom.com/web/docs/news/blog-posts">The Cyber Boardroom, blog posts</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-9"><a href="https://insight.scmagazineuk.com/interview-dinis-cruz-on-the-cyber-boardoom">SC Media UK, Interview: Dinis Cruz on The Cyber Boardroom (22 April 2024)</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-10"><a href="https://pypi.org/project/cbr-website-beta/#history">PyPI, cbr-website-beta</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-11"><a href="https://pypi.org/project/cbr-content/#history">PyPI, cbr-content</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-12"><a href="https://sgit.ai/about/index.html">sgit.ai, about</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-13"><a href="https://thecyberboardroom.com/web/docs/demos/personas/ciso/index">The Cyber Boardroom, CISO personas</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-14"><a href="https://thecyberboardroom.com/web/chat-with-llms">The Cyber Boardroom, chat with LLMs</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-15"><a href="https://static.dev.aws.cyber-boardroom.com/cbr-content/latest/en/web-site/home-page/card-1.md">The Cyber Boardroom, Athena card</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-16"><a href="https://thecyberboardroom.com/web/docs/platforms/groq/speak-in-6-languages">The Cyber Boardroom, speak in 6 languages</a> <span class="acc">read 20 November 2026</span></li><li id="n-src-17"><a href="https://diniscruz.ai/">Dinis Cruz, home page</a> <span class="acc">read 20 November 2026</span></li></ol></section></main><footer class="foot"><p>An independent brochure about The Cyber Boardroom, made from its own public pages. For the real thing, go to <a href="https://thecyberboardroom.com/web/home">thecyberboardroom.com</a>.</p><p>Facts last checked 20 November 2026. Text licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; names and marks belong to their owners. No cookies, no tracking, no scripts. <a href="designs/index.html">All designs</a> &middot; <a href="https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom">Source</a>.</p></footer>
 </body>
 </html>

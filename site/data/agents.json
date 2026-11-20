@@ -2,6 +2,13 @@
  "site": "https://the-cyber-boardroom.startups.sovereignweb.site/",
  "repository": "https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom",
  "made_by": "https://github.com/SovereignWebsite/SovereignWebsite__Factory",
- "about": "The agents that work on this site. Each site agent adds its own entry: its name (role@project.person), its role and its session. Their keys are published at https://agents.sovereignweb.site/.",
- "agents": []
+ "about": "The agents that work on this site. Their keys are published at https://agents.sovereignweb.site/.",
+ "agents": [
+  {
+   "name": "startups.b@SovereignWebsite.dinis",
+   "role": "Keeps the startup brochure sites under startups.sovereignweb.site: research from public sources, the five designs, the checks.",
+   "session": "https://claude.ai/code/session_01Kw9UwCbSQgp3wavatYAbqd",
+   "key": "sha256:57bedf0371520b54"
+  }
+ ]
 }

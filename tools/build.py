@@ -65,14 +65,15 @@ def load():
 
 # ---------------------------------------------------------------- helpers
 def cite(F, ids, prefix):
-    """One small, spaced marker per claim (design.b round 1): it links to the first source; the label names them all."""
+    """Source markers: every source kept, each a 24 px target labelled "source N" (design.b round 1)."""
     if not ids:
         return ''
+    out = []
     for i in ids:
         if i not in F['_src']:
             sys.exit(f'unknown source id {i}')
-    label = f'source {ids[0]}' if len(ids) == 1 else 'sources ' + ' and '.join(str(i) for i in ids)
-    return f'<sup class="cites"><a href="#{prefix}src-{ids[0]}" class="cite" aria-label="{label}">{ids[0]}</a></sup>'
+        out.append(f'<a href="#{prefix}src-{i}" class="cite" aria-label="source {i}">{i}</a>')
+    return '<sup class="cites">' + ''.join(out) + '</sup>'
 
 
 def md(text):
@@ -288,7 +289,7 @@ a{color:var(--link)}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}
-sup.cites a{text-decoration:none;padding:0 .12em}
+sup.cites a{text-decoration:none;display:inline-block;min-width:24px;text-align:center}
 sup.cites a:hover{text-decoration:underline}
 /* top navigation: the site's own */
 .top{background:var(--navbg,var(--bg));color:var(--navfg,var(--fg));border-bottom:1px solid var(--line);font:500 .95rem/1.4 var(--navfont,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif)}

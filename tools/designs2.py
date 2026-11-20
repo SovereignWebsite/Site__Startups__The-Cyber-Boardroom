@@ -12,13 +12,13 @@ B = None  # build.py module, set by setup()
 BAND_CSS = """
 .oneline{font:600 1.05rem/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:-.2rem 0 1rem;opacity:.9}
 .band-full{background:#0f1113;color:#f4f4f2;padding:3rem 0;margin:2.5rem 0}
-.band-full h2{color:#fff;margin:0 0 1.4rem;font:800 clamp(1.6rem,4vw,2.6rem)/1.1 system-ui,sans-serif}
+.band-full h2{color:#fff;margin:0 0 1.4rem;font:800 clamp(1.6rem,4vw,2.6rem)/1.1 var(--headfont,system-ui,sans-serif)}
 .band-full a{color:#9be7d8}
 .bcols,.bnums,.bkeys{display:grid;gap:1.2rem;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))}
 .bcol,.bkey{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:1.1rem 1.2rem}
 .bcol b,.bkey b{display:block;font-size:1.15rem;margin-bottom:.3rem}
 .bcol span,.bkey span{color:#d6d6d2}
-.bkey i{font-style:normal;font-size:1.6rem;display:block}
+.bkey .keyico{display:block;color:var(--bandacc,#5eead4);margin-bottom:.4rem}
 .bnum b{display:block;font:900 clamp(2.6rem,7vw,4.4rem)/1 system-ui,sans-serif;color:var(--bandacc,#5eead4)}
 .bnum span{display:block;color:#e4e4e0;margin-top:.4rem}.bnum small{display:block;color:#a9a9a4;font-size:.78rem;margin-top:.3rem}
 .bcode{margin:1.6rem 0 0;max-width:40rem}.bcode pre{background:#000;border:1px solid #333;border-radius:10px;padding:1rem 1.2rem;overflow-x:auto;color:#7ee787;font:.95rem/1.6 ui-monospace,Menlo,monospace;margin:0}
@@ -143,10 +143,12 @@ def band(F, depth, d, p):
     extra = B.people(F, p) if b.get('people') else ''
     keys = ''
     if b.get('keys'):
-        keys = '<div class="bkeys">' + ''.join(f'<div class="bkey"><i aria-hidden="true">&#128477;</i><b>{e(k)}</b><span>{md(v)}</span></div>' for k, v in b['keys']) + '</div>'
+        keys = '<div class="bkeys">' + ''.join(f'<div class="bkey"><svg class="keyico" viewBox="0 0 64 32" width="56" height="28" aria-hidden="true" focusable="false"><circle cx="14" cy="16" r="11" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="14" cy="16" r="3.5" fill="currentColor"/><path d="M25 16 H60 M48 16 V25 M56 16 V23" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg><b>{e(k)}</b><span>{md(v)}</span></div>' for k, v in b['keys']) + '</div>'
         if b.get('keys_s'):
             keys += f'<p class="bnote">{md(b["keys_note"])}{B.cite(F, b.get("keys_s"), p)}</p>'
-    return (f'<section class="band-full" aria-labelledby="{p}band"><div class="wrap"><h2 id="{p}band">{e(b["title"])}</h2>'
+    hf = F['brand'].get('headfont')
+    st = f' style="--headfont:{e(hf)}"' if hf else ''
+    return (f'<section class="band-full"{st} aria-labelledby="{p}band"><div class="wrap"><h2 id="{p}band">{e(b["title"])}</h2>'
             f'{"<div class=bcols>" + cols + "</div>" if cols else ""}{"<div class=bnums>" + nums + "</div>" if nums else ""}{keys}{code}{quote}{extra}</div></section>')
 
 
@@ -584,7 +586,8 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr))}
 .figs li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;display:flex;flex-direction:column}.figs .n{font:800 2rem ui-monospace,Menlo,monospace;color:var(--acc)}.figs .d{font-size:.78rem;color:var(--muted)}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-top:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
-.chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:7rem 1fr 2.5rem;gap:.6rem;align-items:center;margin:.3rem 0}
+.chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:7rem 1fr 4rem;gap:.6rem;align-items:center;margin:.3rem 0}
+.chart .bv{white-space:nowrap}
 .chart .bt{height:1rem;background:var(--line);border-radius:4px;overflow:hidden}.chart .bb{display:block;height:100%;background:var(--acc)}.chart .bv{text-align:right;font-weight:700}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 """
@@ -604,12 +607,12 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
            '<figcaption style="color:#cfccc4;font-size:.85rem">Drawn for this site from RiskMandate\'s four objects: mandate, grant, delta and barrier.</figcaption></figure>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
     body = (f'<div class="ghero"><div class="wrap"><div><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p><div class="btns">{btns}</div></div>{svg}</div></div>'
-            f'{band(F, depth, d, p)}<div class="wrap"><div class="parts" id="{p}how">{parts}</div>'
+            f'<div class="wrap"><div class="parts" id="{p}how">{parts}</div></div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">The gap, in plain words</h2>{fb["what"]}'
             f'<h2>Who looks at the gap</h2>{fb["for"]}'
             f'<h2 id="{p}products">What closes it</h2>{fb["products"]}'
             f'<h2>Measured on its own team</h2>{fb["figures"]}{fb["chart"]}'
-            f'<h2 id="{p}story">Key dates</h2>{fb["timeline"]}{fb["people"]}'
+            f'<h2 id="{p}story">Key dates</h2>{fb["timeline"]}'
             f'{next_step(F, depth)}{fb["sources"]}</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
                 sect_links(p, [('how', 'The four objects'), ('what', 'The gap'), ('products', 'What closes it')]), body)
@@ -650,7 +653,8 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
 .cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
 .cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
-.chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:8rem 1fr 3.5rem;gap:.6rem;align-items:center;margin:.3rem 0}
+.chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:7.5rem 1fr 5.5rem;gap:.6rem;align-items:center;margin:.3rem 0}
+.chart .bv{white-space:nowrap}
 .chart .bt{height:1rem;background:var(--line);border-radius:4px;overflow:hidden}.chart .bb{display:block;height:100%;background:var(--acc)}.chart .bv{text-align:right;font-weight:700}
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}.figs li{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8rem}.figs .n{font:800 1.8rem system-ui;color:var(--acc)}.figs .d{font-size:.75rem;color:var(--muted)}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}

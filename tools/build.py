@@ -64,6 +64,9 @@ def load():
 
 
 # ---------------------------------------------------------------- helpers
+CITED = set()
+
+
 def cite(F, ids, prefix):
     """Source markers: every source kept, each a 24 px target labelled "source N" (design.b round 1)."""
     if not ids:
@@ -72,12 +75,14 @@ def cite(F, ids, prefix):
     for i in ids:
         if i not in F['_src']:
             sys.exit(f'unknown source id {i}')
+        CITED.add(i)
         out.append(f'<a href="#{prefix}src-{i}" class="cite" aria-label="source {i}">{i}</a>')
     return '<sup class="cites">' + ''.join(out) + '</sup>'
 
 
 def md(text):
-    """Tiny inline markup: **bold**, *italic*, [label](url)."""
+    """Tiny inline markup: **bold**, *italic*, [label](url); straight double quotes become curly."""
+    text = re.sub(r'"([^"]*)"', '\u201c\\1\u201d', str(text))
     t = e(text)
     t = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', t)
     t = re.sub(r'\*(.+?)\*', r'<i>\1</i>', t)
@@ -148,6 +153,14 @@ def gallery(F, depth, start=0, cls='gallery'):
     return f'<div class="{cls}">' + ''.join(shot(F, depth, k) for k in range(start, len(shots))) + '</div>'
 
 # ---------------------------------------------------------------- visuals
+def short_date(d):
+    m = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    p = d.split('-')
+    if len(p) == 3:
+        return f'{int(p[2])} {m[int(p[1]) - 1]}'
+    return f'{m[int(p[1]) - 1]} {p[0][2:]}' if len(p) == 2 else p[0]
+
+
 def svg_timeline(F, cls='tl-svg'):
     ev = sorted(F.get('timeline', []), key=lambda x: x['date'])
     if len(ev) < 2:
@@ -155,16 +168,19 @@ def svg_timeline(F, cls='tl-svg'):
     a, b = date_num(ev[0]['date']), date_num(ev[-1]['date'])
     span = max(b - a, 1)
     W, X0, X1, Y = 1000, 40, 960, 74
+    dated = (b - a) > 60
     marks = []
     rows = [Y - 26, Y + 42, Y - 54, Y + 70]
     last = [-999] * len(rows)
     for n, x in enumerate(ev, 1):
         px = X0 + (date_num(x['date']) - a) / span * (X1 - X0)
-        r = next((i for i in range(len(rows)) if px - last[i] > 34), 0)
+        lab = short_date(x['date']) if dated else str(n)
+        need = 120 if dated else 40
+        r = next((i for i in range(len(rows)) if px - last[i] > need), len(rows) - 1)
         last[r] = px
         ty = rows[r]
         marks.append(f'<circle cx="{px:.1f}" cy="{Y}" r="9" class="dot"/>'
-                     f'<text x="{px:.1f}" y="{ty}" text-anchor="middle" class="num">{n}</text>')
+                     f'<text x="{px:.1f}" y="{ty}" text-anchor="middle" class="num">{lab}</text>')
     y0, y1 = ev[0]['date'][:4], ev[-1]['date'][:4]
     years = ''
     for yr in range(int(y0), int(y1) + 2):
@@ -257,7 +273,7 @@ def bullets(F, items, prefix, cls=''):
 def products(F, prefix, cls='cards'):
     out = []
     for p in F.get('products', []):
-        name = f'<a href="{e(p["url"])}">{e(p["name"])}</a>' if p.get('url') else e(p['name'])
+        name = f'<a href="{e(p["url"])}">{e(p["name"])} &#8599;</a>' if p.get('url') else e(p['name'])
         out.append(f'<li><h3>{name}</h3><p>{md(p["t"])}{cite(F, p.get("s"), prefix)}</p></li>')
     return f'<ul class="{cls}">' + ''.join(out) + '</ul>'
 
@@ -271,11 +287,19 @@ def people(F, prefix):
 
 
 def sources(F, prefix, heading='Sources'):
-    li = ''.join(f'<li id="{prefix}src-{s["id"]}"><a href="{e(s["url"])}">{e(s["title"])}</a>'
-                 f' <span class="acc">read {e(fmt_date(s["accessed"]))}</span></li>' for s in F['sources'])
-    return (f'<section class="sources" aria-labelledby="{prefix}h-src"><h2 id="{prefix}h-src">{heading}</h2>'
-            f'<p>Every fact on this page comes from the company\'s own public pages, listed here. '
-            f'Numbers in the text point to them. Any diagram on this page was drawn for this site from those facts.</p><ol>{li}</ol></section>')
+    """A placeholder, filled after the page is built with only the sources it cites (design.b round 3)."""
+    return f'<!--SOURCES:{prefix}:{heading}-->'
+
+
+def fill_sources(F, html):
+    def one(m):
+        prefix, heading = m.group(1), m.group(2)
+        li = ''.join(f'<li id="{prefix}src-{s["id"]}"><a href="{e(s["url"])}">{e(s["title"])}</a>'
+                     f' <span class="acc">read {e(fmt_date(s["accessed"]))}</span></li>' for s in F['sources'] if s['id'] in CITED)
+        return (f'<section class="sources" aria-labelledby="{prefix}h-src"><h2 id="{prefix}h-src">{heading}</h2>'
+                f'<p>Every fact on this page comes from the company\'s own public pages, listed here by the numbers in the text. '
+                f'Any diagram on this page was drawn for this site from those facts.</p><ol>{li}</ol></section>')
+    return re.sub(r'<!--SOURCES:([^:]*):([^>]*)-->', one, html)
 
 
 # ---------------------------------------------------------------- chrome
@@ -312,7 +336,7 @@ sup.cites a:hover{text-decoration:underline}
 .pick-cards ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:.8rem}
 .pick-cards a{display:flex;flex-direction:column;gap:.15rem;text-decoration:none;color:var(--fg);font-size:.85rem;line-height:1.3}
 .pick-cards img{border-radius:6px;border:1px solid var(--line);aspect-ratio:8/5;object-fit:cover;object-position:top}
-.pick-cards strong{display:block}
+.pick-cards strong,.pick-cards span,.pick-cards .now{display:block}
 .pick-cards a:hover strong{text-decoration:underline}
 .pick-cards span{color:var(--muted)}
 .pick-cards .now{color:var(--link);font-weight:600}
@@ -562,7 +586,8 @@ figcaption{font-size:.85rem;color:var(--muted);margin-top:.5rem}
 .chart figcaption{font-size:.95rem;color:var(--fg);margin:0 0 .8rem}
 .chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
 .chart ul{list-style:none;margin:0;padding:0;display:grid;gap:.35rem}
-.chart li{display:grid;grid-template-columns:6.5rem 1fr 2.5rem;gap:.6rem;align-items:center;font-size:.9rem}
+.chart li{display:grid;grid-template-columns:6.5rem 1fr 5rem;gap:.6rem;align-items:center;font-size:.9rem}
+.chart .bv{white-space:nowrap}
 .chart .bt{background:var(--soft);border-radius:4px;height:1.1rem;overflow:hidden}
 .chart .bb{display:block;height:100%;background:var(--acc)}
 .chart .bv{font-weight:700;text-align:right}
@@ -1025,11 +1050,15 @@ def main():
     for k, _, _ in DESIGNS:
         path = page_path(k, F)
         depth = path.count('/')
+        CITED.clear()
+        page = gens[k](F, depth)
         with open(os.path.join(SITE, path), 'w') as f:
-            f.write(gens[k](F, depth))
+            f.write(fill_sources(F, page))
     # the home design is also reachable at its own address: it is a copy
+    CITED.clear()
+    page = gens[F['home']](F, 1)
     with open(os.path.join(SITE, 'designs', f'{F["home"]}.html'), 'w') as f:
-        f.write(gens[F['home']](F, 1))
+        f.write(fill_sources(F, page))
     with open(os.path.join(SITE, 'designs', 'index.html'), 'w') as f:
         f.write(designs_index(F))
     os.makedirs(os.path.join(ROOT, 'tools', 'out'), exist_ok=True)
@@ -1042,7 +1071,8 @@ def main():
     for key, label in PAGES:
         os.makedirs(os.path.join(SITE, key), exist_ok=True)
         with open(os.path.join(SITE, key, 'index.html'), 'w') as f:
-            f.write(seed_page(F, key, label))
+            CITED.clear()
+            f.write(fill_sources(F, seed_page(F, key, label)))
     os.makedirs(os.path.join(SITE, 'data'), exist_ok=True)
     with open(os.path.join(SITE, 'data', 'agents.json'), 'w') as f:
         f.write(agents_json(F))

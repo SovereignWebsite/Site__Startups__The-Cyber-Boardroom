@@ -28,7 +28,7 @@ DESIGNS = [
 
 # Startup sites that are live: only these are linked from the others (a link to a site not yet live fails the
 # link check). Add a slug here once its site answers, then rebuild every startup site.
-LIVE = set()
+LIVE = {'sgit', 'the-cyber-boardroom', 'risk-mandate', 'agentic-cells', 'sovereign-website'}
 
 STARTUPS = [  # the family of startup sites, kept in the same order everywhere
     ('sgit', 'sgit'),

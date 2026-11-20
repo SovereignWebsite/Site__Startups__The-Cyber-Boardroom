@@ -56,21 +56,23 @@ e = lambda s: html.escape(str(s), quote=True)
 def load():
     with open(FACTS) as f:
         F = json.load(f)
-    F.setdefault('home', 'brochure')
+    if F.get('designs'):
+        DESIGNS[:] = [(d['key'], d['name'], d['blurb']) for d in F['designs']]
+    F.setdefault('home', DESIGNS[0][0])
     F['_src'] = {s['id']: s for s in F['sources']}
     return F
 
 
 # ---------------------------------------------------------------- helpers
 def cite(F, ids, prefix):
+    """One small, spaced marker per claim (design.b round 1): it links to the first source; the label names them all."""
     if not ids:
         return ''
-    out = []
     for i in ids:
         if i not in F['_src']:
             sys.exit(f'unknown source id {i}')
-        out.append(f'<a href="#{prefix}src-{i}" class="cite" aria-label="source {i}">{i}</a>')
-    return '<sup class="cites">' + ' '.join(out) + '</sup>'
+    label = f'source {ids[0]}' if len(ids) == 1 else 'sources ' + ' and '.join(str(i) for i in ids)
+    return f'<sup class="cites"><a href="#{prefix}src-{ids[0]}" class="cite" aria-label="{label}">{ids[0]}</a></sup>'
 
 
 def md(text):
@@ -285,7 +287,7 @@ a{color:var(--link)}
 .skip{position:absolute;left:-999px;top:0}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-sup.cites{font-size:.68em;line-height:0;margin-left:.15em;white-space:nowrap}
+sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}
 sup.cites a{text-decoration:none;padding:0 .12em}
 sup.cites a:hover{text-decoration:underline}
 /* top navigation: the site's own */
@@ -307,12 +309,29 @@ sup.cites a:hover{text-decoration:underline}
 .pick-cards ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:.8rem}
 .pick-cards a{display:flex;flex-direction:column;gap:.15rem;text-decoration:none;color:var(--fg);font-size:.85rem;line-height:1.3}
 .pick-cards img{border-radius:6px;border:1px solid var(--line);aspect-ratio:8/5;object-fit:cover;object-position:top}
+.pick-cards strong{display:block}
 .pick-cards a:hover strong{text-decoration:underline}
 .pick-cards span{color:var(--muted)}
 .pick-cards .now{color:var(--link);font-weight:600}
 .pick-cards .all{margin:.8rem 0 0;font-size:.9rem}
 .pick-cards .all a{display:inline;color:var(--link);text-decoration:underline}
-@media (max-width:40rem){.pick{width:100%}.pick-cards{position:static;width:100%;margin-top:.5rem}}
+@media (max-width:40rem){
+ .top-row{flex-wrap:nowrap;gap:.5rem;padding:.45rem .8rem}
+ .top-row>ul{display:none}
+ .top .brand{min-width:0;flex:1 1 auto}
+ .top .brand small{display:none}
+ .top .brand .wm-sw{font-size:.82rem;line-height:1.1}.top .brand .wm-ac{font-size:.95rem}
+ .pick summary{font-size:.82rem;padding:.2rem .6rem}
+ .pick-cards{position:fixed;left:.8rem;right:.8rem;top:3.2rem;width:auto;max-height:80vh;overflow:auto}
+ .top .family-credit{margin-left:0}
+ .top .family-credit summary{font-size:.72rem}
+ .top .family-credit ul{position:fixed;right:.8rem;left:auto;top:3.2rem}
+}
+.top .brand .logo img{height:2rem;width:auto}
+.top .brand .logo.plate{padding:.2rem .4rem;border-radius:6px}
+.top .brand .wm-sgit{font-size:1.35rem}
+.top .brand .wm-ac,.top .brand .wm-sw{font-size:1.05rem}
+.top .brand .wm-ac svg,.top .brand .wm-sw svg{width:22px;height:22px}
 /* FAMILY_CSS */
 .top .family-credit{position:relative;top:auto;right:auto;font-size:.8rem;margin-left:auto}
 .top .family-credit ul{min-width:14rem}
@@ -322,6 +341,7 @@ sup.cites a:hover{text-decoration:underline}
 .foot{font:.85rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted);max-width:76rem;margin:0 auto;padding:1rem 1rem 2.5rem}
 .foot p{margin:0 0 .4rem}
 .foot a{color:var(--muted)}
+.foot .sws-version{opacity:1;color:var(--fg);border-color:var(--muted)}
 
 /* the company's own identity: logos and framed screenshots of the real site */
 .logo{display:inline-flex;align-items:center}
@@ -415,7 +435,7 @@ def nav(F, key, depth, links):
     home_note = dict((k, n) for k, n, _ in DESIGNS)[F['home']]
     lis = ''.join(f'<li><a href="{h}">{e(t)}</a></li>' for t, h in links)
     return (f'<header class="top"><nav class="top-row" aria-label="{e(F["name"])}">'
-            f'<a class="brand" href="{rel(depth, "index.html")}">{e(F["name"])}<small>{e(F["kicker"])}</small></a>'
+            f'<a class="brand" href="{rel(depth, "index.html")}">{logo(F, depth) or e(F["name"])}<small>{e(F["kicker"])}</small></a>'
             f'<ul>{lis}<li><a class="visit" href="{e(F["url"])}">Visit {e(F["url_label"])} &#8599;</a></li></ul>'
             f'<details class="pick"><summary>Choose a design</summary><div class="pick-cards">'
             f'<p class="sr">The same facts in five designs.</p><ul>{"".join(cards)}</ul>'
@@ -751,6 +771,7 @@ body{font:1.1rem/1.65 Georgia,"Times New Roman",serif}
 .mast span{font:600 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
 main{max-width:72rem;margin:0 auto;padding:0 1rem}
 .kick{font:800 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.14em;color:var(--acc);margin:1.8rem 0 .4rem}
+@media (max-width:40rem){.mast{padding:.4rem 1rem .2rem}.mast b{font-size:1.15rem}.mast span{display:none}.kick{margin-top:.5rem}}
 h1{font:900 clamp(2.2rem,6.5vw,4.4rem)/1.02 Georgia,serif;margin:0 0 1rem;letter-spacing:-.02em;max-width:60rem}
 .stand{font-size:clamp(1.15rem,2.4vw,1.45rem);line-height:1.45;color:var(--muted);max-width:50rem;margin:0 0 1rem}
 .by{font:.85rem system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:.5rem 0;margin:0 0 1.6rem}
@@ -789,6 +810,7 @@ aside h2{font:800 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spa
 figcaption{font:.82rem system-ui,sans-serif;color:var(--muted)}
 .more{font:700 1rem system-ui,sans-serif;background:var(--fg);color:var(--bg);display:inline-block;padding:.7rem 1.1rem;text-decoration:none}
 .sources{font:.9rem/1.5 system-ui,sans-serif;border-top:4px double var(--fg);margin-top:2.5rem;padding-top:1rem}
+@media print{@page{size:A4;margin:14mm}body{font-size:10pt;background:#fff;color:#000}.lead,.band,.more{display:none}.grid{grid-template-columns:1fr 14rem;gap:1.2rem}a{color:#000}}
 .sources h2{font-size:1rem;text-transform:uppercase;letter-spacing:.12em}.sources ol{padding-left:1.5rem}.sources .acc,.sources p{color:var(--muted)}
 """
     p = 'n-'
@@ -977,14 +999,26 @@ def main():
     F = load()
     os.makedirs(os.path.join(SITE, 'designs'), exist_ok=True)
     os.makedirs(os.path.join(SITE, 'img', 'designs'), exist_ok=True)
-    gens = {'brochure': d_brochure, 'blueprint': d_blueprint, 'story': d_story,
-            'newsroom': d_newsroom, 'brief': d_brief}
+    import designs2
+    designs2.setup(sys.modules[__name__])
+    old = {'brochure': d_brochure, 'blueprint': d_blueprint, 'story': d_story, 'newsroom': d_newsroom, 'brief': d_brief}
+    gens = {}
+    for d in F.get('designs') or [{'key': k, 'engine': k} for k, _, _ in DESIGNS]:
+        if d['engine'] in old:
+            gens[d['key']] = (lambda fn: lambda F, depth: fn(F, depth))(old[d['engine']])
+        else:
+            gens[d['key']] = (lambda fn, dd: lambda F, depth: fn(F, depth, dd))(designs2.ENGINES[d['engine']], d)
+    for f_ in os.listdir(os.path.join(SITE, 'designs')):
+        os.remove(os.path.join(SITE, 'designs', f_))
+    for f_ in os.listdir(os.path.join(SITE, 'img', 'designs')):
+        if f_.split('.')[0] not in gens:
+            os.remove(os.path.join(SITE, 'img', 'designs', f_))
     for k, _, _ in DESIGNS:
         path = page_path(k, F)
         depth = path.count('/')
         with open(os.path.join(SITE, path), 'w') as f:
             f.write(gens[k](F, depth))
-    # the home design is also reachable at its own address, which redirects nowhere: it is a copy
+    # the home design is also reachable at its own address: it is a copy
     with open(os.path.join(SITE, 'designs', f'{F["home"]}.html'), 'w') as f:
         f.write(gens[F['home']](F, 1))
     with open(os.path.join(SITE, 'designs', 'index.html'), 'w') as f:

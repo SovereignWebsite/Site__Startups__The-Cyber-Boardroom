@@ -8,7 +8,7 @@ const fs = require('fs');
 const ROOT = path.resolve(__dirname, '..');
 const SITE = path.join(ROOT, 'site');
 const facts = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'facts.json')));
-const designs = ['brochure', 'blueprint', 'story', 'newsroom', 'brief'];
+const designs = (facts.designs || []).map(d => d.key);
 const check = process.argv[2];
 
 (async () => {
@@ -31,6 +31,7 @@ const check = process.argv[2];
         const external = [];
         page.on('request', r => { if (!r.url().startsWith('file://') && !r.url().startsWith('data:')) external.push(r.url()); });
         await page.goto(url);
+        await page.waitForTimeout(1500);
         const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
         if (over > 1) problems.push(`${d} ${label} ${scheme}: horizontal overflow ${over}px`);
         if (external.length) problems.push(`${d} ${label} ${scheme}: external requests ${external.join(', ')}`);

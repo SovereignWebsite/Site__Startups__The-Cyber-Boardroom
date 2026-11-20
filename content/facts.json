@@ -8,7 +8,7 @@
  "url_label": "thecyberboardroom.com",
  "repo": "https://github.com/SovereignWebsite/Site__Startups__The-Cyber-Boardroom",
  "updated": "2026-11-20",
- "home": "newsroom",
+ "home": "cyber-boardroom",
  "description": "An independent brochure about The Cyber Boardroom, an AI cyber security advisor and content for boards of directors, made from its own public pages.",
  "headline": "Cyber security, explained to the board",
  "lede": "The Cyber Boardroom gives board members an AI cyber security advisor called Athena, short videos and curated articles, so they can understand their organisation's cyber security agenda and fulfil their duties as directors.",
@@ -419,5 +419,337 @@
     "caption": "Athena, the AI cyber security advisor, on thecyberboardroom.com"
    }
   ]
- }
+ },
+ "next": [
+  {
+   "label": "Meet Athena, your GenAI Cyber Security Advisor",
+   "url": "https://thecyberboardroom.com/web/athena"
+  },
+  {
+   "label": "Security content",
+   "url": "https://thecyberboardroom.com/web/content"
+  }
+ ],
+ "designs": [
+  {
+   "key": "boardpack",
+   "name": "The Board Pack",
+   "blurb": "A board paper: agenda, cover note, papers, minutes",
+   "engine": "paper",
+   "cfg": {
+    "palette": {
+     "light": {
+      "bg": "#e7eeee",
+      "card": "#fff",
+      "fg": "#0e2c2d",
+      "muted": "#4a5e5f",
+      "line": "#cfdcdc",
+      "link": "#2b5c60",
+      "acc": "#2b5c60",
+      "acc-ink": "#fff"
+     },
+     "dark": {
+      "bg": "#0b1a1b",
+      "card": "#122728",
+      "fg": "#e6f0f0",
+      "muted": "#a9bfbf",
+      "line": "#24403f",
+      "link": "#8fcfd4",
+      "acc": "#8fcfd4",
+      "acc-ink": "#0b1a1b"
+     }
+    },
+    "stamp": "For noting",
+    "kick": "Board paper",
+    "h1": "The Cyber Boardroom: cyber readiness for the board",
+    "fields": [
+     [
+      "To",
+      "The board"
+     ],
+     [
+      "From",
+      "startups.b, from The Cyber Boardroom's own public pages"
+     ],
+     [
+      "Date",
+      "20 November 2026"
+     ],
+     [
+      "Purpose",
+      "To note what The Cyber Boardroom offers directors, and where to start"
+     ]
+    ],
+    "items": [
+     {
+      "title": "Cover note",
+      "kind": "text",
+      "text": "\"The Cyber Boardroom's mission is to help you understand your organisation's cyber security agenda, as well as fulfil your duties as a board member.\"",
+      "s": [
+       1
+      ],
+      "short": "Cover note"
+     },
+     {
+      "title": "What it is, and for whom",
+      "kind": "what+for",
+      "short": "The board"
+     },
+     {
+      "title": "Paper A: Athena, the videos, the articles",
+      "kind": "products",
+      "short": "Papers"
+     },
+     {
+      "title": "Paper B: how it works",
+      "kind": "how"
+     },
+     {
+      "title": "The real site, as tabled",
+      "kind": "shot",
+      "shot": 0
+     },
+     {
+      "title": "Minutes: the record so far",
+      "kind": "timeline"
+     },
+     {
+      "title": "Attendance",
+      "kind": "people"
+     }
+    ],
+    "sig": "Prepared for this brochure from public sources only. The decision, as ever, is the board's."
+   }
+  },
+  {
+   "key": "ask-athena",
+   "name": "Ask Athena",
+   "blurb": "A director's questions, answered from its own pages",
+   "engine": "chat",
+   "cfg": {
+    "palette": {
+     "light": {
+      "bg": "#eef5f5",
+      "card": "#ffffff",
+      "fg": "#0e2c2d",
+      "muted": "#3f5a5b",
+      "line": "#d3e2e2",
+      "link": "#2b5c60",
+      "acc": "#2b5c60",
+      "acc-ink": "#fff",
+      "herobg": "linear-gradient(135deg,#0e2c2d,#2b5c60)",
+      "heroink": "#ffffff",
+      "heroacc": "#c23a44",
+      "heroacc-ink": "#fff"
+     },
+     "dark": {
+      "bg": "#0b1a1b",
+      "card": "#122728",
+      "fg": "#e6f0f0",
+      "muted": "#a9bfbf",
+      "line": "#24403f",
+      "link": "#8fcfd4",
+      "acc": "#8fcfd4",
+      "acc-ink": "#0b1a1b",
+      "herobg": "linear-gradient(135deg,#071516,#1d4346)",
+      "heroink": "#ffffff",
+      "heroacc": "#c23a44",
+      "heroacc-ink": "#fff"
+     }
+    },
+    "h1": "Ask Athena",
+    "sub": "A director's questions, each answered from The Cyber Boardroom's own pages, with the source of every answer. The real Athena is on thecyberboardroom.com.",
+    "bot": "From The Cyber Boardroom's pages",
+    "win_note": "Answers quoted, not generated",
+    "shot": 1,
+    "prompts_note": "The real Athena page suggests prompts such as these:",
+    "prompts": [
+     {
+      "label": "Hello, what do you know about me?",
+      "url": "https://thecyberboardroom.com/web/athena"
+     },
+     {
+      "label": "What questions should I ask my CISO?",
+      "url": "https://thecyberboardroom.com/web/athena"
+     },
+     {
+      "label": "What is DORA?",
+      "url": "https://thecyberboardroom.com/web/athena"
+     },
+     {
+      "label": "What are my legal responsibilities?",
+      "url": "https://thecyberboardroom.com/web/athena"
+     },
+     {
+      "label": "What is the best way to learn more about cyber security?",
+      "url": "https://thecyberboardroom.com/web/athena"
+     }
+    ],
+    "messages": [
+     {
+      "who": "a",
+      "id": "athena",
+      "text": "\"I'm Athena, your personal AI cyber security advisor. What cyber security topic would you like to explore today?\" (Athena's own greeting, on its page)",
+      "s": [
+       2
+      ]
+     },
+     {
+      "who": "q",
+      "text": "What is The Cyber Boardroom, in one line?"
+     },
+     {
+      "who": "a",
+      "text": "\"Welcome to The Cyber Boardroom, the one-stop shop that boards of directors rely on for their cyber readiness.\"",
+      "s": [
+       1
+      ]
+     },
+     {
+      "who": "q",
+      "text": "Why should a board care?"
+     },
+     {
+      "who": "a",
+      "block": "what"
+     },
+     {
+      "who": "q",
+      "text": "What is in it for me?"
+     },
+     {
+      "who": "a",
+      "id": "parts",
+      "block": "products"
+     },
+     {
+      "who": "q",
+      "text": "How does it work?"
+     },
+     {
+      "who": "a",
+      "block": "how"
+     },
+     {
+      "who": "q",
+      "text": "Where has it come from?"
+     },
+     {
+      "who": "a",
+      "id": "dates",
+      "block": "timeline"
+     }
+    ]
+   }
+  },
+  {
+   "key": "cyber-boardroom",
+   "name": "Identity: The Cyber Boardroom",
+   "blurb": "Its own look: the CB logo, dark teal, the red beta",
+   "engine": "identity",
+   "cfg": {
+    "palette": {
+     "light": {
+      "bg": "#eef5f5",
+      "card": "#ffffff",
+      "fg": "#0e2c2d",
+      "muted": "#3f5a5b",
+      "line": "#d3e2e2",
+      "link": "#2b5c60",
+      "acc": "#2b5c60",
+      "acc-ink": "#fff",
+      "herobg": "linear-gradient(135deg,#0e2c2d,#2b5c60)",
+      "heroink": "#ffffff",
+      "heroacc": "#c23a44",
+      "heroacc-ink": "#fff"
+     },
+     "dark": {
+      "bg": "#0b1a1b",
+      "card": "#122728",
+      "fg": "#e6f0f0",
+      "muted": "#a9bfbf",
+      "line": "#24403f",
+      "link": "#8fcfd4",
+      "acc": "#8fcfd4",
+      "acc-ink": "#0b1a1b",
+      "herobg": "linear-gradient(135deg,#071516,#1d4346)",
+      "heroink": "#ffffff",
+      "heroacc": "#c23a44",
+      "heroacc-ink": "#fff"
+     }
+    },
+    "plate": true,
+    "logo_h": "5rem",
+    "h1_font": "800 clamp(2rem,4.8vw,3.4rem)/1.08 system-ui,sans-serif",
+    "h1": "The one-stop shop that boards of directors rely on for their cyber readiness",
+    "h1_s": [
+     1
+    ],
+    "sub": "\"The Cyber Boardroom's mission is to help you understand your organisation's cyber security agenda, as well as fulfil your duties as a board member.\"",
+    "hero": "shot",
+    "shot": 0,
+    "strip_below": [
+     1
+    ],
+    "strip_title": "Athena, on the real site"
+   }
+  },
+  {
+   "key": "athena",
+   "name": "Identity: Athena",
+   "blurb": "Built round the real site's Meet Athena card",
+   "engine": "identity",
+   "cfg": {
+    "palette": {
+     "light": {
+      "bg": "#eef5f5",
+      "card": "#ffffff",
+      "fg": "#0e2c2d",
+      "muted": "#3f5a5b",
+      "line": "#d3e2e2",
+      "link": "#2b5c60",
+      "acc": "#2b5c60",
+      "acc-ink": "#fff",
+      "herobg": "linear-gradient(135deg,#0e2c2d,#2b5c60)",
+      "heroink": "#ffffff",
+      "heroacc": "#c23a44",
+      "heroacc-ink": "#fff"
+     },
+     "dark": {
+      "bg": "#0b1a1b",
+      "card": "#122728",
+      "fg": "#e6f0f0",
+      "muted": "#a9bfbf",
+      "line": "#24403f",
+      "link": "#8fcfd4",
+      "acc": "#8fcfd4",
+      "acc-ink": "#0b1a1b",
+      "herobg": "linear-gradient(135deg,#071516,#1d4346)",
+      "heroink": "#ffffff",
+      "heroacc": "#c23a44",
+      "heroacc-ink": "#fff"
+     }
+    },
+    "plate": true,
+    "h1_font": "800 clamp(2.2rem,5.6vw,3.8rem)/1.06 system-ui,sans-serif",
+    "h1": "Athena, your AI cyber security advisor",
+    "h1_s": [
+     2
+    ],
+    "sub": "\"We have harnessed the power of large language models and created an AI advisor named Athena, designed to help board members with their cyber security concerns.\"",
+    "hero": "shot",
+    "shot": 1,
+    "strip_below": [
+     0
+    ],
+    "strip_title": "The home page, with its two introduction videos"
+   }
+  },
+  {
+   "key": "newsroom",
+   "name": "The Newsroom",
+   "blurb": "A newsroom feature, printable on A4",
+   "engine": "newsroom"
+  }
+ ]
 }

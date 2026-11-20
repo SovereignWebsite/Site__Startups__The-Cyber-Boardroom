@@ -28,11 +28,11 @@ An independent brochure about The Cyber Boardroom, made from its own public page
 
 ## Pages
 
-- [The Brochure](https://the-cyber-boardroom.startups.sovereignweb.site/designs/brochure.html): The company at a glance, with diagrams
-- [The Blueprint](https://the-cyber-boardroom.startups.sovereignweb.site/designs/blueprint.html): A dark technical spec sheet
-- [The Story](https://the-cyber-boardroom.startups.sovereignweb.site/designs/story.html): Told in order, date by date
-- [The Newsroom](https://the-cyber-boardroom.startups.sovereignweb.site/index.html): A magazine feature about the company
-- [The Brief](https://the-cyber-boardroom.startups.sovereignweb.site/designs/brief.html): Plain and printable on A4
+- [The Board Pack](https://the-cyber-boardroom.startups.sovereignweb.site/designs/boardpack.html): A board paper: agenda, cover note, papers, minutes
+- [Ask Athena](https://the-cyber-boardroom.startups.sovereignweb.site/designs/ask-athena.html): A director's questions, answered from its own pages
+- [Identity: The Cyber Boardroom](https://the-cyber-boardroom.startups.sovereignweb.site/index.html): Its own look: the CB logo, dark teal, the red beta
+- [Identity: Athena](https://the-cyber-boardroom.startups.sovereignweb.site/designs/athena.html): Built round the real site's Meet Athena card
+- [The Newsroom](https://the-cyber-boardroom.startups.sovereignweb.site/designs/newsroom.html): A newsroom feature, printable on A4
 
 ## Sources
 

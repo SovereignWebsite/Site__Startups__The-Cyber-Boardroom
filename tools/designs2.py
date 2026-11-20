@@ -234,7 +234,7 @@ def eng_vault(F, depth, d):
     p = 'v-'
     css = palette_css({'light': {'bg': '#faf9f5', 'card': '#ffffff', 'fg': '#1c1d21', 'muted': '#5c5f66', 'line': '#e5e1d5', 'link': '#0f766e', 'acc': '#0f766e', 'acc-ink': '#fff'},
                        'dark': {'bg': '#0e1412', 'card': '#151d1b', 'fg': '#e7efec', 'muted': '#a3b3ae', 'line': '#26332f', 'link': '#5eead4', 'acc': '#5eead4', 'acc-ink': '#04201c'}}) + COMMON + """
-body{font:1.06rem/1.65 ui-serif,Georgia,"Times New Roman",serif}
+body{font:1.06rem/1.65 "Iowan Old Style",Charter,Georgia,serif}
 .seal{background:#0d1117;color:#3fb950;padding:3rem 1rem 3.5rem;overflow:hidden;position:relative}
 .seal .ct{font:.85rem/1.5 ui-monospace,Menlo,monospace;color:#3fb950;word-break:break-all;max-height:9rem;overflow:hidden}
 .seal h1{position:relative;font:800 clamp(2.4rem,8vw,5.2rem)/1 ui-sans-serif,system-ui,sans-serif;color:#fff;margin:1.2rem 0 .8rem;letter-spacing:-.03em}
@@ -296,10 +296,10 @@ body{{font:1.05rem/1.62 {c.get('body_font', 'system-ui,-apple-system,"Segoe UI",
 .ihero .shot figcaption,.ihero .shot figcaption a{{color:var(--heroink);opacity:.85}}
 .ihero cite,.ihero .cites a{{color:var(--heroink)}}
 h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-serif')};margin:2.6rem 0 1rem}}
-.cards{{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}}
+.cards{{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}}
 .cards li{{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem}}
 .cards h3{{margin:0 0 .3rem;font-size:1.1rem}}.cards h3 a{{color:var(--fg)}}.cards p{{margin:0;color:var(--muted)}}
-.flow{{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));counter-reset:s}}
+.flow{{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));counter-reset:s}}
 .flow li{{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}}
 .flow li::before{{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:800;margin-bottom:.5rem}}
 .flow b{{display:block}}.flow span{{color:var(--muted);font-size:.95rem}}
@@ -309,6 +309,9 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
 .bigfigs span{{display:block;color:var(--muted);font-size:.92rem;margin-top:.4rem}}
 .bigfigs small{{display:block;color:var(--muted);font-size:.78rem;margin-top:.4rem}}
 .tl-list{{padding-left:1.4rem}}.tl-list li{{margin:.4rem 0}}.tl-list time{{font-weight:700;display:block}}
+.tl-svg{{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem;margin:0 0 1rem}}
+.tl-svg .axis{{stroke:var(--fg);stroke-width:3}}.tl-svg .tick{{stroke:var(--muted);stroke-width:2}}.tl-svg .dot{{fill:var(--acc);stroke:var(--card);stroke-width:3}}
+.tl-svg .num{{fill:var(--fg);font:800 24px system-ui,sans-serif}}.tl-svg .yr{{fill:var(--muted);font:700 24px system-ui,sans-serif}}.tl-svg figcaption{{font-size:.82rem;color:var(--muted)}}
 .two{{display:grid;gap:2rem}}@media (min-width:56rem){{.two{{grid-template-columns:1fr 1fr}}}}
 .offer{{border:2px dashed var(--acc);border-radius:12px;padding:1.2rem 1.3rem;background:var(--card);max-width:26rem}}
 .offer .tag{{display:inline-block;border:1px solid var(--fg);font:700 .7rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em;padding:.1rem .4rem;margin-bottom:.4rem}}
@@ -323,7 +326,7 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
 .vcards{{list-style:none;margin:0;padding:0;display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr))}}
 .vcards a{{display:block;height:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-top:6px solid var(--acc);border-radius:12px;padding:1rem;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.08)}}
 .vcards small{{display:block;font:700 .72rem system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}}
-.vcards b{{display:block;font:700 1.2rem/1.2 ui-serif,Georgia,serif;margin:.3rem 0}}.vcards span{{display:block;color:var(--muted);font-size:.92rem}}.vcards em{{display:block;font-style:normal;font-weight:700;margin-top:.5rem;color:var(--acc)}}
+.vcards b{{display:block;font:700 1.2rem/1.2 "Iowan Old Style",Charter,Georgia,serif;margin:.3rem 0}}.vcards span{{display:block;color:var(--muted);font-size:.92rem}}.vcards em{{display:block;font-style:normal;font-weight:700;margin-top:.5rem;color:var(--acc)}}
 .acard{{background:#fff;color:#0e2c2d;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}}
 .acard-h{{background:#5b3fd6;color:#fff;font-weight:700;padding:.7rem 1.1rem}}
 .acard-m{{margin:1.1rem;background:#f1f4f4;border-radius:14px;padding:.9rem 1rem;font-size:1.05rem}}
@@ -381,7 +384,7 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
     body.append(f'<div class="two" id="{p}what"><div><h2>What it is</h2>{fb["what"]}</div><div><h2>Who it is for</h2>{fb["for"]}</div></div>')
     body.append(f'<h2 id="{p}how">How it works</h2>{fb["how"]}')
     body.append(f'<h2 id="{p}products">What it offers</h2>{fb["products"]}')
-    body.append(f'<h2 id="{p}story">Key dates</h2>{fb["timeline"]}')
+    body.append(f'<h2 id="{p}story">Key dates</h2>{B.svg_timeline(F)}{fb["timeline"]}')
     body.append(next_step(F, depth))
     body.append(fb['sources'] + '</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
@@ -565,18 +568,18 @@ body{font:1.05rem/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sa
 .gap svg{width:100%;max-width:40rem}
 .gap .reach{fill:#2b2a27;stroke:#8a8780;stroke-width:2}
 .gap .auth{fill:#0d0d0c;stroke:#f7f6f2;stroke-width:3}
-.gap .delta{fill:#1a7f5a;opacity:.9}
-.gap .barrier{stroke:#ffd166;stroke-width:6;stroke-dasharray:820;stroke-dashoffset:820;animation:draw 1.2s .4s ease-out forwards}
+.gap .delta{fill:#1a7f5a}
+.gap .barrier{stroke:#ffd166;stroke-width:6;stroke-dasharray:960;stroke-dashoffset:960;animation:draw 1.2s .4s ease-out forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
-.gap text{font:700 20px ui-sans-serif,system-ui,sans-serif;fill:#f7f6f2}
-.gap .small{font:500 15px ui-sans-serif,system-ui,sans-serif;fill:#cfccc4}
+.gap text{font:800 25px ui-sans-serif,system-ui,sans-serif;fill:#f7f6f2}
+.gap .small{font:600 21px ui-sans-serif,system-ui,sans-serif;fill:#e4e1da}
 .parts{display:grid;gap:1.2rem;margin:2.4rem 0}
 @media (min-width:56rem){.parts{grid-template-columns:repeat(4,1fr)}}
 .part{background:var(--card);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:12px;padding:1rem 1.1rem}
 .part b{display:block;font:800 1.2rem ui-sans-serif,system-ui,sans-serif;margin-bottom:.3rem}
 .part span{color:var(--muted);font-size:.95rem}
 h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;margin:2.6rem 0 1rem}
-.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}
+.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
 .cards li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem}.cards h3{margin:0 0 .3rem;font-size:1.05rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted);font-size:.95rem}
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr))}
 .figs li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;display:flex;flex-direction:column}.figs .n{font:800 2rem ui-monospace,Menlo,monospace;color:var(--acc)}.figs .d{font-size:.78rem;color:var(--muted)}
@@ -589,16 +592,15 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
     how = F['how']
     cols = ['#8a8780', '#f7f6f2', '#1a7f5a', '#ffd166']
     parts = ''.join(f'<div class="part" style="--c:{cols[i % 4]}"><b>{e(h["title"])}</b><span>{md(h["t"])}{B.cite(F, h.get("s"), p)}</span></div>' for i, h in enumerate(how))
-    svg = ('<figure class="gap"><svg viewBox="0 0 640 440" role="img" aria-label="The gap: what the agent can reach, what you authorised inside it, '
-           'the delta between them in green, and a barrier drawn across the delta.">'
-           '<rect x="10" y="10" width="620" height="420" rx="28" class="reach"/>'
-           '<rect x="60" y="120" width="250" height="230" rx="22" class="auth"/>'
-           '<path d="M330 40 H610 V410 H330 Z" class="delta"/>'
-           '<line x1="320" y1="30" x2="320" y2="420" class="barrier"/>'
-           '<text x="34" y="52">The grant</text><text x="34" y="78" class="small">what the agent can actually reach</text>'
-           '<text x="82" y="162">The mandate</text><text x="82" y="188" class="small">what you authorised</text>'
-           '<text x="352" y="214">The delta</text><text x="352" y="240" class="small">reach nobody authorised</text>'
-           '<text x="330" y="396" class="small" style="fill:#ffd166">the barrier</text></svg>'
+    svg = ('<figure class="gap"><svg viewBox="0 0 640 440" role="img" aria-label="The gap: the grant is everything the agent can reach; inside it sits the mandate, what you authorised; '
+           'the rest of the grant, in green, is the delta; a barrier is drawn round the mandate.">'
+           '<path d="M38 10 H602 a28 28 0 0 1 28 28 V402 a28 28 0 0 1 -28 28 H38 a28 28 0 0 1 -28 -28 V38 a28 28 0 0 1 28 -28 Z M82 150 V350 a22 22 0 0 0 22 22 H268 a22 22 0 0 0 22 -22 V172 a22 22 0 0 0 -22 -22 H104 a22 22 0 0 0 -22 22 Z" fill-rule="evenodd" class="delta"/>'
+           '<rect x="82" y="150" width="208" height="222" rx="22" class="auth"/>'
+           '<rect x="70" y="138" width="232" height="246" rx="28" fill="none" class="barrier"/>'
+           '<text x="34" y="56">The grant</text><text x="34" y="86" class="small">everything the agent can reach</text>'
+           '<text x="98" y="200">The mandate</text><text x="104" y="230" class="small">what you</text><text x="104" y="256" class="small">authorised</text>'
+           '<text x="350" y="250">The delta</text><text x="350" y="282" class="small">reach nobody authorised</text>'
+           '<text x="80" y="412" class="small" style="fill:#ffd166">the barrier, round the mandate</text></svg>'
            '<figcaption style="color:#cfccc4;font-size:.85rem">Drawn for this site from RiskMandate\'s four objects: mandate, grant, delta and barrier.</figcaption></figure>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
     body = (f'<div class="ghero"><div class="wrap"><div><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p><div class="btns">{btns}</div></div>{svg}</div></div>'
@@ -626,7 +628,8 @@ body{font:1.05rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .chero p{max-width:40rem;color:var(--muted)}
 .cellbox{position:relative;border:3px solid var(--acc);border-radius:44px;padding:2rem 1.2rem 1.4rem;margin:2rem 0;background:radial-gradient(circle at 50% 40%,rgba(168,32,90,.10),transparent 60%),var(--card)}
 .cellbox .env{position:absolute;top:-.8rem;left:1.6rem;background:var(--bg);padding:0 .6rem;font:700 .78rem system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
-.cond{display:flex;align-items:center;gap:.8rem;justify-content:center;margin:0 0 1.4rem}
+.cond{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;justify-content:center;margin:0 0 1.4rem;text-align:center}
+.cond b{white-space:nowrap}
 .cond i{width:3.2rem;height:3.2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font:800 1.2rem system-ui;font-style:normal;animation:pulse 1.6s ease-in-out infinite}
 .cond b{font-size:1.1rem}
 @keyframes pulse{50%{box-shadow:0 0 0 12px rgba(168,32,90,.15)}}
@@ -644,7 +647,7 @@ body{font:1.05rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 #cell-stop:target .halted{display:block}
 #cell-stop:target .stopbar .go{display:none}#cell-stop:target .stopbar .resume{display:inline-block}
 h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0 1rem}
-.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}
+.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
 .cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
 .chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:8rem 1fr 3.5rem;gap:.6rem;align-items:center;margin:.3rem 0}
@@ -699,7 +702,7 @@ h1 em{font-style:normal;color:#f0a7c4}
 .stat div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}
 .stat b{display:block;font:900 2.4rem/1 system-ui;color:#f0a7c4}.stat span{color:var(--muted);font-size:.92rem}
 h2{font:800 1.6rem system-ui;margin:2.4rem 0 1rem}
-.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
+.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
 .next{background:var(--card)}
 """
     fb = facts_blocks(F, p, depth)
@@ -736,9 +739,9 @@ body{font:1.05rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .exhibit .role{color:var(--acc);font-weight:700;margin:0 0 .6rem}
 .exhibit .hand{border-left:4px solid var(--acc);padding:.4rem .9rem;background:var(--card);margin:.8rem 0}
 .exhibit .shot figcaption{font-size:.82rem}
-h2.s{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,serif;margin:2.6rem 0 1rem}
-.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem;font-family:Georgia,serif}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
-.flow{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));counter-reset:s}.flow li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.flow li::before{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:800;margin-bottom:.5rem}.flow b{display:block}.flow span{color:var(--muted);font-size:.95rem}
+h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Style",serif;margin:2.6rem 0 1rem}
+.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem;font-family:Georgia,serif}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
+.flow{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));counter-reset:s}.flow li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.flow li::before{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:800;margin-bottom:.5rem}.flow b{display:block}.flow span{color:var(--muted);font-size:.95rem}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 """
     fb = facts_blocks(F, p, depth)

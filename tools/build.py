@@ -230,7 +230,7 @@ def chart(F, prefix, cls='chart'):
     mx = max(b['value'] for b in bars) or 1
     rows = ''.join(
         f'<li><span class="bl">{e(b["label"])}</span><span class="bt"><span class="bb" style="width:{b["value"]/mx*100:.1f}%"></span></span>'
-        f'<span class="bv">{e(b["value"])}</span></li>' for b in bars)
+        f'<span class="bv">{e(c.get("prefix", ""))}{b["value"]:,}</span></li>' for b in bars)
     return (f'<figure class="{cls}"><figcaption><b>{md(c["title"])}</b> '
             f'<span>{md(c["note"])}{cite(F, c.get("s"), prefix)}</span></figcaption><ul>{rows}</ul></figure>')
 
@@ -275,7 +275,7 @@ def sources(F, prefix, heading='Sources'):
                  f' <span class="acc">read {e(fmt_date(s["accessed"]))}</span></li>' for s in F['sources'])
     return (f'<section class="sources" aria-labelledby="{prefix}h-src"><h2 id="{prefix}h-src">{heading}</h2>'
             f'<p>Every fact on this page comes from the company\'s own public pages, listed here. '
-            f'Numbers in the text point to them. Diagrams were drawn for this site from those facts.</p><ol>{li}</ol></section>')
+            f'Numbers in the text point to them. Any diagram on this page was drawn for this site from those facts.</p><ol>{li}</ol></section>')
 
 
 # ---------------------------------------------------------------- chrome

@@ -552,8 +552,8 @@
       "acc-ink": "#fff",
       "herobg": "linear-gradient(135deg,#0e2c2d,#2b5c60)",
       "heroink": "#ffffff",
-      "heroacc": "#c23a44",
-      "heroacc-ink": "#fff"
+      "heroacc": "#8fcfd4",
+      "heroacc-ink": "#0e2c2d"
      },
      "dark": {
       "bg": "#0b1a1b",
@@ -566,8 +566,8 @@
       "acc-ink": "#0b1a1b",
       "herobg": "linear-gradient(135deg,#071516,#1d4346)",
       "heroink": "#ffffff",
-      "heroacc": "#c23a44",
-      "heroacc-ink": "#fff"
+      "heroacc": "#8fcfd4",
+      "heroacc-ink": "#0e2c2d"
      }
     },
     "h1": "Ask Athena",
@@ -673,8 +673,8 @@
       "acc-ink": "#fff",
       "herobg": "linear-gradient(135deg,#0e2c2d,#2b5c60)",
       "heroink": "#ffffff",
-      "heroacc": "#c23a44",
-      "heroacc-ink": "#fff"
+      "heroacc": "#8fcfd4",
+      "heroacc-ink": "#0e2c2d"
      },
      "dark": {
       "bg": "#0b1a1b",
@@ -687,8 +687,8 @@
       "acc-ink": "#0b1a1b",
       "herobg": "linear-gradient(135deg,#071516,#1d4346)",
       "heroink": "#ffffff",
-      "heroacc": "#c23a44",
-      "heroacc-ink": "#fff"
+      "heroacc": "#8fcfd4",
+      "heroacc-ink": "#0e2c2d"
      }
     },
     "plate": true,
@@ -725,8 +725,8 @@
       "acc-ink": "#fff",
       "herobg": "linear-gradient(135deg,#0e2c2d,#2b5c60)",
       "heroink": "#ffffff",
-      "heroacc": "#c23a44",
-      "heroacc-ink": "#fff"
+      "heroacc": "#8fcfd4",
+      "heroacc-ink": "#0e2c2d"
      },
      "dark": {
       "bg": "#0b1a1b",
@@ -739,8 +739,8 @@
       "acc-ink": "#0b1a1b",
       "herobg": "linear-gradient(135deg,#071516,#1d4346)",
       "heroink": "#ffffff",
-      "heroacc": "#c23a44",
-      "heroacc-ink": "#fff"
+      "heroacc": "#8fcfd4",
+      "heroacc-ink": "#0e2c2d"
      }
     },
     "plate": true,

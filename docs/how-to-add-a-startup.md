@@ -20,7 +20,10 @@ Copy the facts file of an existing startup site and replace every value. The key
 |---|---|
 | `slug`, `name`, `mark`, `kicker` | Address slug, display name, favicon letter, a short line under the name |
 | `domain`, `url`, `url_label`, `repo` | This site's address, the company's own site, how to show it, this repository |
-| `updated`, `home` | Date facts were last checked; which design is the home page (`brochure`, `blueprint`, `story`, `newsroom`, `brief`) |
+| `updated`, `home` | Date facts were last checked; the key of the design used as the home page |
+| `designs` | The site's five designs: `{key, name, blurb, engine, cfg}`. Two from the company's own world, two on its real identity, and the Newsroom feature (printable on A4). Engines in `tools/designs2.py`: `terminal`, `vault`, `identity`, `paper` (variants `boardpaper`, `policyform`, `luggage`), `chat`, `gap`, `cell`, `badge`, `showroom`, plus `newsroom` |
+| `oneline`, `next`, `band` | The company's own one-line description (shown under each headline), its own first step quoted from its site (the main buttons), and the full-bleed band of its facts on the home design |
+| `identity` | Logo (`logo_img` or `logo_html`), and `shots`: screenshots of its live site taken with Playwright, each with its page URL, caption and a phone crop |
 | `description`, `headline`, `lede`, `visit` | Meta description, home headline, opening paragraph, the closing line pointing to the company |
 | `quote` | The company's own one-line description, exact, with its source |
 | `what`, `story`, `for_whom` | Paragraphs and bullets, each `{"t": text, "s": [source ids]}` |
@@ -36,6 +39,8 @@ Copy the facts file of an existing startup site and replace every value. The key
 
 Text accepts `**bold**`, `*italic*` and `[label](https://...)`. Plain British English, no em dashes.
 
+Brand assets and screenshots of the company's own site may be used for Dinis Cruz's companies (his permission, relayed by design.b and sites.b on 20 November 2026); for anyone else, ask first. Copy every asset into `site/img/` so nothing loads from another host, caption and link each screenshot, and leave out photos of people who have not agreed.
+
 ## 4. Build and check
 
 ```
@@ -46,7 +51,7 @@ python3 tools/thumbs.py         # turns thumbnails into .webp
 
 `shots.js` also makes the 1200x630 share card (`site/img/share-card.jpg`) that link previews need. It reports any page wider than the screen and any request to another host; both must be empty. Then look at the screenshots yourself, on a phone width and in dark mode.
 
-The build makes: `index.html` (the home design), `designs/<design>.html` for all five, `designs/index.html` (all designs), `favicon.svg`, `llms.txt`, and `docs/sources.md`. Every page has the site's own navigation at the top with "Choose a design", and one small, muted "Sovereign Website" pop-up at the top right listing the startups and the family (Dinis Cruz, 20 November 2026: the site is about its subject; the family stays in a pop-up menu). No scripts, no cookies, no tracking, no third-party requests.
+The build makes: `index.html` (the home design), `designs/<key>.html` for all five, the seeded `start/`, `agents/`, `admin/`, `designs/index.html` (all designs), `favicon.svg`, `llms.txt`, and `docs/sources.md`. Every page has the site's own navigation at the top with "Choose a design", and one small, muted "Sovereign Website" pop-up at the top right listing the startups and the family (Dinis Cruz, 20 November 2026: the site is about its subject; the family stays in a pop-up menu). No scripts, no cookies, no tracking, no third-party requests.
 
 Use the Factory's CI from `seed/site-template/.github/` (SovereignWebsite__Factory, dev). On every push to dev it builds, checks link previews, links, em dashes, the family strip, leaks, HTML validity and accessibility (axe), then deploys and tags. Confirm a green run and the tag after each push.
 

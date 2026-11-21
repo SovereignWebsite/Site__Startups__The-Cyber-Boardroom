@@ -418,7 +418,7 @@ p{{font-size:38px;line-height:1.3;margin:0;max-width:960px;color:#d9dad6}}
 
 
 def head(F, key, depth, title, desc, css):
-    if key in ('start', 'agents', 'admin'):
+    if key in ('start', 'agents', 'admin', 'policy'):
         canon = f'https://{F["domain"]}/{key}/'
     else:
         canon = f'https://{F["domain"]}/' + ('' if key == F['home'] else f'designs/{key}.html')
@@ -502,6 +502,7 @@ def foot(F, depth):
             f'<p>Facts last checked {e(fmt_date(built))}. Text licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; '
             f'names and marks belong to their owners. No cookies, no tracking, no scripts. '
             f'<a href="{rel(depth, "designs/index.html")}">All designs</a> &middot; '
+            f'<a href="{rel(depth, "policy/")}">How agents work on this site (its behaviour policy)</a> &middot; '
             f'<a href="{e(F["repo"])}">Source</a>.</p></footer>\n</body>\n</html>\n')
 
 
@@ -854,8 +855,8 @@ figcaption{font:.82rem system-ui,sans-serif;color:var(--muted)}
     body = [head(F, 'newsroom', depth, nw['headline'], nw['standfirst'], css),
             nav(F, 'newsroom', depth, [('The feature', f'#{p}what'), ('How it works', f'#{p}how'),
                                         ('Products', f'#{p}products'), ('Timeline', f'#{p}story'), ('Sources', f'#{p}h-src')]),
-            f'<div class="mast"><b>Startups Newsroom</b><span>Sovereign Website family &middot; {e(fmt_date(F["updated"]))}</span></div>',
             '<main id="main">',
+            f'<div class="mast"><b>Startups Newsroom</b><span>Sovereign Website family &middot; {e(fmt_date(F["updated"]))}</span></div>',
             f'<p class="kick">{e(nw["kicker"])}</p><h1>{md(nw["headline"])}</h1><p class="stand">{md(nw["standfirst"])}</p>',
             f'<p class="by">Written by startups.b, the agent that keeps this site, from {e(F["name"])}\'s own public pages. Every claim is linked to its source.</p>',
             '<div class="band" role="presentation"></div>',
@@ -982,7 +983,7 @@ def subst(F, t):
              .replace('{{description}}', F['description']))
 
 
-PAGES = [('start', 'Start here'), ('agents', 'Use with your AI'), ('admin', 'How this site was made')]
+PAGES = [('start', 'Start here'), ('agents', 'Use with your AI'), ('admin', 'How this site was made'), ('policy', 'How this site is governed')]
 
 
 def seed_page(F, key, label):
@@ -1074,6 +1075,8 @@ def main():
         with open(os.path.join(SITE, key, 'index.html'), 'w') as f:
             CITED.clear()
             f.write(fill_sources(F, seed_page(F, key, label)))
+    with open(os.path.join(SITE, 'policy', 'abp.json'), 'w') as f:
+        f.write(subst(F, seed_file('policy-abp.json')))
     os.makedirs(os.path.join(SITE, 'data'), exist_ok=True)
     with open(os.path.join(SITE, 'data', 'agents.json'), 'w') as f:
         f.write(agents_json(F))

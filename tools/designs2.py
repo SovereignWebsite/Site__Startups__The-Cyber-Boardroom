@@ -547,7 +547,7 @@ body{font:1.04rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
     prompts = ''.join(f'<a href="{e(x["url"])}">{e(x["label"])}</a>' for x in c.get('prompts', []))
     body = (f'<div class="chathead"><div class="wrap">{B.logo(F, depth, force_plate=True)}<h1>{e(c["h1"])}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p></div></div>'
             f'<div class="wrap"><div class="win" role="group" aria-label="A conversation, answered from the company\'s own pages"><div class="win-h"><span>{e(c["bot"])}</span><span>{e(c["win_note"])}</span></div>'
-            f'<div class="msgs">{"".join(msgs)}</div>' + (f'<p style="padding:0 1.2rem;margin:0 0 .4rem;font-size:.85rem;color:var(--muted)">{e(c["prompts_note"])}</p><div class="prompts">{prompts}</div>' if prompts else '') +
+            f'<h2 class="sr">The conversation</h2><div class="msgs">{"".join(msgs)}</div>' + (f'<p style="padding:0 1.2rem;margin:0 0 .4rem;font-size:.85rem;color:var(--muted)">{e(c["prompts_note"])}</p><div class="prompts">{prompts}</div>' if prompts else '') +
             f'</div><div class="shotwrap">{B.shot(F, depth, c.get("shot", 1))}</div>{next_step(F, depth)}{fb["sources"]}</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
                 [('Athena', f'#{p}athena'), ('The parts', f'#{p}parts'), ('Dates', f'#{p}dates'), ('Sources', f'#{p}h-src')], body, credit=True)

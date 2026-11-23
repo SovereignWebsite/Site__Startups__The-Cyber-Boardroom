@@ -624,7 +624,9 @@ DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in s
     '.next-k,.tl-list span,.chart li,.sources ol,.sources p,.sources .acc,.figs li span,.cond span,.cellbox li span,.cellbox .env,'
     '.kick,.by,.pq footer,.bquote footer,.box h2,.sess-h span,.srv,.srv b,.blk p.id,.m .who,.win p,.prompts a,.acard-k,.acard-c,'
     '.chips li,.stamp,.agenda b,.sig,.offer .tag,.ex-id,.sheet span,.formf b,main p[style*="font-size"]{font-size:15px!important}'
-    '.gap text{font-size:27px!important}.gap .small{font-size:26px!important}}')
+    '.gap text{font-size:27px!important}.gap .small{font-size:26px!important}'
+    # Round 7 (design.b): the footer and the family menu too, kept quiet by colour and weight, not size.
+    '.foot,.foot p,.foot a,.designs-foot li a,.family-credit,.family-credit .family-head,.family-credit li a,.foot .sws-version{font-size:15px!important}}')
 
 
 def palette(F, light, dark):

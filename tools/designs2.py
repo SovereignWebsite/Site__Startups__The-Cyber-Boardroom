@@ -681,7 +681,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
 .cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
 .cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
-.realshot{margin:2.4rem 0 1rem}.realshot-in{max-width:52rem}
+.realshot{margin:2.4rem 0 1rem}.realshot-in{display:grid;gap:1.6rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,26rem),1fr))}
 .chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:7.5rem 1fr 5.5rem;gap:.6rem;align-items:center;margin:.3rem 0}
 .chart .bv{white-space:nowrap}
 .chart .bt{height:1rem;background:var(--line);border-radius:4px;overflow:hidden}.chart .bb{display:block;height:100%;background:var(--acc)}.chart .bv{text-align:right;font-weight:700}
@@ -698,7 +698,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
             f'<div class="stopbar"><span>{e(c["stopline"])}</span><span><a class="go" href="#cell-stop">Stop</a><a class="resume" href="#{p}what">Resume</a></span></div></section>'
             f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p>'
             + (f'<section class="realshot" aria-labelledby="{p}real"><h2 id="{p}real">{e(c.get("shot_title", "The real thing"))}</h2>'
-               f'<div class="realshot-in">{B.shot(F, depth, c["shot"])}</div></section>' if c.get('shot') is not None else '')
+               f'<div class="realshot-in strip">{"".join(B.shot(F, depth, k) for k in (c["shot"] if isinstance(c["shot"], list) else [c["shot"]]))}</div></section>' if c.get('shot') is not None else '')
             + f'</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">What a cell is</h2>{fb["what"]}<h2>Who it is for</h2>{fb["for"]}'
             f'<h2 id="{p}products">Sizes and offers</h2>{fb["products"]}{fb["chart"]}'

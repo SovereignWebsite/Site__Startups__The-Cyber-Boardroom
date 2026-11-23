@@ -426,11 +426,12 @@
    {
     "file": "img/real/athena.webp",
     "url": "https://thecyberboardroom.com/web/athena",
-    "caption": "Athena, the AI cyber security advisor, on thecyberboardroom.com",
+    "caption": "Athena's page on thecyberboardroom.com, with her opening line",
     "phone": "img/real/athena-phone.webp",
     "phone_w": 780,
     "phone_h": 940,
-    "phone_taken": "2026-11-23"
+    "phone_taken": "2026-11-23",
+    "taken": "2026-11-23"
    }
   ]
  },
@@ -789,18 +790,18 @@
   ]
  },
  "band": {
-  "title": "A director asks. Athena answers.",
+  "title": "Athena opens. A director asks.",
   "cols": [
    {
-    "k": "The director",
-    "t": "\"What questions should I ask my CISO?\" (one of the prompt examples on Athena's page)",
+    "k": "Athena opens",
+    "t": "\"I'm Athena, your personal AI cyber security advisor. What cyber security topic would you like to explore today?\"",
     "s": [
      2
     ]
    },
    {
-    "k": "Athena",
-    "t": "\"I'm Athena, your personal AI cyber security advisor. What cyber security topic would you like to explore today?\"",
+    "k": "A director asks",
+    "t": "\"What questions should I ask my CISO?\" (one of the prompt examples on Athena's page)",
     "s": [
      2
     ]

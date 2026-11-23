@@ -143,7 +143,7 @@ def shot(F, depth, n=0, cls='shot', lazy=True):
             + (f'<picture><source media="(max-width: 40rem)" srcset="{rel(depth, x["phone"])}" width="{x["phone_w"]}" height="{x["phone_h"]}">' if x.get('phone') else '')
             + f'<img src="{rel(depth, x["file"])}" width="1200" height="750" alt="Screenshot: {e(x["caption"])}"{ld}>'
             + ('</picture>' if x.get('phone') else '') + '</a>'
-            f'<figcaption>{e(x["caption"])}. Screenshot taken {e(fmt_date(F["updated"]))}{(", phone view " + e(fmt_date(x["phone_taken"]))) if x.get("phone_taken") else ""}; '
+            f'<figcaption>{e(x["caption"])}. {("<span class=cap-desk>Desktop screenshot taken " + e(fmt_date(x.get("taken", F["updated"]))) + "</span><span class=cap-phone>Phone screenshot taken " + e(fmt_date(x["phone_taken"])) + "</span>") if x.get("phone_taken") else "Screenshot taken " + e(fmt_date(x.get("taken", F["updated"])))}; '
             f'<a href="{e(x["url"])}">open the real page &#8599;</a></figcaption></figure>')
 
 
@@ -315,7 +315,8 @@ def source_lines(html):
     for m in tagre.finditer(html):
         out.append(html[pos:m.start()]); pos = m.end()
         if m.group(2):
-            prefix[0] = m.group(1)
+            if m.group(1):  # a token without a prefix (shared parts, such as the Next step note) keeps the page's prefix
+                prefix[0] = m.group(1)
             h = holder()
             if h is None:
                 carry.append(m.group(2))
@@ -379,7 +380,8 @@ def source_lines(html):
 def fill_sources(F, html):
     """Each page numbers its own sources 1, 2, 3 without gaps, in the order of the facts file, and the
     "Sources:" rows use the same numbers (design.b.rounds, round 5)."""
-    cited = [s for s in F['sources'] if s['id'] in CITED]
+    present = set(re.findall(r'<!--C:[^:]*:(\d+)-->', html))  # only sources whose citation reaches the page
+    cited = [s for s in F['sources'] if str(s['id']) in present]
     num = {str(s['id']): str(k + 1) for k, s in enumerate(cited)}
     html = re.sub(r'<!--C:([^:]*):(\d+)-->', lambda m: f'<!--C:{m.group(1)}:{num.get(m.group(2), m.group(2))}-->', html)
     def one(m):
@@ -404,6 +406,7 @@ a{color:var(--link)}
 .skip{position:absolute;left:-999px;top:0}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.cap-phone{display:none}@media (max-width:40rem){.cap-desk{display:none}.cap-phone{display:inline}}
 .srcline,main p.srcline{grid-column:1/-1;font:.875rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:inherit;opacity:.9;margin:1.25rem 0 0;padding:0;max-width:none}
 .srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:2px 2px;text-align:right}
 sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}
@@ -614,7 +617,14 @@ def std_links(prefix=''):
 
 # ---------------------------------------------------------------- designs
 # Round 5 (design.b.rounds, 23 Nov 2026): in dark mode, secondary text is the body colour at about 90 per cent.
-DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in srgb,var(--fg) 88%,var(--bg))}}'
+DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in srgb,var(--fg) 88%,var(--bg))}}' + (
+    # Round 6: on phones no reading text below 15 px; source links keep 24 px targets.
+    '@media (max-width:40rem){main p.srcline,.srcline{font-size:15px!important}.srcline a{min-width:24px;min-height:24px}'
+    'main figcaption,main figcaption *,main small,main time,main label,.figs .d,.bnum small,.bnum span,.cards p,.flow span,.part span,'
+    '.next-k,.tl-list span,.chart li,.sources ol,.sources p,.sources .acc,.figs li span,.cond span,.cellbox li span,.cellbox .env,'
+    '.kick,.by,.pq footer,.bquote footer,.box h2,.sess-h span,.srv,.srv b,.blk p.id,.m .who,.win p,.prompts a,.acard-k,.acard-c,'
+    '.chips li,.stamp,.agenda b,.sig,.offer .tag,.ex-id,.sheet span,.formf b,main p[style*="font-size"]{font-size:15px!important}'
+    '.gap text{font-size:27px!important}.gap .small{font-size:26px!important}}')
 
 
 def palette(F, light, dark):

@@ -50,7 +50,9 @@ def next_step(F, depth, cls='next'):
     if not n:
         return ''
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(n))
-    return f'<div class="{cls}"><p class="next-k">Next step, on {e(F["url_label"])}</p><div class="btns">{btns}</div></div>'
+    note = F.get('next_note')
+    note = f'<p class="next-note">{md(note["t"])}{B.cite(F, note.get("s"), "")}</p>' if note else ''
+    return f'<div class="{cls}"><p class="next-k">Next step, on {e(F["url_label"])}</p><div class="btns">{btns}</div>{note}</div>'
 
 
 def identity_credit(F):
@@ -100,6 +102,7 @@ COMMON = """
 .btn.primary{background:var(--acc);color:var(--acc-ink,#fff)}
 .btn:hover{filter:brightness(1.1)}
 .next{margin:2.5rem 0;padding:1.4rem 1.5rem;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.next-note{margin:.8rem 0 0;max-width:40rem}
 .next-k{margin:0 0 .7rem;font:700 .78rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
 .credit{font-weight:600}
 .sources ol{padding-left:1.6rem;font-size:.9rem}.sources .acc,.sources p{color:var(--muted)}
@@ -604,7 +607,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
            '<rect x="70" y="138" width="232" height="246" rx="28" fill="none" class="barrier"/>'
            '<text x="34" y="56">The grant</text><text x="34" y="86" class="small">everything the agent can reach</text>'
            '<text x="98" y="200">The mandate</text><text x="104" y="230" class="small">what you</text><text x="104" y="256" class="small">authorised</text>'
-           '<text x="350" y="250">The delta</text><text x="350" y="282" class="small">reach nobody authorised</text>'
+           '<text x="350" y="250">The delta</text><text x="350" y="282" class="small">reach nobody</text><text x="350" y="310" class="small">authorised</text>'
            '<text x="80" y="412" class="small" style="fill:#ffd166">the barrier, round the mandate</text></svg>'
            '<figcaption style="color:#cfccc4;font-size:.85rem">Drawn for this site from RiskMandate\'s four objects: mandate, grant, delta and barrier.</figcaption></figure>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))

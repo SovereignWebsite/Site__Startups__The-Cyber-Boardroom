@@ -73,7 +73,7 @@ def next_step(F, depth, cls='next'):
     if not n:
         return ''
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(n))
-    note = F.get('next_note')
+    note = None if F.get('next_note_hero_only') else F.get('next_note')  # round 10: said once, under the hero button
     note = f'<p class="next-note">{md(note["t"])}{B.cite(F, note.get("s"), "")}</p>' if note else ''
     return f'<div class="{cls}"><p class="next-k">Next step, on {e(F["url_label"])}</p><div class="btns">{btns}</div>{note}</div>'
 
@@ -438,7 +438,7 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
         cards = ''.join(f'<li><b>{e(x["n"])}</b><span>{md(x["l"])}{B.cite(F, x.get("s"), p)}</span><small>{e(x["when"])}</small></li>' for x in c['cards'])
         body.append(f'<h2 id="{p}figs">{e(c.get("cards_title", "In its own numbers"))}</h2><ul class="bigfigs">{cards}</ul>')
     if c.get('strip_below'):
-        body.append(f'<h2 id="{p}real">{e(c.get("strip_title", "On the real site"))}</h2><div class="strip">' + ''.join(B.shot(F, depth, k) for k in c['strip_below']) + '</div>')
+        body.append(f'<h2 id="{p}real">{e(c.get("strip_title", "On the real site"))}</h2>' + B.more_shots(F, depth, c['strip_below'], lead=0))
     body.append(f'<div class="two" id="{p}what"><div><h2>What it is</h2>{fb["what"]}</div><div><h2>Who it is for</h2>{fb["for"]}</div></div>')
     body.append(f'<h2 id="{p}how">How it works</h2>{fb["how"]}')
     body.append(f'<h2 id="{p}products">What it offers</h2>{fb["products"]}')
@@ -713,7 +713,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
 .cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
 .cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
-.realshot{margin:2.4rem 0 1rem}.realshot-in{display:grid;gap:1.6rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,26rem),1fr))}
+.realshot{margin:2.4rem 0 1rem}.realshot-in .strip.desk-only{display:grid;gap:1.6rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,26rem),1fr))}
 .chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:7.5rem 1fr 5.5rem;gap:.6rem;align-items:center;margin:.3rem 0}
 .chart .bv{white-space:nowrap}
 .chart .bt{height:1rem;background:var(--line);border-radius:4px;overflow:hidden}.chart .bb{display:block;height:100%;background:var(--acc)}.chart .bv{text-align:right;font-weight:700}
@@ -730,11 +730,11 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
             f'<p class="halted">{e(c["halted"])}</p><ul class="agents">{agents}</ul></section>'
             f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p>'
             + (f'<section class="realshot" aria-labelledby="{p}real"><h2 id="{p}real">{e(c.get("shot_title", "The real thing"))}</h2>'
-               f'<div class="realshot-in strip">{"".join(B.shot(F, depth, k) for k in (c["shot"] if isinstance(c["shot"], list) else [c["shot"]]))}</div></section>' if c.get('shot') is not None else '')
+               f'<div class="realshot-in">{B.more_shots(F, depth, c["shot"] if isinstance(c["shot"], list) else [c["shot"]], lead=1)}</div></section>' if c.get('shot') is not None else '')
             + f'</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">What a cell is</h2>{fb["what"]}<h2>Who it is for</h2>{fb["for"]}'
             f'<h2 id="{p}products">Sizes and offers</h2>{fb["products"]}{fb["chart"]}'
-            f'<h2 id="{p}story">How it started</h2>{B.timeline_list(F, p, "tl-list tl-rail")}<h2>Counted</h2>{fb["figures"]}'
+            f'<h2 id="{p}story">How it started</h2>{fb["timeline"]}{"" if (F.get("band") or {}).get("merge_figures") else "<h2>Counted</h2>" + fb["figures"]}'
             f'{next_step(F, depth)}{fb["sources"]}</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
                 sect_links(p, [('what', 'What a cell is'), ('products', 'Sizes'), ('story', 'Start')]), body)
@@ -815,7 +815,7 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
     fb = facts_blocks(F, p, depth)
     ex = []
     for x in c['sites']:
-        ex.append(f'<article class="exhibit">{B.shot(F, depth, x["shot"], lazy=x["shot"] != c["sites"][0]["shot"])}'
+        ex.append(f'<article class="exhibit">{B.shot(F, depth, x["shot"], lazy=x["shot"] != c["sites"][0]["shot"], phone_hide=x["shot"] != c["sites"][0]["shot"])}'
                   f'<div><h2><a href="{e(x["url"])}" style="color:var(--fg)">{e(x["name"])}</a></h2><p class="role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>'
                   f'<p class="hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p>{md(x["credit"])}</p></div></article>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
@@ -826,7 +826,7 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
             f'<h2 class="s" id="{p}how">How each one was made</h2>{fb["how"]}'
             f'<h2 class="s" id="{p}what">What Sovereign Website is</h2>{fb["what"]}'
             f'<h2 class="s" id="{p}products">The family</h2>{fb["products"]}'
-            f'<h2 class="s">Key dates</h2>{fb["timeline"]}{next_step(F, depth)}{fb["sources"]}</div>')
+            f'<h2 class="s">Key dates</h2>{B.timeline_list(F, p, "tl-list tl-rail")}{next_step(F, depth)}{fb["sources"]}</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
                 sect_links(p, [('sites', 'The sites'), ('how', 'How'), ('what', 'What it is')]), body, credit=True)
 

@@ -130,7 +130,7 @@ def logo(F, depth, cls='logo', force_plate=False):
     return ''
 
 
-def shot(F, depth, n=0, cls='shot', lazy=True):
+def shot(F, depth, n=0, cls='shot', lazy=True, phone_hide=False):
     i = F.get('identity') or {}
     shots = i.get('shots') or []
     if n >= len(shots):
@@ -138,9 +138,10 @@ def shot(F, depth, n=0, cls='shot', lazy=True):
     x = shots[n]
     host = re.sub(r'^https?://', '', x['url']).rstrip('/')
     ld = ' loading="lazy" decoding="async"' if lazy else ''
-    if x.get('phone_link'):  # round 9: on phones this screenshot gives way to a plain link to the page
+    hide = x.get('phone_link') or phone_hide  # round 9/10: on phones this screenshot gives way to a plain link to the page
+    if hide:
         cls += ' shot-deskonly'
-    link = (f'<p class="shot-phonelink"><a href="{e(x["url"])}">{e(x["caption"])} &#8599;</a></p>' if x.get('phone_link') else '')
+    link = (f'<p class="shot-phonelink"><a href="{e(x["url"])}">{e(x["caption"])} &#8599;</a></p>' if hide else '')
     return (link + f'<figure class="{cls}"><a href="{e(x["url"])}" class="frame" aria-label="{e(x["caption"])}: open the real page">'
             f'<span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>{e(host)}</span></span>'
             + (f'<picture><source media="(max-width: 40rem)" srcset="{rel(depth, x["phone"])}" width="{x["phone_w"]}" height="{x["phone_h"]}">' if x.get('phone') else '')
@@ -148,6 +149,20 @@ def shot(F, depth, n=0, cls='shot', lazy=True):
             + ('</picture>' if x.get('phone') else '') + '</a>'
             f'<figcaption>{(("<span class=cap-desk>" + e(x["caption"]) + ". </span><span class=cap-phone>" + e(x["phone_caption"]) + ". </span>") if x.get("phone_caption") else e(x["caption"]) + ". ")}{("<span class=cap-desk>Desktop screenshot taken " + e(fmt_date(x.get("taken", F["updated"]))) + "</span><span class=cap-phone>Phone screenshot taken " + e(fmt_date(x["phone_taken"])) + "</span>") if x.get("phone_taken") else "Screenshot taken " + e(fmt_date(x.get("taken", F["updated"])))}; '
             f'<a href="{e(x["url"])}">open the real page &#8599;</a></figcaption></figure>')
+
+
+def more_shots(F, depth, ks, lead=0):
+    """Round 10: desktop shows every screenshot; a phone shows the first `lead` and keeps the rest behind "More screenshots"."""
+    ks = [k for k in ks if k < len((F.get('identity') or {}).get('shots') or [])]
+    if not ks:
+        return ''
+    desk = '<div class="strip desk-only">' + ''.join(shot(F, depth, k) for k in ks) + '</div>'
+    first, rest = ks[:lead], ks[lead:]
+    ph = ''.join(shot(F, depth, k) for k in first)
+    if rest:
+        ph += (f'<details class="moreshots"><summary>More screenshots ({len(rest)})</summary>'
+               f'<div class="strip">' + ''.join(shot(F, depth, k) for k in rest) + '</div></details>')
+    return desk + f'<div class="phone-only">{ph}</div>'
 
 
 def gallery(F, depth, start=0, cls='gallery'):
@@ -213,7 +228,7 @@ def timeline_list(F, prefix, cls='tl-list'):
             items.append(f'<li style="--gap:{gap}"><time datetime="{e(x["date"])}">{when}</time> '
                          f'<span>{md(x["label"])}{cite(F, x.get("s"), prefix)}</span></li>')
         return (f'<ol class="{cls}">{"".join(items)}</ol>'
-                f'<p class="tl-note">Spaced by the time between dates, up to three months. Drawn for this site from the dates the company publishes.</p>')
+                f'<p class="tl-note">Spaced to scale by date, up to three months between dots. Drawn for this site from the dates the company publishes.</p>')
     items = ''.join(f'<li><time datetime="{e(x["date"])}">{e(fmt_date(x["date"]))}</time> '
                     f'<span>{md(x["label"])}{cite(F, x.get("s"), prefix)}</span></li>' for x in ev)
     return f'<ol class="{cls}">{items}</ol>'
@@ -421,7 +436,7 @@ a{color:var(--link)}
 .skip{position:absolute;left:-999px;top:0}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.cap-phone{display:none}.shot-phonelink{display:none}@media (max-width:40rem){.cap-desk{display:none}.cap-phone{display:inline}.shot-deskonly{display:none}.shot-phonelink{display:block}}
+.cap-phone{display:none}.shot-phonelink{display:none}.phone-only{display:none}.moreshots{margin:1rem 0}.moreshots summary{cursor:pointer;font-weight:700;padding:.6rem 0;min-height:24px}.moreshots .strip{display:grid;gap:1.4rem;margin-top:.6rem}@media (max-width:40rem){.desk-only{display:none!important}.phone-only{display:block}.cap-desk{display:none}.cap-phone{display:inline}.shot-deskonly{display:none}.shot-phonelink{display:block}}
 .tl-list.tl-rail{list-style:none;margin:1rem 0 1rem .6rem;padding:0 0 0 1.6rem;border-left:3px solid var(--acc);position:relative}.tl-list.tl-rail li{position:relative;margin:calc(8px + var(--gap,0) * 1px) 0 0;padding-left:.4rem}.tl-list.tl-rail li:first-child{margin-top:0}.tl-list.tl-rail li::before{content:'';position:absolute;left:calc(-2.1rem - 1.5px);top:.35rem;width:1rem;height:1rem;border-radius:50%;background:var(--acc);border:3px solid var(--bg,#fff)}.tl-list.tl-rail time{display:block;font-weight:800}.tl-list.tl-rail time a{color:inherit}.tl-note{font-size:.9rem;color:var(--muted)}
 .srcline,main p.srcline{grid-column:1/-1;font:.875rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:inherit;opacity:.9;margin:1.25rem 0 0;padding:0;max-width:none}
 .srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:6px 2px 6px 8px;margin:-6px 0 -6px -2px;text-align:right}
@@ -642,7 +657,16 @@ DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in s
     '.chips li,.stamp,.agenda b,.sig,.offer .tag,.ex-id,.sheet span,.formf b,.tl-note,main p[style*="font-size"]{font-size:15px!important}'
     '.gap text{font-size:27px!important}.gap .small{font-size:26px!important}'
     # Round 7 (design.b): the footer and the family menu too, kept quiet by colour and weight, not size.
-    '.foot,.foot p,.foot a,.designs-foot li a,.family-credit,.family-credit .family-head,.family-credit li a,.foot .sws-version{font-size:15px!important}}')
+    '.foot,.foot p,.foot a,.designs-foot li a,.family-credit,.family-credit .family-head,.family-credit li a,.foot .sws-version{font-size:15px!important}'
+    # Round 10: shorter phone pages. Compact sources, numbers two by two, the keys in one row.
+    '.sources li{margin:.15rem 0!important;line-height:1.4}.sources ol{margin:.4rem 0}'
+    '.bnums{grid-template-columns:1fr 1fr!important;gap:1.2rem .9rem!important}.bnum b{font-size:2.3rem!important}'
+    '.kset{grid-template-columns:repeat(3,1fr)!important;gap:.7rem!important}.kkey{width:40px;height:100px}.kset b{font-size:1rem!important}.kset span{font-size:15px}'
+    '.tl-list.tl-rail li{margin-top:calc(6px + var(--gap,0) * .35px)!important}.tl-list.tl-rail li:first-child{margin-top:0!important}'
+    '.bflow{gap:1.4rem!important}.bzone{padding:.9rem 1rem 1rem!important}.bzone:not(:last-child)::after{bottom:-1.4rem!important;height:1.4rem!important}'
+    '.flow,.cards,.figs{gap:.7rem!important}.flow li,.cards li,.figs li,.part,.bcol{padding:.8rem .9rem!important}'
+    'main h2{margin-top:1.9rem!important;margin-bottom:.7rem!important}.band-full{padding-top:2rem!important;padding-bottom:2rem!important}'
+    '.ihero,.ghero{padding-bottom:1.4rem!important}.bquote{margin:1rem 0!important}.tl-note{margin:.3rem 0 0}}')
 
 
 def palette(F, light, dark):

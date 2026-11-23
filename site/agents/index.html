@@ -35,9 +35,8 @@ a{color:var(--link)}
 .skip{position:absolute;left:-999px;top:0}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.srcline{font:.82rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted);margin:.6rem 0 1rem;opacity:.95}
-.srcline a{color:inherit;display:inline-block;min-width:24px;text-align:center}
-.band-full .srcline,.ihero .srcline,.ghero .srcline,.chathead .srcline,.seal .srcline{color:#d6d6d2}
+.srcline,main p.srcline{grid-column:1/-1;font:.875rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:inherit;opacity:.9;margin:1.25rem 0 0;padding:0;max-width:none}
+.srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:2px 2px;text-align:right}
 sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}
 sup.cites a{text-decoration:none;display:inline-block;min-width:24px;text-align:center}
 sup.cites a:hover{text-decoration:underline}

@@ -293,35 +293,92 @@ def sources(F, prefix, heading='Sources'):
 
 
 def source_lines(html):
-    """Replace the inline source tokens with one line at the end of each section: "Sources: 2, 7, 13" (design.b, 23 Nov 2026).
-    A section ends at its closing tag, where the next h2 starts, or at the end of main."""
-    out, pending, prefix = [], [], ''
-    def flush():
-        nonlocal pending
-        if not pending:
-            return ''
-        ids = sorted(set(pending), key=int)
-        pending = []
-        links = ', '.join(f'<a href="#{prefix}src-{i}" aria-label="source {i}">{i}</a>' for i in ids)
+    """Replace the inline source tokens with one line, "Sources: 2, 7, 13", as the last child of each section's
+    inner container (design.b, 23 Nov 2026; design.b.rounds round 4). A hero's sources move to the first
+    section after it. A section with several h2s gets a line before each further h2 at its own level."""
+    SECT = ('section', 'article', 'header', 'main')
+    tagre = re.compile(r'<!--C:([^:]*):(\d+)-->|<(/?)(section|article|header|aside|main|footer|div|nav|h2)(?=[\s>])([^>]*)>')
+    stack, out, pos, prefix, carry = [], [], 0, [''], []
+    def line(ids, h2=True):
+        if h2 and carry and not any(x['band'] for x in stack):
+            ids = ids + carry; carry.clear()
+        ids = sorted(set(ids), key=int)
+        links = ', '.join(f'<a href="#{prefix[0]}src-{i}" aria-label="source {i}">{i}</a>' for i in ids)
         return f'<p class="srcline">Sources: {links}</p>'
-    pos = 0
-    for m in re.finditer(r'<!--C:([^:]*):(\d+)-->|<h2[\s>]|</section>|</article>|</main>', html):
-        out.append(html[pos:m.start()])
-        if m.group(1) is not None or m.group(2):
-            prefix = m.group(1)
-            pending.append(m.group(2))
-        else:
-            out.append(flush())
-            out.append(m.group(0))
-        pos = m.end()
+    def holder():
+        for k in range(len(stack) - 1, -1, -1):
+            if stack[k]['tag'] in SECT:
+                if k + 1 < len(stack) and stack[k + 1]['tag'] == 'div':
+                    return stack[k + 1]
+                return stack[k]
+        return stack[-1] if stack else None
+    for m in tagre.finditer(html):
+        out.append(html[pos:m.start()]); pos = m.end()
+        if m.group(2):
+            prefix[0] = m.group(1)
+            h = holder()
+            if h is None:
+                carry.append(m.group(2))
+            else:
+                h['ids'].append(m.group(2))
+            continue
+        close, tag, attrs = m.group(3), m.group(4), m.group(5) or ''
+        if tag == 'h2':
+            if not close and stack:
+                h = holder()
+                if h is not None and h is stack[-1] and h['ids'] and h['seen_h2']:
+                    out.append(line(h['ids'])); h['ids'] = []
+                if h is not None and h is stack[-1]:
+                    h['seen_h2'] = True
+            out.append(m.group(0)); continue
+        if not close:
+            cls = re.search(r'class="([^"]*)"', attrs)
+            hero = bool(cls and re.search(r'hero|mast|chathead', cls.group(1)))
+            ent = {'tag': tag, 'ids': [], 'hero': hero, 'seen_h2': False,
+                   'band': bool(cls and re.search(r'(^|\s)band', cls.group(1)))}
+            if tag in ('section', 'article') and stack and not hero:
+                h = holder()
+                if h is not None and h is stack[-1] and h['ids'] and not any(x['hero'] for x in stack):
+                    out.append(line(h['ids'], h['seen_h2'])); h['ids'] = []
+            stack.append(ent); out.append(m.group(0)); continue
+        # closing tag: pop to the matching entry
+        k = len(stack) - 1
+        while k >= 0 and stack[k]['tag'] != tag:
+            k -= 1
+        if k < 0:
+            out.append(m.group(0)); continue
+        ids, h2 = [], False
+        for ent in stack[k:]:
+            ids += ent['ids']; h2 = h2 or ent['seen_h2']
+        inhero = any(x['hero'] for x in stack[:k + 1])
+        del stack[k:]
+        if ids:
+            if inhero:
+                carry += ids
+            else:
+                out.append(line(ids, h2))
+        out.append(m.group(0))
     out.append(html[pos:])
-    return ''.join(out)
+    html = ''.join(out)
+    if carry:  # a hero with no headed section after it: its numbers join the last row before the sources list
+        i = html.find('<section class="sources"')
+        rows = [m for m in re.finditer(r'<p class="srcline">Sources: (.*?)</p>', html) if i < 0 or m.start() < i]
+        if rows:
+            m = rows[-1]
+            ids = sorted(set(carry) | set(re.findall(r'>(\d+)<', m.group(1))), key=int)
+            links = ', '.join(f'<a href="#{prefix[0]}src-{n}" aria-label="source {n}">{n}</a>' for n in ids)
+            html = html[:m.start()] + f'<p class="srcline">Sources: {links}</p>' + html[m.end():]
+        else:
+            links = ', '.join(f'<a href="#{prefix[0]}src-{n}" aria-label="source {n}">{n}</a>' for n in sorted(set(carry), key=int))
+            j = html.find('</main>')
+            html = html[:j] + f'<p class="srcline">Sources: {links}</p>' + html[j:]
+    return html
 
 
 def fill_sources(F, html):
     def one(m):
         prefix, heading = m.group(1), m.group(2)
-        li = ''.join(f'<li id="{prefix}src-{s["id"]}"><a href="{e(s["url"])}">{e(s["title"])}</a>'
+        li = ''.join(f'<li id="{prefix}src-{s["id"]}" value="{s["id"]}"><a href="{e(s["url"])}">{e(s["title"])}</a>'
                      f' <span class="acc">read {e(fmt_date(s["accessed"]))}</span></li>' for s in F['sources'] if s['id'] in CITED)
         return (f'<section class="sources" aria-labelledby="{prefix}h-src"><h2 id="{prefix}h-src">{heading}</h2>'
                 f'<p>Every fact on this page comes from the company\'s own public pages, listed here. Each section ends with the numbers of its sources. '
@@ -341,9 +398,8 @@ a{color:var(--link)}
 .skip{position:absolute;left:-999px;top:0}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.srcline{font:.82rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted);margin:.6rem 0 1rem;opacity:.95}
-.srcline a{color:inherit;display:inline-block;min-width:24px;text-align:center}
-.band-full .srcline,.ihero .srcline,.ghero .srcline,.chathead .srcline,.seal .srcline{color:#d6d6d2}
+.srcline,main p.srcline{grid-column:1/-1;font:.875rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:inherit;opacity:.9;margin:1.25rem 0 0;padding:0;max-width:none}
+.srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:2px 2px;text-align:right}
 sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}
 sup.cites a{text-decoration:none;display:inline-block;min-width:24px;text-align:center}
 sup.cites a:hover{text-decoration:underline}
@@ -608,7 +664,7 @@ figcaption{font-size:.85rem;color:var(--muted);margin-top:.5rem}
 .cards{list-style:none;padding:0;margin:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr))}
 .cards li{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--acc);border-radius:14px;padding:1.1rem 1.2rem;box-shadow:0 6px 18px rgba(0,0,0,.06)}
 .cards h3{margin:0 0 .35rem;font-size:1.15rem}
-.cards p{margin:0;color:var(--muted);font-size:.97rem}
+.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent);font-size:.97rem}
 .tl-svg{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1rem;margin-bottom:1rem}
 .tl-svg .axis{stroke:var(--fg);stroke-width:3}
 .tl-svg .tick{stroke:var(--muted);stroke-width:2}
@@ -794,7 +850,7 @@ h2::after{content:"";display:block;width:3rem;height:2px;background:var(--acc);m
 .flow{padding-left:1.4rem}.flow li{margin:0 0 .8rem}.flow b{display:block}
 .cards{list-style:none;padding:0;margin:0}
 .cards li{border-top:1px solid var(--line);padding:.8rem 0}
-.cards h3{margin:0;font-size:1.2rem}.cards p{margin:.2rem 0 0;color:var(--muted)}
+.cards h3{margin:0;font-size:1.2rem}.cards p{margin:.2rem 0 0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .figs{list-style:none;padding:0;margin:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr));text-align:center}
 .figs li{display:flex;flex-direction:column}
 .figs .n{font-size:2.2rem;font-weight:700;color:var(--acc)}
@@ -995,7 +1051,7 @@ h1{font-size:clamp(1.8rem,5vw,2.6rem);margin:.5rem 0}
     return (head(F, 'index', 1, f'{F["name"]}: choose a design', f'The same facts about {F["name"]} in five designs.', css)
             + nav(F, 'gallery', 1, [('Home', '../index.html')])
             + f'<main id="main"><h1>Five designs, the same facts</h1><p>Every design below says the same things about {e(F["name"])}, '
-              f'from the same sources. Pick the one you like; the control at the top of every page moves between them.</p>'
+              f'from the same sources. Pick the one you like; the links at the foot of every page move between them.</p>'
               f'<ul class="g">{cards}</ul></main>' + foot(F, 1))
 
 

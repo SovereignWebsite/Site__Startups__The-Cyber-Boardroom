@@ -191,7 +191,7 @@ h2{font-size:1rem;color:#3fb950;margin:2.5rem 0 1rem;text-transform:lowercase}
 h2::before{content:"$ cat ";color:#8b949e}
 .cards li,.flow li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;list-style:none}
 .cards,.flow{padding:0;display:grid;gap:.8rem;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr))}
-.cards h3{margin:0 0 .3rem;font-size:1rem;color:#fff}.cards p{margin:0;color:var(--muted);font-size:.9rem}
+.cards h3{margin:0 0 .3rem;font-size:1rem;color:#fff}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent);font-size:.9rem}
 .flow b{display:block;color:#fff}.flow span{color:var(--muted);font-size:.9rem}
 .tl-list{padding-left:1.4rem}.tl-list time{color:#d29922}
 .figs{list-style:none;padding:0;display:grid;gap:.8rem;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}
@@ -247,14 +247,14 @@ body{font:1.06rem/1.65 "Iowan Old Style",Charter,Georgia,serif}
 .blk{position:relative;margin:2.6rem 0;padding:1.4rem 1.5rem;background:var(--card);border:1px solid var(--line);border-radius:14px}
 .blk h2{font:800 1.4rem/1.2 ui-sans-serif,system-ui,sans-serif;margin:0 0 .8rem}
 .blk .id{font:.75rem ui-monospace,Menlo,monospace;color:var(--muted);margin:0 0 .6rem}
-.blk .srcline{position:relative;z-index:1;background:#0d1117;color:#c9d1d9;display:inline-block;padding:.1rem .6rem;border-radius:6px}
+.blk .srcline{position:relative;z-index:1;background:#0d1117;color:#c9d1d9;opacity:1;display:inline-block;padding:.1rem .6rem;border-radius:6px}
 .blk .ct{position:absolute;inset:0;border-radius:14px;background:#0d1117;color:#3fb950;font:.8rem/1.45 ui-monospace,Menlo,monospace;padding:1.2rem 1.4rem;word-break:break-all;overflow:hidden;pointer-events:none;opacity:0}
 @supports (animation-timeline:view()){
  .blk .ct{opacity:1;animation:open linear both;animation-timeline:view();animation-range:entry 0% entry 90%}
  @keyframes open{from{opacity:1}to{opacity:0}}
 }
 .cards{list-style:none;padding:0;display:grid;gap:.8rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}
-.cards li{border-left:4px solid var(--acc);padding:.2rem .9rem}.cards h3{margin:0;font:700 1.05rem system-ui,sans-serif}.cards p{margin:.2rem 0 0;color:var(--muted)}
+.cards li{border-left:4px solid var(--acc);padding:.2rem .9rem}.cards h3{margin:0;font:700 1.05rem system-ui,sans-serif}.cards p{margin:.2rem 0 0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .flow{padding-left:1.3rem}.flow li{margin:.4rem 0}.flow b{display:block;font-family:system-ui,sans-serif}
 .tl-list{padding-left:1.3rem}.tl-list time{font:700 .9rem system-ui,sans-serif;color:var(--acc);display:block}
 .figs{list-style:none;padding:0;display:grid;gap:.8rem;grid-template-columns:repeat(auto-fill,minmax(11rem,1fr))}
@@ -301,7 +301,7 @@ body{{font:1.05rem/1.62 {c.get('body_font', 'system-ui,-apple-system,"Segoe UI",
 h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-serif')};margin:2.6rem 0 1rem}}
 .cards{{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}}
 .cards li{{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem}}
-.cards h3{{margin:0 0 .3rem;font-size:1.1rem}}.cards h3 a{{color:var(--fg)}}.cards p{{margin:0;color:var(--muted)}}
+.cards h3{{margin:0 0 .3rem;font-size:1.1rem}}.cards h3 a{{color:var(--fg)}}.cards p{{margin:0;color:color-mix(in srgb,currentColor 90%,transparent)}}
 .flow{{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));counter-reset:s}}
 .flow li{{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}}
 .flow li::before{{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:800;margin-bottom:.5rem}}
@@ -527,7 +527,7 @@ body{font:1.04rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .m.a{align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-bottom-left-radius:4px}
 .m.a .who{display:block;font-size:.78rem;font-weight:700;color:var(--acc2);margin-bottom:.2rem}
 .m p{margin:.2rem 0}.m ul,.m ol{margin:.3rem 0;padding-left:1.2rem}
-.m.a .cards{list-style:none;padding:0}.m.a .cards h3{font-size:1rem;margin:.4rem 0 0}.m.a .cards p{color:var(--muted)}
+.m.a .cards{list-style:none;padding:0}.m.a .cards h3{font-size:1rem;margin:.4rem 0 0}.m.a .cards p{color:color-mix(in srgb,currentColor 90%,transparent)}
 .m.a .flow b{display:block}.m.a .tl-list time{font-weight:700}
 .m.a .figs{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(9rem,1fr));gap:.4rem}.m.a .figs li{display:flex;flex-direction:column}.m.a .figs .n{font-weight:800;font-size:1.3rem;color:var(--acc2)}.m.a .figs .d{font-size:.72rem;color:var(--muted)}
 @keyframes pop{from{transform:translateY(10px)}to{transform:none}}
@@ -583,7 +583,7 @@ body{font:1.05rem/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sa
 .part span{color:var(--muted);font-size:.95rem}
 h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;margin:2.6rem 0 1rem}
 .cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
-.cards li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem}.cards h3{margin:0 0 .3rem;font-size:1.05rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted);font-size:.95rem}
+.cards li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem}.cards h3{margin:0 0 .3rem;font-size:1.05rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent);font-size:.95rem}
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr))}
 .figs li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;display:flex;flex-direction:column}.figs .n{font:800 2rem ui-monospace,Menlo,monospace;color:var(--acc)}.figs .d{font-size:.78rem;color:var(--muted)}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-top:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
@@ -652,7 +652,7 @@ body{font:1.05rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 #cell-stop:target .stopbar .go{display:none}#cell-stop:target .stopbar .resume{display:inline-block}
 h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0 1rem}
 .cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
-.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
+.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
 .chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:7.5rem 1fr 5.5rem;gap:.6rem;align-items:center;margin:.3rem 0}
 .chart .bv{white-space:nowrap}
@@ -707,7 +707,7 @@ h1 em{font-style:normal;color:#f0a7c4}
 .stat div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}
 .stat b{display:block;font:900 2.4rem/1 system-ui;color:#f0a7c4}.stat span{color:var(--muted);font-size:.92rem}
 h2{font:800 1.6rem system-ui;margin:2.4rem 0 1rem}
-.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
+.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .next{background:var(--card)}
 """
     fb = facts_blocks(F, p, depth)
@@ -745,7 +745,7 @@ body{font:1.05rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .exhibit .hand{border-left:4px solid var(--acc);padding:.4rem .9rem;background:var(--card);margin:.8rem 0}
 .exhibit .shot figcaption{font-size:.82rem}
 h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Style",serif;margin:2.6rem 0 1rem}
-.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem;font-family:Georgia,serif}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:var(--muted)}
+.cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem;font-family:Georgia,serif}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .flow{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));counter-reset:s}.flow li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.flow li::before{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:800;margin-bottom:.5rem}.flow b{display:block}.flow span{color:var(--muted);font-size:.95rem}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 """

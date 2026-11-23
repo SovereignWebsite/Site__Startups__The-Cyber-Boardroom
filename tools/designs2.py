@@ -27,7 +27,15 @@ BAND_CSS = """
 .bquote p{font:600 1.3rem/1.45 system-ui,sans-serif;margin:0 0 .4rem}.bquote footer{color:#d0d0cb;font-size:.9rem}
 .band-full .people{margin-top:1.4rem;color:#e4e4e0}
 .bnote{color:#c9c9c4;margin-top:1rem}
-"""
+
+.bflow{list-style:none;margin:1.6rem 0;padding:0;display:grid;gap:2.2rem;counter-reset:z}
+@media (min-width:56rem){.bflow{grid-template-columns:repeat(3,1fr);gap:3rem}}
+.bzone{position:relative;border:2px solid var(--bandacc,#5eead4);border-radius:16px;padding:1.2rem 1.2rem 1.3rem;display:flex;flex-direction:column;gap:.5rem}
+.bzone b{font:800 1.25rem system-ui,sans-serif;color:#fff}.bzone span{color:#e4e4e0}
+.zico{fill:none;stroke:var(--bandacc,#5eead4);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.zsample{margin-top:auto;display:block;padding:.5rem .7rem;border-radius:8px;background:rgba(255,255,255,.08);color:#e4e4e0;font:600 .9rem ui-monospace,Menlo,monospace;overflow-wrap:anywhere}
+.bzone:not(:last-child)::after{content:"";position:absolute;left:50%;bottom:-2.2rem;width:2px;height:2.2rem;background:var(--bandacc,#5eead4)}
+@media (min-width:56rem){.bzone:not(:last-child)::after{left:auto;right:-3rem;top:50%;bottom:auto;width:3rem;height:2px}}"""
 
 
 def setup(build):
@@ -57,7 +65,7 @@ def next_step(F, depth, cls='next'):
 
 def identity_credit(F):
     host = F['url_label']
-    return (f'<p class="credit">Logo and screenshots: {e(host)}, {e(B.fmt_date(F["updated"]))}. '
+    return (f'<p class="credit">Logo and screenshots: {e(host)}; each caption gives the date its screenshot was taken. '
             f'Used with Dinis Cruz\'s permission: these are his own companies (relayed by design.b, 20 November 2026). '
             f'Each screenshot links to the real page it shows.</p>')
 
@@ -134,6 +142,18 @@ def band(F, depth, d, p):
     if not b or d['key'] != F['home']:
         return ''
     cols = ''.join(f'<div class="bcol"><b>{e(c["k"])}</b><span>{md(c["t"])}{B.cite(F, c.get("s"), p)}</span></div>' for c in b.get('cols', []))
+    flow = ''
+    if b.get('flow'):  # round 7: the columns drawn as zones joined by arrows (sgit: machine, server, read key)
+        icons = {
+            'machine': '<rect x="10" y="10" width="44" height="30" rx="3"/><path d="M4 48 H60 L54 40 H10 Z"/><path d="M20 22 h12 M20 29 h20" />',
+            'server': '<rect x="12" y="6" width="40" height="14" rx="3"/><rect x="12" y="25" width="40" height="14" rx="3"/><rect x="12" y="44" width="40" height="12" rx="3"/><path d="M20 13 h4 M20 32 h4 M20 50 h4"/>',
+            'key': '<circle cx="18" cy="32" r="11"/><circle cx="18" cy="32" r="3.5"/><path d="M29 32 H60 M48 32 V41 M56 32 V39"/>',
+        }
+        items = ''.join(f'<li class="bzone"><svg class="zico" viewBox="0 0 64 64" width="56" height="56" aria-hidden="true" focusable="false">{icons.get(c.get("icon"), "")}</svg>'
+                        f'<b>{e(c["k"])}</b><span>{md(c["t"])}{B.cite(F, c.get("s"), p)}</span>'
+                        + (f'<code class="zsample" aria-hidden="true">{e(c["sample"])}</code>' if c.get('sample') else '') + '</li>' for c in b.get('cols', []))
+        flow = f'<ol class="bflow">{items}</ol>' + (f'<p class="bnote">{md(b["flow_note"])}</p>' if b.get('flow_note') else '')
+        cols = ''
     nums = ''.join(f'<div class="bnum"><b>{e(n["n"])}</b><span>{md(n["l"])}{B.cite(F, n.get("s"), p)}</span><small>{e(n.get("when", ""))}</small></div>' for n in b.get('nums', []))
     code = ''
     if b.get('code'):
@@ -152,7 +172,7 @@ def band(F, depth, d, p):
     hf = F['brand'].get('headfont')
     st = f' style="--headfont:{e(hf)}"' if hf else ''
     return (f'<section class="band-full"{st} aria-labelledby="{p}band"><div class="wrap"><h2 id="{p}band">{e(b["title"])}</h2>'
-            f'{"<div class=bcols>" + cols + "</div>" if cols else ""}{"<div class=bnums>" + nums + "</div>" if nums else ""}{keys}{code}{quote}{extra}</div></section>')
+            f'{"<div class=bcols>" + cols + "</div>" if cols else ""}{"<div class=bnums>" + nums + "</div>" if nums else ""}{flow}{keys}{code}{quote}{extra}</div></section>')
 
 
 
@@ -589,7 +609,8 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
 .cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
 .cards li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem}.cards h3{margin:0 0 .3rem;font-size:1.05rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent);font-size:.95rem}
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr))}
-.figs li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;display:flex;flex-direction:column}.figs .n{font:800 2rem ui-monospace,Menlo,monospace;color:var(--acc)}.figs .d{font-size:.78rem;color:var(--muted)}
+.figs li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.1rem;display:flex;flex-direction:column}.figs .n{font:900 clamp(2.2rem,4.6vw,3.4rem)/1 system-ui,sans-serif;color:var(--acc);margin-bottom:.4rem;white-space:nowrap}.figs .d{font-size:.85rem;color:var(--muted)}
+.gapchart{margin:0 0 2.4rem}.gapchart .chart{margin-top:0}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-top:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
 .chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:7rem 1fr 4rem;gap:.6rem;align-items:center;margin:.3rem 0}
 .chart .bv{white-space:nowrap}
@@ -612,11 +633,13 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
            '<figcaption style="color:#cfccc4;font-size:.85rem">Drawn for this site from RiskMandate\'s four objects: mandate, grant, delta and barrier.</figcaption></figure>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
     body = (f'<div class="ghero"><div class="wrap"><div><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p><div class="btns">{btns}</div></div>{svg}</div></div>'
-            f'<div class="wrap"><div class="parts" id="{p}how">{parts}</div></div>{band(F, depth, d, p)}<div class="wrap">'
+            f'<div class="wrap"><div class="parts" id="{p}how">{parts}</div>'
+            + (f'<section class="gapchart" aria-label="Measured">{fb["chart"]}</section>' if fb["chart"] else '')
+            + f'</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">The gap, in plain words</h2>{fb["what"]}'
             f'<h2>Who looks at the gap</h2>{fb["for"]}'
             f'<h2 id="{p}products">What closes it</h2>{fb["products"]}'
-            f'<h2>Measured on its own team</h2>{fb["figures"]}{fb["chart"]}'
+            f'<h2>Measured on its own team</h2>{fb["figures"]}'
             f'<h2 id="{p}story">Key dates</h2>{fb["timeline"]}'
             f'{next_step(F, depth)}{fb["sources"]}</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
@@ -624,7 +647,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
 
 
 # ---------------------------------------------------------------- engine: the cell (AgentiCCells)
-def eng_cell(F, depth, d):
+def eng_cell(F, depth, d):  # cfg 'shot': index of a real screenshot shown after the diagram (round 7)
     c = d['cfg']
     p = 'cl-'
     css = palette_css({'light': {'bg': '#f8f5f1', 'card': '#fff', 'fg': '#17141a', 'muted': '#4f4a55', 'line': '#e4ddd6', 'link': '#a8205a', 'acc': '#a8205a', 'acc-ink': '#fff'},
@@ -658,6 +681,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
 .cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}
 .cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.chart figcaption span{display:block;color:var(--muted);font-size:.85rem}
+.realshot{margin:2.4rem 0 1rem}.realshot-in{max-width:52rem}
 .chart ul{list-style:none;padding:0}.chart li{display:grid;grid-template-columns:7.5rem 1fr 5.5rem;gap:.6rem;align-items:center;margin:.3rem 0}
 .chart .bv{white-space:nowrap}
 .chart .bt{height:1rem;background:var(--line);border-radius:4px;overflow:hidden}.chart .bb{display:block;height:100%;background:var(--acc)}.chart .bv{text-align:right;font-weight:700}
@@ -672,7 +696,10 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
             f'<div class="cond"><i>C</i><b>The conductor</b><span style="color:var(--muted)">hands out the work and keeps the record</span></div>'
             f'<ul class="agents">{agents}</ul><p class="halted">{e(c["halted"])}</p>'
             f'<div class="stopbar"><span>{e(c["stopline"])}</span><span><a class="go" href="#cell-stop">Stop</a><a class="resume" href="#{p}what">Resume</a></span></div></section>'
-            f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p></div>{band(F, depth, d, p)}<div class="wrap">'
+            f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p>'
+            + (f'<section class="realshot" aria-labelledby="{p}real"><h2 id="{p}real">{e(c.get("shot_title", "The real thing"))}</h2>'
+               f'<div class="realshot-in">{B.shot(F, depth, c["shot"])}</div></section>' if c.get('shot') is not None else '')
+            + f'</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">What a cell is</h2>{fb["what"]}<h2>Who it is for</h2>{fb["for"]}'
             f'<h2 id="{p}products">Sizes and offers</h2>{fb["products"]}{fb["chart"]}'
             f'<h2 id="{p}story">How it started</h2>{fb["timeline"]}<h2>Counted</h2>{fb["figures"]}'

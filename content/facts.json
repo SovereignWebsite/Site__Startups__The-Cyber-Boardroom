@@ -421,7 +421,8 @@
     "phone": "img/real/home-phone.webp",
     "phone_w": 780,
     "phone_h": 940,
-    "phone_taken": "2026-11-23"
+    "phone_taken": "2026-11-23",
+    "taken": "2026-11-23"
    },
    {
     "file": "img/real/athena.webp",
@@ -703,9 +704,9 @@
     ],
     "sub": "\"The Cyber Boardroom's mission is to help you understand your organisation's cyber security agenda, as well as fulfil your duties as a board member.\"",
     "hero": "shot",
-    "shot": 0,
+    "shot": 1,
     "strip_below": [
-     1
+     0
     ],
     "strip_title": "Athena, on the real site"
    }
@@ -802,6 +803,13 @@
    {
     "k": "A director asks",
     "t": "\"What questions should I ask my CISO?\" (one of the prompt examples on Athena's page)",
+    "s": [
+     2
+    ]
+   },
+   {
+    "k": "What else a director can ask",
+    "t": "\"Hello, what do you know about me?\" \"What is DORA?\" \"What are my legal responsibilities?\" \"What is the best way to learn more about cyber security?\" (the other prompt examples on Athena's page). Her answers are written live by the model, so none is quoted here.",
     "s": [
      2
     ]

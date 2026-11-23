@@ -54,7 +54,7 @@ BAND_CSS = """
 .hero-chat{margin:0;max-width:34rem}.hero-chat .bub{font-size:1.1rem}
 .bwhen{margin:.2rem 0 1rem;color:#e4e4e0;font-weight:600}.bnum small:empty{display:none}
 .band-full .bnote{color:#ececea}
-.hero-shot-k{margin:1.6rem 0 .6rem;font-weight:800;font-size:1.05rem}"""
+.hero-shot-k{margin:1.6rem 0 .6rem;font-weight:800;font-size:1.05rem}.ihero .shot-phonelink a{color:#fff;font-weight:700}"""
 
 
 def setup(build):
@@ -181,7 +181,7 @@ def band(F, depth, d, p):
         cols = ''
     if b.get('merge_figures'):  # round 9: the company's published figures join the band's own numbers, one section
         b = dict(b, nums=list(b.get('nums', [])) + [{'n': f['value'], 'l': f['label'], 's': f.get('s'),
-                 'when': f.get('when') or 'as published ' + B.fmt_date(f['asof'])} for f in F.get('figures', [])])
+                 'when': f['when'] if 'when' in f else 'as published ' + B.fmt_date(f['asof'])} for f in F.get('figures', [])])
     head = f'<p class="bwhen">{e(b["when_head"])}</p>' if b.get('when_head') else ''  # round 14: the shared date once, at the head
     nums = ''.join(f'<div class="bnum"><b>{e(n["n"])}</b><span>{md(n["l"])}{B.cite(F, n.get("s"), p)}</span><small>{e(n.get("when", ""))}</small></div>' for n in b.get('nums', []))
     code = ''
@@ -415,7 +415,7 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
                       for x in (F.get('band') or {}).get('cols', []) if not x.get('note'))
         hero_right = f'<ol class="bchat hero-chat" aria-label="{e(c.get("chat_label", "A conversation"))}">{bub}</ol>'
         if c.get('chat_shot') is not None:  # round 14: the real page, right under the conversation
-            hero_right += f'<p class="hero-shot-k">{e(c.get("chat_shot_title", "On the real site"))}</p>' + B.shot(F, depth, c['chat_shot'], lazy=False)
+            hero_right += f'<p class="hero-shot-k">{e(c.get("chat_shot_title", "On the real site"))}</p>' + B.shot(F, depth, c['chat_shot'], lazy=False, phone_hide=bool(c.get('chat_shot_phone_link')))
     elif c.get('hero') == 'strip':
         hero_right = '<div class="strip">' + ''.join(B.shot(F, depth, k, lazy=False) for k in c['strip'][:2]) + '</div>'
     elif c.get('hero') == 'sharecard':
@@ -744,7 +744,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}.figs li{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8rem}.figs .n{font:800 1.8rem system-ui;color:var(--acc)}.figs .d{font-size:.75rem;color:var(--muted)}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
-@media (max-width:40rem){.agents-scroll{overflow-x:auto;scroll-snap-type:x mandatory;margin:0;padding:0 0 .6rem;scrollbar-width:thin}.agents-scroll:focus-visible{outline:3px solid var(--acc);outline-offset:2px}.agents{display:flex!important;gap:.6rem!important;width:max-content}.agents li{flex:0 0 15rem;scroll-snap-align:start;padding:.8rem .9rem!important}}"""
+@media (max-width:40rem){.agents-scroll{overflow-x:auto;scroll-snap-type:x mandatory;margin:0;padding:0 0 .6rem;scrollbar-width:thin}.agents-scroll:focus-visible{outline:3px solid var(--acc);outline-offset:2px}.agents{display:flex!important;gap:.6rem!important;width:max-content}.agents li{flex:0 0 13rem;scroll-snap-align:start;padding:.8rem .9rem!important}.agents-cue{margin:.2rem 0 .5rem;font-weight:700;color:var(--acc)}}"""
     fb = facts_blocks(F, p, depth)
     agents = ''.join(f'<li><b>{e(h["title"])}</b><span>{md(h["t"])}{B.cite(F, h.get("s"), p)}</span></li>' for h in F['how'])
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
@@ -755,7 +755,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
             + f'<section class="cellbox" id="cell-stop" aria-label="One cell, drawn: a conductor and its agents inside your environment"><span class="env">Your environment</span>'
             f'<div class="cond"><i>C</i><b>The conductor</b><span style="color:var(--muted)">hands out the work and keeps the record</span></div>'
             f'<div class="stopbar"><span>{e(c["stopline"])}</span><span><a class="go" href="#cell-stop">Stop</a><a class="resume" href="#{p}what">Resume</a></span></div>'
-            f'<p class="halted">{e(c["halted"])}</p><div class="agents-scroll" role="region" aria-label="The agents in the cell, side by side" tabindex="0"><ul class="agents">{agents}</ul></div></section>'
+            f'<p class="halted">{e(c["halted"])}</p><p class="agents-cue phone-only" aria-hidden="true">Five agents, side by side: swipe &#8594;</p><div class="agents-scroll" role="region" aria-label="The agents in the cell, side by side" tabindex="0"><ul class="agents">{agents}</ul></div></section>'
             f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p>'
             + f'</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">What a cell is</h2>{fb["what"]}<h2>Who it is for</h2>{fb["for"]}'
@@ -839,8 +839,8 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
 .wthumbs{list-style:none;margin:1rem 0 1.2rem;padding:0;gap:1.4rem;grid-template-columns:1fr}.wt-role{margin:.2rem 0 0;color:var(--acc);font-weight:700}.wt-credit{margin:.1rem 0 0;color:var(--muted)}.wt-hand{margin:.3rem 0 0;border-left:4px solid var(--acc);padding:.2rem .7rem}@media (max-width:40rem){.wthumbs.phone-only{display:grid}}
-.wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none}.wthumbs img{display:block;width:100%;height:220px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid var(--line);margin-bottom:.3rem}
-.wthumbs span{display:block;line-height:1.25}
+.wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}.wthumbs img{display:block;width:100%;height:220px;object-fit:cover;object-position:top;margin:0}
+.wthumbs a > span{display:block;line-height:1.25;padding:.55rem .8rem;font-size:1.05rem}
 .exhibit .shot-phonelink{display:none!important}
 @media (max-width:40rem){.wall{display:none}.shead .btns{justify-content:center}.shead .next-note{text-align:center}}"""
     fb = facts_blocks(F, p, depth)
@@ -852,8 +852,9 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
     shots = (F.get('identity') or {}).get('shots') or []
     thumbs = ''.join(f'<li><a href="{e(x["url"])}"><img src="{B.rel(depth, shots[x["shot"]].get("phone") or shots[x["shot"]]["file"])}" alt="{e(x["name"])}: the live site" loading="lazy" decoding="async"'
                      + (f' style="object-position:50% {x["thumb_y"]}%"' if x.get('thumb_y') is not None else '') + '>'
-                     f'<span>{e(x["name"])} &#8599;</span></a><p class="wt-role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>'
-                     f'<p class="wt-hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p class="wt-credit">{md(x["credit"])}</p></li>'
+                     f'<span>{e(x["name"])} &#8599;</span></a>'
+                     + (f'<p class="wt-role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>' if not x.get('thumb_role_hidden') else B.cite(F, x.get("s"), p))
+                     + f'<p class="wt-hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p class="wt-credit">{md(x["credit"])}</p></li>'
                      for x in c['sites'] if x['shot'] < len(shots))
     thumbs = f'<ul class="wthumbs phone-only" aria-label="The owners\' sites">{thumbs}</ul>'  # round 11: on phones, all three owners at a glance
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))

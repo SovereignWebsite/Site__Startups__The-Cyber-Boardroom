@@ -712,7 +712,8 @@
     "strip_title": "The Cyber Boardroom, on the real site",
     "chat_label": "Athena opens, a director asks",
     "chat_shot": 1,
-    "chat_shot_title": "Athena, on the real site"
+    "chat_shot_title": "Athena, on the real site",
+    "chat_shot_phone_link": true
    }
   },
   {

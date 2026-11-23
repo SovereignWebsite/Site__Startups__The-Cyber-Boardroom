@@ -138,7 +138,10 @@ def shot(F, depth, n=0, cls='shot', lazy=True):
     x = shots[n]
     host = re.sub(r'^https?://', '', x['url']).rstrip('/')
     ld = ' loading="lazy" decoding="async"' if lazy else ''
-    return (f'<figure class="{cls}"><a href="{e(x["url"])}" class="frame" aria-label="{e(x["caption"])}: open the real page">'
+    if x.get('phone_link'):  # round 9: on phones this screenshot gives way to a plain link to the page
+        cls += ' shot-deskonly'
+    link = (f'<p class="shot-phonelink"><a href="{e(x["url"])}">{e(x["caption"])} &#8599;</a></p>' if x.get('phone_link') else '')
+    return (link + f'<figure class="{cls}"><a href="{e(x["url"])}" class="frame" aria-label="{e(x["caption"])}: open the real page">'
             f'<span class="bar" aria-hidden="true"><i></i><i></i><i></i><span>{e(host)}</span></span>'
             + (f'<picture><source media="(max-width: 40rem)" srcset="{rel(depth, x["phone"])}" width="{x["phone_w"]}" height="{x["phone_h"]}">' if x.get('phone') else '')
             + f'<img src="{rel(depth, x["file"])}" width="1200" height="750" alt="Screenshot: {e(x["caption"])}"{ld}>'
@@ -204,7 +207,10 @@ def timeline_list(F, prefix, cls='tl-list'):
         for x in ev:
             gap = 0 if prev is None else min(max(date_num(x['date']) - date_num(prev), 0), 90)
             prev = x['date']
-            items.append(f'<li style="--gap:{gap}"><time datetime="{e(x["date"])}">{e(fmt_date(x["date"]))}</time> '
+            src = F['_src'].get(x['s'][0]) if x.get('s') else None  # the date links to the page it comes from
+            when = e(fmt_date(x["date"]))
+            when = f'<a href="{e(src["url"])}">{when}</a>' if src else when
+            items.append(f'<li style="--gap:{gap}"><time datetime="{e(x["date"])}">{when}</time> '
                          f'<span>{md(x["label"])}{cite(F, x.get("s"), prefix)}</span></li>')
         return (f'<ol class="{cls}">{"".join(items)}</ol>'
                 f'<p class="tl-note">Spaced by the time between dates, up to three months. Drawn for this site from the dates the company publishes.</p>')
@@ -343,7 +349,7 @@ def source_lines(html):
             out.append(m.group(0)); continue
         if not close:
             cls = re.search(r'class="([^"]*)"', attrs)
-            hero = bool(cls and re.search(r'hero|mast|chathead', cls.group(1)))
+            hero = bool(cls and re.search(r'hero|mast|chathead|shead', cls.group(1)))
             ent = {'tag': tag, 'ids': [], 'hero': hero, 'seen_h2': False,
                    'band': bool(cls and re.search(r'(^|\s)band', cls.group(1)))}
             nextbox = bool(cls and re.search(r'(^|\s)next(\s|$)', cls.group(1)))
@@ -415,8 +421,8 @@ a{color:var(--link)}
 .skip{position:absolute;left:-999px;top:0}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.cap-phone{display:none}@media (max-width:40rem){.cap-desk{display:none}.cap-phone{display:inline}}
-.tl-rail{list-style:none;margin:1rem 0 1rem .6rem;padding:0 0 0 1.6rem;border-left:3px solid var(--acc);position:relative}.tl-rail li{position:relative;margin-top:calc(.6rem + var(--gap,0) * .045rem);padding-left:.4rem}.tl-rail li::before{content:'';position:absolute;left:calc(-2.1rem - 1.5px);top:.35rem;width:1rem;height:1rem;border-radius:50%;background:var(--acc);border:3px solid var(--bg,#fff)}.tl-rail time{display:block;font-weight:800}.tl-note{font-size:.9rem;color:var(--muted)}
+.cap-phone{display:none}.shot-phonelink{display:none}@media (max-width:40rem){.cap-desk{display:none}.cap-phone{display:inline}.shot-deskonly{display:none}.shot-phonelink{display:block}}
+.tl-list.tl-rail{list-style:none;margin:1rem 0 1rem .6rem;padding:0 0 0 1.6rem;border-left:3px solid var(--acc);position:relative}.tl-list.tl-rail li{position:relative;margin:calc(8px + var(--gap,0) * 1px) 0 0;padding-left:.4rem}.tl-list.tl-rail li:first-child{margin-top:0}.tl-list.tl-rail li::before{content:'';position:absolute;left:calc(-2.1rem - 1.5px);top:.35rem;width:1rem;height:1rem;border-radius:50%;background:var(--acc);border:3px solid var(--bg,#fff)}.tl-list.tl-rail time{display:block;font-weight:800}.tl-list.tl-rail time a{color:inherit}.tl-note{font-size:.9rem;color:var(--muted)}
 .srcline,main p.srcline{grid-column:1/-1;font:.875rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:inherit;opacity:.9;margin:1.25rem 0 0;padding:0;max-width:none}
 .srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:6px 2px 6px 8px;margin:-6px 0 -6px -2px;text-align:right}
 sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}

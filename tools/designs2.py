@@ -46,7 +46,11 @@ BAND_CSS = """
 .bub{position:relative;max-width:min(36rem,92%);padding:1rem 1.2rem;border-radius:20px;font-size:1.15rem;line-height:1.5}
 .bub b{display:block;font:700 .95rem system-ui,sans-serif;margin-bottom:.3rem}.bub p{margin:0}
 .bub-l{align-self:flex-start;background:#f4f1ee;color:#1d2428;border-bottom-left-radius:4px}
-.bub-r{align-self:flex-end;background:var(--bandacc,#5eead4);color:#06201c;border-bottom-right-radius:4px}"""
+.bub-r{align-self:flex-end;background:var(--bandacc,#5eead4);color:#06201c;border-bottom-right-radius:4px}
+.kset{list-style:none;margin:1.6rem 0;padding:0;display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));text-align:center}
+.kset li{display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.kkey{fill:none;stroke:var(--bandacc,#5eead4);stroke-width:7;stroke-linecap:round;margin-bottom:.4rem}.kkey .kk-hole{fill:var(--bandacc,#5eead4);stroke:none}
+.kset b{font:800 1.3rem var(--headfont,system-ui),system-ui,sans-serif;color:#fff}.kset span{color:#ececea;max-width:20rem}"""
 
 
 def setup(build):
@@ -171,6 +175,9 @@ def band(F, depth, d, p):
         notes = ''.join(f'<p class="bnote">{md(c["t"])}{B.cite(F, c.get("s"), p)}</p>' for c in b.get('cols', []) if c.get('note'))
         flow = f'<ol class="bchat">{bub}</ol>{notes}'
         cols = ''
+    if b.get('merge_figures'):  # round 9: the company's published figures join the band's own numbers, one section
+        b = dict(b, nums=list(b.get('nums', [])) + [{'n': f['value'], 'l': f['label'], 's': f.get('s'),
+                 'when': f.get('when') or 'as published ' + B.fmt_date(f['asof'])} for f in F.get('figures', [])])
     nums = ''.join(f'<div class="bnum"><b>{e(n["n"])}</b><span>{md(n["l"])}{B.cite(F, n.get("s"), p)}</span><small>{e(n.get("when", ""))}</small></div>' for n in b.get('nums', []))
     code = ''
     if b.get('code'):
@@ -186,17 +193,12 @@ def band(F, depth, d, p):
         keys = '<div class="bkeys">' + ''.join(f'<div class="bkey"><svg class="keyico" viewBox="0 0 64 32" width="56" height="28" aria-hidden="true" focusable="false"><circle cx="14" cy="16" r="11" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="14" cy="16" r="3.5" fill="currentColor"/><path d="M25 16 H60 M48 16 V25 M56 16 V23" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg><b>{e(k)}</b><span>{md(v)}</span></div>' for k, v in b['keys']) + '</div>'
         if b.get('keys_s'):
             keys += f'<p class="bnote">{md(b["keys_note"])}{B.cite(F, b.get("keys_s"), p)}</p>'
-    if b.get('keys') and b.get('ring'):  # round 8: the keys drawn on one ring, each labelled with what it opens
-        xs = [110, 300, 490]
-        draw = ''.join(
-            f'<path d="M300 62 Q{(300 + x) / 2:.0f} {95 if x != 300 else 80} {x} 118" class="kr-link"/>'
-            f'<circle cx="{x}" cy="146" r="30" class="kr-head"/><circle cx="{x}" cy="146" r="9" class="kr-hole"/>'
-            f'<path d="M{x} 176 V300 M{x} 250 h22 M{x} 276 h16" class="kr-shaft"/>'
-            f'<text x="{x - 44}" y="152" class="kr-n">{i + 1}</text>' for i, x in enumerate(xs))
-        svg = (f'<svg class="kring" viewBox="0 0 600 310" role="img" aria-label="Three keys on one ring: {", ".join(e(k) for k, _ in b["keys"])}">'
-               f'<circle cx="300" cy="40" r="26" class="kr-ring"/>{draw}</svg>')
-        labels = ''.join(f'<li><b><span class="kr-num">{i + 1}</span> {e(k)}</b><span>{md(v)}</span></li>' for i, (k, v) in enumerate(b['keys']))
-        keys = f'<figure class="kring-fig">{svg}<ol class="kr-list">{labels}</ol></figure>'
+    if b.get('keys') and b.get('ring'):  # round 9: three separate keys side by side, each labelled with what it opens
+        key = ('<svg class="kkey" viewBox="0 0 80 200" width="64" height="160" aria-hidden="true" focusable="false">'
+               '<circle cx="40" cy="40" r="30"/><circle cx="40" cy="40" r="10" class="kk-hole"/>'
+               '<path d="M40 70 V188 M40 140 h24 M40 168 h18"/></svg>')
+        items = ''.join(f'<li>{key}<b>{e(k)}</b><span>{md(v)}</span></li>' for k, v in b['keys'])
+        keys = f'<ul class="kset" aria-label="Three keys">{items}</ul>'
         if b.get('keys_s'):
             keys += f'<p class="bnote">{md(b["keys_note"])}{B.cite(F, b.get("keys_s"), p)}</p>'
     hf = F['brand'].get('headfont')
@@ -669,8 +671,8 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
             f'<h2 id="{p}what">The gap, in plain words</h2>{fb["what"]}'
             f'<h2>Who looks at the gap</h2>{fb["for"]}'
             f'<h2 id="{p}products">What closes it</h2>{fb["products"]}'
-            f'<h2>Measured on its own team</h2>{fb["figures"]}'
-            f'<h2 id="{p}story">Key dates</h2>{fb["timeline"]}'
+            f'{"" if (F.get("band") or {}).get("merge_figures") else "<h2>Measured on its own team</h2>" + fb["figures"]}'
+            f'<h2 id="{p}story">Key dates</h2>{B.timeline_list(F, p, "tl-list tl-rail")}'
             f'{next_step(F, depth)}{fb["sources"]}</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
                 sect_links(p, [('how', 'The four objects'), ('what', 'The gap'), ('products', 'What closes it')]), body)
@@ -732,7 +734,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
             + f'</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">What a cell is</h2>{fb["what"]}<h2>Who it is for</h2>{fb["for"]}'
             f'<h2 id="{p}products">Sizes and offers</h2>{fb["products"]}{fb["chart"]}'
-            f'<h2 id="{p}story">How it started</h2>{fb["timeline"]}<h2>Counted</h2>{fb["figures"]}'
+            f'<h2 id="{p}story">How it started</h2>{B.timeline_list(F, p, "tl-list tl-rail")}<h2>Counted</h2>{fb["figures"]}'
             f'{next_step(F, depth)}{fb["sources"]}</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
                 sect_links(p, [('what', 'What a cell is'), ('products', 'Sizes'), ('story', 'Start')]), body)
@@ -817,7 +819,9 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
                   f'<div><h2><a href="{e(x["url"])}" style="color:var(--fg)">{e(x["name"])}</a></h2><p class="role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>'
                   f'<p class="hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p>{md(x["credit"])}</p></div></article>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
-    body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p><div class="btns">{btns}</div></section>'
+    body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p><div class="btns">{btns}</div>'
+            + (f'<p class="next-note">{md(F["next_note"]["t"])}{B.cite(F, F["next_note"].get("s"), p)}</p>' if F.get('next_note') else '')
+            + '</section>'
             f'<div class="wall" id="{p}sites">{"".join(ex)}</div></div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 class="s" id="{p}how">How each one was made</h2>{fb["how"]}'
             f'<h2 class="s" id="{p}what">What Sovereign Website is</h2>{fb["what"]}'

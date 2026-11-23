@@ -422,7 +422,8 @@
     "phone_w": 780,
     "phone_h": 940,
     "phone_taken": "2026-11-23",
-    "taken": "2026-11-23"
+    "taken": "2026-11-23",
+    "phone_link": true
    },
    {
     "file": "img/real/athena.webp",

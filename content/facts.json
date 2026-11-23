@@ -419,16 +419,18 @@
     "url": "https://thecyberboardroom.com/web/home",
     "caption": "The Cyber Boardroom home page, with its welcome and videos",
     "phone": "img/real/home-phone.webp",
-    "phone_w": 720,
-    "phone_h": 470
+    "phone_w": 780,
+    "phone_h": 940,
+    "phone_taken": "2026-11-23"
    },
    {
     "file": "img/real/athena.webp",
     "url": "https://thecyberboardroom.com/web/athena",
     "caption": "Athena, the AI cyber security advisor, on thecyberboardroom.com",
     "phone": "img/real/athena-phone.webp",
-    "phone_w": 760,
-    "phone_h": 470
+    "phone_w": 780,
+    "phone_h": 940,
+    "phone_taken": "2026-11-23"
    }
   ]
  },

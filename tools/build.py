@@ -143,7 +143,7 @@ def shot(F, depth, n=0, cls='shot', lazy=True):
             + (f'<picture><source media="(max-width: 40rem)" srcset="{rel(depth, x["phone"])}" width="{x["phone_w"]}" height="{x["phone_h"]}">' if x.get('phone') else '')
             + f'<img src="{rel(depth, x["file"])}" width="1200" height="750" alt="Screenshot: {e(x["caption"])}"{ld}>'
             + ('</picture>' if x.get('phone') else '') + '</a>'
-            f'<figcaption>{e(x["caption"])}. Screenshot taken {e(fmt_date(F["updated"]))}; '
+            f'<figcaption>{e(x["caption"])}. Screenshot taken {e(fmt_date(F["updated"]))}{(", phone view " + e(fmt_date(x["phone_taken"]))) if x.get("phone_taken") else ""}; '
             f'<a href="{e(x["url"])}">open the real page &#8599;</a></figcaption></figure>')
 
 
@@ -336,7 +336,8 @@ def source_lines(html):
             hero = bool(cls and re.search(r'hero|mast|chathead', cls.group(1)))
             ent = {'tag': tag, 'ids': [], 'hero': hero, 'seen_h2': False,
                    'band': bool(cls and re.search(r'(^|\s)band', cls.group(1)))}
-            if tag in ('section', 'article') and stack and not hero:
+            nextbox = bool(cls and re.search(r'(^|\s)next(\s|$)', cls.group(1)))
+            if (tag in ('section', 'article') or nextbox) and stack and not hero:
                 h = holder()
                 if h is not None and h is stack[-1] and h['ids'] and not any(x['hero'] for x in stack):
                     out.append(line(h['ids'], h['seen_h2'])); h['ids'] = []
@@ -376,10 +377,15 @@ def source_lines(html):
 
 
 def fill_sources(F, html):
+    """Each page numbers its own sources 1, 2, 3 without gaps, in the order of the facts file, and the
+    "Sources:" rows use the same numbers (design.b.rounds, round 5)."""
+    cited = [s for s in F['sources'] if s['id'] in CITED]
+    num = {str(s['id']): str(k + 1) for k, s in enumerate(cited)}
+    html = re.sub(r'<!--C:([^:]*):(\d+)-->', lambda m: f'<!--C:{m.group(1)}:{num.get(m.group(2), m.group(2))}-->', html)
     def one(m):
         prefix, heading = m.group(1), m.group(2)
-        li = ''.join(f'<li id="{prefix}src-{s["id"]}" value="{s["id"]}"><a href="{e(s["url"])}">{e(s["title"])}</a>'
-                     f' <span class="acc">read {e(fmt_date(s["accessed"]))}</span></li>' for s in F['sources'] if s['id'] in CITED)
+        li = ''.join(f'<li id="{prefix}src-{k + 1}" value="{k + 1}"><a href="{e(s["url"])}">{e(s["title"])}</a>'
+                     f' <span class="acc">read {e(fmt_date(s["accessed"]))}</span></li>' for k, s in enumerate(cited))
         return (f'<section class="sources" aria-labelledby="{prefix}h-src"><h2 id="{prefix}h-src">{heading}</h2>'
                 f'<p>Every fact on this page comes from the company\'s own public pages, listed here. Each section ends with the numbers of its sources. '
                 f'Any diagram on this page was drawn for this site from those facts.</p><ol>{li}</ol></section>')
@@ -539,7 +545,7 @@ def head(F, key, depth, title, desc, css):
 <meta name="twitter:image:alt" content="{e(share_alt(F))}">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="{rel(depth, 'favicon.svg')}" type="image/svg+xml">
-<style>{BASE_CSS.replace('/* FAMILY_CSS */', seed_file('family-credit.css'))}{css}</style>
+<style>{BASE_CSS.replace('/* FAMILY_CSS */', seed_file('family-credit.css'))}{css}{DARK_TEXT_CSS}</style>
 </head>
 <body class="d-{key}">
 <a class="skip" href="#main">Skip to content</a>
@@ -607,6 +613,10 @@ def std_links(prefix=''):
 
 
 # ---------------------------------------------------------------- designs
+# Round 5 (design.b.rounds, 23 Nov 2026): in dark mode, secondary text is the body colour at about 90 per cent.
+DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in srgb,var(--fg) 88%,var(--bg))}}'
+
+
 def palette(F, light, dark):
     return (':root{' + light + '}' +
             '@media (prefers-color-scheme:dark){:root{' + dark + '}}')

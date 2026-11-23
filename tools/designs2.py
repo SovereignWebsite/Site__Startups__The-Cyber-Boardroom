@@ -20,11 +20,11 @@ BAND_CSS = """
 .bcol span,.bkey span{color:#d6d6d2}
 .bkey .keyico{display:block;color:var(--bandacc,#5eead4);margin-bottom:.4rem}
 .bnum b{display:block;font:900 clamp(2.6rem,7vw,4.4rem)/1 system-ui,sans-serif;color:var(--bandacc,#5eead4)}
-.bnum span{display:block;color:#e4e4e0;margin-top:.4rem}.bnum small{display:block;color:#a9a9a4;font-size:.78rem;margin-top:.3rem}
+.bnum span{display:block;color:#e4e4e0;margin-top:.4rem}.bnum small{display:block;color:#d0d0cb;font-size:.78rem;margin-top:.3rem}
 .bcode{margin:1.6rem 0 0;max-width:40rem}.bcode pre{background:#000;border:1px solid #333;border-radius:10px;padding:1rem 1.2rem;overflow-x:auto;color:#7ee787;font:.95rem/1.6 ui-monospace,Menlo,monospace;margin:0}
-.bcode figcaption{color:#a9a9a4;font-size:.85rem;margin-top:.4rem}
+.bcode figcaption{color:#d0d0cb;font-size:.85rem;margin-top:.4rem}
 .bquote{margin:1.6rem 0 0;border-left:5px solid var(--bandacc,#5eead4);padding:.4rem 0 .4rem 1.2rem;max-width:46rem}
-.bquote p{font:600 1.3rem/1.45 system-ui,sans-serif;margin:0 0 .4rem}.bquote footer{color:#a9a9a4;font-size:.9rem}
+.bquote p{font:600 1.3rem/1.45 system-ui,sans-serif;margin:0 0 .4rem}.bquote footer{color:#d0d0cb;font-size:.9rem}
 .band-full .people{margin-top:1.4rem;color:#e4e4e0}
 .bnote{color:#c9c9c4;margin-top:1rem}
 """
@@ -559,9 +559,10 @@ def eng_gap(F, depth, d):
     c = d['cfg']
     p = 'g-'
     css = palette_css({'light': {'bg': '#f7f6f2', 'card': '#fff', 'fg': '#1a1917', 'muted': '#4a4845', 'line': '#e2dfd8', 'link': '#1a7f5a', 'acc': '#1a7f5a', 'acc-ink': '#fff'},
-                       'dark': {'bg': '#0d0d0c', 'card': '#161615', 'fg': '#f7f6f2', 'muted': '#b8b5ae', 'line': '#2b2a27', 'link': '#22c55e', 'acc': '#22c55e', 'acc-ink': '#0d0d0c'}}) + COMMON + """
+                       'dark': {'bg': '#1b1b19', 'card': '#252523', 'fg': '#f7f6f2', 'muted': '#b8b5ae', 'line': '#3d3c38', 'link': '#22c55e', 'acc': '#22c55e', 'acc-ink': '#0d0d0c'}}) + COMMON + """
 body{font:1.05rem/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .ghero{background:#0d0d0c;color:#f7f6f2;padding:2.6rem 0 3rem}
+@media (prefers-color-scheme:dark){.ghero,.band-full{border-block:1px solid #3d3c38}}
 .ghero .wrap{display:grid;gap:2rem;align-items:center}
 @media (min-width:58rem){.ghero .wrap{grid-template-columns:1fr 1.1fr}}
 .ghero h1{font:800 clamp(2.4rem,7vw,4.6rem)/1.02 ui-sans-serif,system-ui,sans-serif;margin:0 0 1rem;letter-spacing:-.03em}

@@ -1,4 +1,6 @@
-# Open questions for Dinis Cruz
+# Optional questions for the owner
+
+Nothing here blocks the site: it is live and complete from public sources. What you can do yourself is in `docs/owner.md`.
 
 Things this brochure would like to say but the public pages do not settle. Asked by startups.b on 20 November 2026. Each answer becomes a fact with its source.
 

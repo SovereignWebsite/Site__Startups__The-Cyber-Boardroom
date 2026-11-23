@@ -223,7 +223,7 @@ def timeline_list(F, prefix, cls='tl-list'):
         gaps = [0] + [min(max(date_num(b['date']) - date_num(a['date']), 0), 90) for a, b in zip(ev, ev[1:])]
         k = max(1.0, min(14.0, 320.0 / max(sum(gaps), 1)))  # px per day: short spans spread out, long ones fit (round 17)
         for x, g in zip(ev, gaps):
-            gap = round(g * k); pgap = round(g * min(k * .8, 120.0 / max(sum(gaps), 1)))  # phones: same order, a fixed 120 px budget
+            gap = round(g * k); pgap = round(g * min(k * .8, 60.0 / max(sum(gaps), 1)))  # phones: same order, a fixed 60 px budget
             prev = x['date']
             src = F['_src'].get(x['s'][0]) if x.get('s') else None  # the date links to the page it comes from
             when = e(fmt_date(x["date"]))

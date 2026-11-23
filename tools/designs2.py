@@ -438,7 +438,7 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
         cards = ''.join(f'<li><b>{e(x["n"])}</b><span>{md(x["l"])}{B.cite(F, x.get("s"), p)}</span><small>{e(x["when"])}</small></li>' for x in c['cards'])
         body.append(f'<h2 id="{p}figs">{e(c.get("cards_title", "In its own numbers"))}</h2><ul class="bigfigs">{cards}</ul>')
     if c.get('strip_below'):
-        body.append(f'<h2 id="{p}real">{e(c.get("strip_title", "On the real site"))}</h2>' + B.more_shots(F, depth, c['strip_below'], lead=0))
+        body.append(f'<h2 id="{p}real" class="desk-only">{e(c.get("strip_title", "On the real site"))}</h2>' + B.more_shots(F, depth, c['strip_below'], lead=0))
     body.append(f'<div class="two" id="{p}what"><div><h2>What it is</h2>{fb["what"]}</div><div><h2>Who it is for</h2>{fb["for"]}</div></div>')
     body.append(f'<h2 id="{p}how">How it works</h2>{fb["how"]}')
     body.append(f'<h2 id="{p}products">What it offers</h2>{fb["products"]}')
@@ -719,7 +719,8 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
 .chart .bt{height:1rem;background:var(--line);border-radius:4px;overflow:hidden}.chart .bb{display:block;height:100%;background:var(--acc)}.chart .bv{text-align:right;font-weight:700}
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}.figs li{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8rem}.figs .n{font:800 1.8rem system-ui;color:var(--acc)}.figs .d{font-size:.75rem;color:var(--muted)}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
-"""
+
+@media (max-width:40rem){.agents{grid-template-columns:1fr 1fr!important;gap:.5rem!important}.agents li{padding:.6rem .65rem!important;border-radius:12px}.agents li::before{top:.55rem;right:.55rem;width:.55rem;height:.55rem}.agents b{font-size:15px;padding-right:.8rem}.agents span{font-size:15px!important;line-height:1.35}}"""
     fb = facts_blocks(F, p, depth)
     agents = ''.join(f'<li><b>{e(h["title"])}</b><span>{md(h["t"])}{B.cite(F, h.get("s"), p)}</span></li>' for h in F['how'])
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
@@ -811,18 +812,26 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
 .cards{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr))}.cards li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.cards h3{margin:0 0 .3rem;font-family:Georgia,serif}.cards h3 a{color:var(--fg)}.cards p{margin:0;color:color-mix(in srgb,currentColor 90%,transparent)}
 .flow{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));counter-reset:s}.flow li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.flow li::before{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:800;margin-bottom:.5rem}.flow b{display:block}.flow span{color:var(--muted);font-size:.95rem}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
-"""
+
+.wthumbs{list-style:none;margin:1rem 0;padding:0;gap:.6rem;grid-template-columns:repeat(3,1fr)}@media (max-width:40rem){.wthumbs.phone-only{display:grid}}
+.wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none}.wthumbs img{display:block;width:100%;height:120px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid var(--line);margin-bottom:.3rem}
+.wthumbs span{display:block;line-height:1.25}
+.exhibit .shot-phonelink{display:none!important}"""
     fb = facts_blocks(F, p, depth)
     ex = []
     for x in c['sites']:
-        ex.append(f'<article class="exhibit">{B.shot(F, depth, x["shot"], lazy=x["shot"] != c["sites"][0]["shot"], phone_hide=x["shot"] != c["sites"][0]["shot"])}'
+        ex.append(f'<article class="exhibit">{B.shot(F, depth, x["shot"], lazy=x["shot"] != c["sites"][0]["shot"], phone_hide=True)}'
                   f'<div><h2><a href="{e(x["url"])}" style="color:var(--fg)">{e(x["name"])}</a></h2><p class="role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>'
                   f'<p class="hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p>{md(x["credit"])}</p></div></article>')
+    shots = (F.get('identity') or {}).get('shots') or []
+    thumbs = ''.join(f'<li><a href="{e(x["url"])}"><img src="{B.rel(depth, shots[x["shot"]].get("phone") or shots[x["shot"]]["file"])}" alt="{e(x["name"])}: the live site" loading="lazy" decoding="async">'
+                     f'<span>{e(x["name"])} &#8599;</span></a></li>' for x in c['sites'] if x['shot'] < len(shots))
+    thumbs = f'<ul class="wthumbs phone-only" aria-label="The owners\' sites">{thumbs}</ul>'  # round 11: on phones, all three owners at a glance
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
     body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p><div class="btns">{btns}</div>'
             + (f'<p class="next-note">{md(F["next_note"]["t"])}{B.cite(F, F["next_note"].get("s"), p)}</p>' if F.get('next_note') else '')
             + '</section>'
-            f'<div class="wall" id="{p}sites">{"".join(ex)}</div></div>{band(F, depth, d, p)}<div class="wrap">'
+            f'<div class="wall" id="{p}sites">{thumbs}{"".join(ex)}</div></div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 class="s" id="{p}how">How each one was made</h2>{fb["how"]}'
             f'<h2 class="s" id="{p}what">What Sovereign Website is</h2>{fb["what"]}'
             f'<h2 class="s" id="{p}products">The family</h2>{fb["products"]}'

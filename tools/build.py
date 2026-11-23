@@ -228,7 +228,7 @@ def timeline_list(F, prefix, cls='tl-list'):
             items.append(f'<li style="--gap:{gap}"><time datetime="{e(x["date"])}">{when}</time> '
                          f'<span>{md(x["label"])}{cite(F, x.get("s"), prefix)}</span></li>')
         return (f'<ol class="{cls}">{"".join(items)}</ol>'
-                f'<p class="tl-note">Spaced to scale by date, up to three months between dots. Drawn for this site from the dates the company publishes.</p>')
+                f'<p class="tl-note">Drawn to scale by date (gaps over three months shortened), from the dates the company publishes.</p>')
     items = ''.join(f'<li><time datetime="{e(x["date"])}">{e(fmt_date(x["date"]))}</time> '
                     f'<span>{md(x["label"])}{cite(F, x.get("s"), prefix)}</span></li>' for x in ev)
     return f'<ol class="{cls}">{items}</ol>'
@@ -662,13 +662,14 @@ DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in s
     '.sources li{margin:.15rem 0!important;line-height:1.4}.sources ol{margin:.4rem 0}'
     '.bnums{grid-template-columns:1fr 1fr!important;gap:1.2rem .9rem!important}.bnum b{font-size:2.3rem!important}'
     '.kset{grid-template-columns:repeat(3,1fr)!important;gap:.7rem!important}.kkey{width:40px;height:100px}.kset b{font-size:1rem!important}.kset span{font-size:15px}'
-    '.tl-list.tl-rail li{margin-top:calc(6px + var(--gap,0) * .35px)!important}.tl-list.tl-rail li:first-child{margin-top:0!important}'
+    '.tl-list.tl-rail li{margin-top:calc(4px + var(--gap,0) * .15px)!important}.tl-list.tl-rail li:first-child{margin-top:0!important}'
     '.bflow{gap:1.4rem!important}.bzone{padding:.9rem 1rem 1rem!important}.bzone:not(:last-child)::after{bottom:-1.4rem!important;height:1.4rem!important}'
     '.flow,.cards,.figs{gap:.7rem!important}.flow li,.cards li,.figs li,.part,.bcol{padding:.8rem .9rem!important}'
     'main h2{margin-top:1.9rem!important;margin-bottom:.7rem!important}.band-full{padding-top:2rem!important;padding-bottom:2rem!important}'
     '.ihero,.ghero{padding-bottom:1.4rem!important}.bquote{margin:1rem 0!important}.tl-note{margin:.3rem 0 0}'
     '.foot{padding:.6rem 1rem 1.2rem!important;line-height:1.45!important}.foot p{margin:.4rem 0!important}.designs-foot{padding:.5rem 0!important;margin:0 0 .5rem!important}'
-    '.designs-foot ul{gap:.3rem .35rem!important;margin:.2rem 0 .3rem!important}.designs-foot li a{padding:.15rem .6rem!important}.next{margin:1.6rem 0!important;padding:1rem!important}}')
+    '.designs-foot ul{gap:.3rem .35rem!important;margin:.2rem 0 .3rem!important}.designs-foot li a{padding:.15rem .6rem!important}.next{margin:1.6rem 0!important;padding:1rem!important}'
+    'main .wrap > p{margin-top:.55rem;margin-bottom:.55rem}.sources > p{margin:.4rem 0}}')
 
 
 def palette(F, light, dark):

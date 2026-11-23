@@ -54,7 +54,9 @@ BAND_CSS = """
 .hero-chat{margin:0;max-width:34rem}.hero-chat .bub{font-size:1.1rem}
 .bwhen{margin:.2rem 0 1rem;color:#e4e4e0;font-weight:600}.bnum small:empty{display:none}
 .band-full .bnote{color:#ececea}
-.hero-shot-k{margin:1.6rem 0 .6rem;font-weight:800;font-size:1.05rem}.ihero .shot-phonelink a{color:#fff;font-weight:700}"""
+.hero-shot-k{margin:1.6rem 0 .6rem;font-weight:800;font-size:1.05rem}.ihero .shot-phonelink a{color:#fff;font-weight:700}
+.zlane{display:none}
+@media (min-width:56rem) and (prefers-reduced-motion:no-preference){.zlane{display:block;position:relative;height:2.6rem;margin:1.2rem 0 -.6rem}.zpacket{position:absolute;top:0;left:0;width:calc((100% - 6rem) / 3);display:grid;place-items:center;animation:zmove 9s ease-in-out infinite}.zp{grid-area:1/1;padding:.35rem .8rem;border-radius:999px;font:700 .95rem ui-monospace,Menlo,monospace;white-space:nowrap;opacity:0;animation:zshow 9s infinite}.zp1{background:#fff;color:#111;animation-name:zs1}.zp2{background:#1f2a28;color:#5eead4;border:1px solid #5eead4;animation-name:zs2}.zp3{background:var(--bandacc,#5eead4);color:#06201c;animation-name:zs3}@keyframes zmove{0%,18%{left:0}38%,58%{left:calc((100% - 6rem) / 3 + 3rem)}78%,100%{left:calc((100% - 6rem) / 3 * 2 + 6rem)}}@keyframes zs1{0%,26%{opacity:1}30%,100%{opacity:0}}@keyframes zs2{0%,26%{opacity:0}30%,66%{opacity:1}70%,100%{opacity:0}}@keyframes zs3{0%,66%{opacity:0}70%,100%{opacity:1}}}"""
 
 
 def setup(build):
@@ -171,7 +173,12 @@ def band(F, depth, d, p):
         items = ''.join(f'<li class="bzone"><svg class="zico" viewBox="0 0 64 64" width="56" height="56" aria-hidden="true" focusable="false">{icons.get(c.get("icon"), "")}</svg>'
                         f'<b>{e(c["k"])}</b><span>{md(c["t"])}{B.cite(F, c.get("s"), p)}</span>'
                         + (f'<code class="zsample" aria-hidden="true">{e(c["sample"])}</code>' if c.get('sample') else '') + '</li>' for c in b.get('cols', []))
-        flow = f'<ol class="bflow">{items}</ol>' + (f'<p class="bnote">{md(b["flow_note"])}</p>' if b.get('flow_note') else '')
+        samples = [c.get('sample', '') for c in b.get('cols', [])]
+        packet = ''
+        if b.get('flow_anim') and len(samples) >= 3:  # round 15: one file travelling through the zones (illustration, desktop, no motion if reduced)
+            packet = ('<div class="zlane" aria-hidden="true"><div class="zpacket">'
+                      + ''.join(f'<span class="zp zp{i + 1}">{e(t)}</span>' for i, t in enumerate(samples[:3])) + '</div></div>')
+        flow = packet + f'<ol class="bflow">{items}</ol>' + (f'<p class="bnote">{md(b["flow_note"])}</p>' if b.get('flow_note') else '')
         cols = ''
     if b.get('chat'):  # round 8: the columns as a conversation, speech bubbles left and right; a col with "note" sits below
         bub = '' if d.get('cfg', {}).get('hero') == 'chat' else ''.join(f'<li class="bub {"bub-r" if c.get("side") == "right" else "bub-l"}"><b>{e(c["k"])}</b><p>{md(c["t"])}{B.cite(F, c.get("s"), p)}</p></li>'
@@ -667,7 +674,9 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
 .gap .onfill{paint-order:stroke;stroke:#0d3b2a;stroke-width:6px;stroke-linejoin:round}.gap text.onfill{fill:#fff}
-@media (max-width:40rem){.parts{gap:.6rem!important;margin:1.4rem 0!important}.part{padding:.7rem .9rem!important}.part b{margin-bottom:.1rem!important}}"""
+@media (max-width:40rem){.parts{gap:.6rem!important;margin:1.4rem 0!important}.part{padding:.7rem .9rem!important}.part b{margin-bottom:.1rem!important}}
+.gapex{margin:2rem 0 1rem}.gapex .shot{max-width:60rem}
+@media (max-width:40rem){.gapex{margin:1rem 0 .4rem}.gapchart{margin:0 0 1.2rem!important}.gapex h2{margin-top:1rem!important}.ghero{padding-top:1.6rem!important}.gap{margin:0}.bnums{gap:.9rem .8rem!important}}"""
     fb = facts_blocks(F, p, depth)
     how = F['how']
     cols = ['#8a8780', '#f7f6f2', '#1a7f5a', '#ffd166']
@@ -691,6 +700,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
     body = (f'<div class="ghero"><div class="wrap"><div><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p><div class="btns">{btns}</div></div>{svg}</div></div>'
             f'<div class="wrap"><div class="parts" id="{p}how">{parts}</div>'
             + (f'<section class="gapchart" aria-label="Measured">{fb["chart"]}</section>' if fb["chart"] else '')
+            + (f'<section class="gapex" aria-labelledby="{p}ex"><h2 id="{p}ex">{e(c.get("example_title", "The real thing"))}</h2>{B.shot(F, depth, c["example_shot"])}</section>' if c.get('example_shot') is not None else '')
             + f'</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">The gap, in plain words</h2>{fb["what"]}'
             f'<h2>Who looks at the gap</h2>{fb["for"]}'

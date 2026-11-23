@@ -51,7 +51,10 @@ BAND_CSS = """
 .kset li{display:flex;flex-direction:column;align-items:center;gap:.5rem}
 .kkey{fill:none;stroke:var(--bandacc,#5eead4);stroke-width:7;stroke-linecap:round;margin-bottom:.4rem}.kkey .kk-hole{fill:var(--bandacc,#5eead4);stroke:none}
 .kset b{font:800 1.3rem var(--headfont,system-ui),system-ui,sans-serif;color:#fff}.kset span{color:#ececea;max-width:20rem}
-.hero-chat{margin:0;max-width:34rem}.hero-chat .bub{font-size:1.1rem}"""
+.hero-chat{margin:0;max-width:34rem}.hero-chat .bub{font-size:1.1rem}
+.bwhen{margin:.2rem 0 1rem;color:#e4e4e0;font-weight:600}.bnum small:empty{display:none}
+.band-full .bnote{color:#ececea}
+.hero-shot-k{margin:1.6rem 0 .6rem;font-weight:800;font-size:1.05rem}"""
 
 
 def setup(build):
@@ -179,6 +182,7 @@ def band(F, depth, d, p):
     if b.get('merge_figures'):  # round 9: the company's published figures join the band's own numbers, one section
         b = dict(b, nums=list(b.get('nums', [])) + [{'n': f['value'], 'l': f['label'], 's': f.get('s'),
                  'when': f.get('when') or 'as published ' + B.fmt_date(f['asof'])} for f in F.get('figures', [])])
+    head = f'<p class="bwhen">{e(b["when_head"])}</p>' if b.get('when_head') else ''  # round 14: the shared date once, at the head
     nums = ''.join(f'<div class="bnum"><b>{e(n["n"])}</b><span>{md(n["l"])}{B.cite(F, n.get("s"), p)}</span><small>{e(n.get("when", ""))}</small></div>' for n in b.get('nums', []))
     code = ''
     if b.get('code'):
@@ -205,7 +209,7 @@ def band(F, depth, d, p):
     hf = F['brand'].get('headfont')
     st = f' style="--headfont:{e(hf)}"' if hf else ''
     return (f'<section class="band-full"{st} aria-labelledby="{p}band"><div class="wrap"><h2 id="{p}band">{e(b["title"])}</h2>'
-            f'{"<div class=bcols>" + cols + "</div>" if cols else ""}{"<div class=bnums>" + nums + "</div>" if nums else ""}{flow}{keys}{code}{quote}{extra}</div></section>')
+            f'{"<div class=bcols>" + cols + "</div>" if cols else ""}{head}{"<div class=bnums>" + nums + "</div>" if nums else ""}{flow}{keys}{code}{quote}{extra}</div></section>')
 
 
 
@@ -410,6 +414,8 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
         bub = ''.join(f'<li class="bub {"bub-r" if x.get("side") == "right" else "bub-l"}"><b>{e(x["k"])}</b><p>{md(x["t"])}{B.cite(F, x.get("s"), p)}</p></li>'
                       for x in (F.get('band') or {}).get('cols', []) if not x.get('note'))
         hero_right = f'<ol class="bchat hero-chat" aria-label="{e(c.get("chat_label", "A conversation"))}">{bub}</ol>'
+        if c.get('chat_shot') is not None:  # round 14: the real page, right under the conversation
+            hero_right += f'<p class="hero-shot-k">{e(c.get("chat_shot_title", "On the real site"))}</p>' + B.shot(F, depth, c['chat_shot'], lazy=False)
     elif c.get('hero') == 'strip':
         hero_right = '<div class="strip">' + ''.join(B.shot(F, depth, k, lazy=False) for k in c['strip'][:2]) + '</div>'
     elif c.get('hero') == 'sharecard':
@@ -448,7 +454,7 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
         cards = ''.join(f'<li><b>{e(x["n"])}</b><span>{md(x["l"])}{B.cite(F, x.get("s"), p)}</span><small>{e(x["when"])}</small></li>' for x in c['cards'])
         body.append(f'<h2 id="{p}figs">{e(c.get("cards_title", "In its own numbers"))}</h2><ul class="bigfigs">{cards}</ul>')
     if c.get('strip_below'):
-        lead = 0 if c.get('hero') in ('shot', 'strip') else 1  # the hero already shows one screenshot on phones, or none
+        lead = 0 if c.get('hero') in ('shot', 'strip') or c.get('chat_shot') is not None else 1  # the hero already shows one screenshot on phones, or none
         body.append(f'<h2 id="{p}real"{"" if lead else " class=desk-only"}>{e(c.get("strip_title", "On the real site"))}</h2>' + B.more_shots(F, depth, c['strip_below'], lead=lead))
     body.append(f'<div class="two" id="{p}what"><div><h2>What it is</h2>{fb["what"]}</div><div><h2>Who it is for</h2>{fb["for"]}</div></div>')
     body.append(f'<h2 id="{p}how">How it works</h2>{fb["how"]}')
@@ -660,11 +666,14 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
 .chart .bt{height:1rem;background:var(--line);border-radius:4px;overflow:hidden}.chart .bb{display:block;height:100%;background:var(--acc)}.chart .bv{text-align:right;font-weight:700}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
-.gap .onfill{paint-order:stroke;stroke:#0d3b2a;stroke-width:6px;stroke-linejoin:round}.gap text.onfill{fill:#fff}"""
+.gap .onfill{paint-order:stroke;stroke:#0d3b2a;stroke-width:6px;stroke-linejoin:round}.gap text.onfill{fill:#fff}
+@media (max-width:40rem){.parts{gap:.6rem!important;margin:1.4rem 0!important}.part{padding:.7rem .9rem!important}.part b{margin-bottom:.1rem!important}}"""
     fb = facts_blocks(F, p, depth)
     how = F['how']
     cols = ['#8a8780', '#f7f6f2', '#1a7f5a', '#ffd166']
-    parts = ''.join(f'<div class="part" style="--c:{cols[i % 4]}"><b>{e(h["title"])}</b><span>{md(h["t"])}{B.cite(F, h.get("s"), p)}</span></div>' for i, h in enumerate(how))
+    parts = ''.join(f'<div class="part" style="--c:{cols[i % 4]}"><b>{e(h["title"])}</b>'
+                    + (f'<span class="desk-only">{md(h["t"])}</span><span class="phone-only">{md(h["t_short"])}</span>' if h.get('t_short') else f'<span>{md(h["t"])}</span>')
+                    + f'{B.cite(F, h.get("s"), p)}</div>' for i, h in enumerate(how))
     svg = ('<figure class="gap"><svg viewBox="0 0 640 540" role="img" aria-label="The gap: the grant is everything the agent can reach; inside it sits the mandate, what you authorised; '
            'the rest of the grant, hatched in green, is the delta; a barrier is drawn round the mandate.">'
            '<defs><pattern id="g-hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#1a7f5a"/><rect width="5" height="14" fill="#22c55e"/></pattern></defs>'
@@ -735,7 +744,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}.figs li{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8rem}.figs .n{font:800 1.8rem system-ui;color:var(--acc)}.figs .d{font-size:.75rem;color:var(--muted)}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
-@media (max-width:40rem){.agents{grid-template-columns:1fr!important;gap:.5rem!important}.agents li{padding:.7rem .9rem!important}}"""
+@media (max-width:40rem){.agents-scroll{overflow-x:auto;scroll-snap-type:x mandatory;margin:0;padding:0 0 .6rem;scrollbar-width:thin}.agents-scroll:focus-visible{outline:3px solid var(--acc);outline-offset:2px}.agents{display:flex!important;gap:.6rem!important;width:max-content}.agents li{flex:0 0 15rem;scroll-snap-align:start;padding:.8rem .9rem!important}}"""
     fb = facts_blocks(F, p, depth)
     agents = ''.join(f'<li><b>{e(h["title"])}</b><span>{md(h["t"])}{B.cite(F, h.get("s"), p)}</span></li>' for h in F['how'])
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
@@ -746,7 +755,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
             + f'<section class="cellbox" id="cell-stop" aria-label="One cell, drawn: a conductor and its agents inside your environment"><span class="env">Your environment</span>'
             f'<div class="cond"><i>C</i><b>The conductor</b><span style="color:var(--muted)">hands out the work and keeps the record</span></div>'
             f'<div class="stopbar"><span>{e(c["stopline"])}</span><span><a class="go" href="#cell-stop">Stop</a><a class="resume" href="#{p}what">Resume</a></span></div>'
-            f'<p class="halted">{e(c["halted"])}</p><ul class="agents">{agents}</ul></section>'
+            f'<p class="halted">{e(c["halted"])}</p><div class="agents-scroll" role="region" aria-label="The agents in the cell, side by side" tabindex="0"><ul class="agents">{agents}</ul></div></section>'
             f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p>'
             + f'</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 id="{p}what">What a cell is</h2>{fb["what"]}<h2>Who it is for</h2>{fb["for"]}'
@@ -829,11 +838,11 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
 .flow{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));counter-reset:s}.flow li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.flow li::before{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:800;margin-bottom:.5rem}.flow b{display:block}.flow span{color:var(--muted);font-size:.95rem}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
-.wthumbs{list-style:none;margin:1rem 0 1.2rem;padding:0;gap:1.4rem;grid-template-columns:1fr}.wt-role{margin:.2rem 0 0;color:var(--acc);font-weight:700}.wt-credit{margin:.1rem 0 0;color:var(--muted)}@media (max-width:40rem){.wthumbs.phone-only{display:grid}}
+.wthumbs{list-style:none;margin:1rem 0 1.2rem;padding:0;gap:1.4rem;grid-template-columns:1fr}.wt-role{margin:.2rem 0 0;color:var(--acc);font-weight:700}.wt-credit{margin:.1rem 0 0;color:var(--muted)}.wt-hand{margin:.3rem 0 0;border-left:4px solid var(--acc);padding:.2rem .7rem}@media (max-width:40rem){.wthumbs.phone-only{display:grid}}
 .wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none}.wthumbs img{display:block;width:100%;height:220px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid var(--line);margin-bottom:.3rem}
 .wthumbs span{display:block;line-height:1.25}
 .exhibit .shot-phonelink{display:none!important}
-@media (max-width:40rem){.wall .exhibit{display:none}.shead .btns{justify-content:center}.shead .next-note{text-align:center}}"""
+@media (max-width:40rem){.wall{display:none}.shead .btns{justify-content:center}.shead .next-note{text-align:center}}"""
     fb = facts_blocks(F, p, depth)
     ex = []
     for x in c['sites']:
@@ -841,8 +850,10 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
                   f'<div><h2><a href="{e(x["url"])}" style="color:var(--fg)">{e(x["name"])}</a></h2><p class="role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>'
                   f'<p class="hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p>{md(x["credit"])}</p></div></article>')
     shots = (F.get('identity') or {}).get('shots') or []
-    thumbs = ''.join(f'<li><a href="{e(x["url"])}"><img src="{B.rel(depth, shots[x["shot"]].get("phone") or shots[x["shot"]]["file"])}" alt="{e(x["name"])}: the live site" loading="lazy" decoding="async">'
-                     f'<span>{e(x["name"])} &#8599;</span></a><p class="wt-role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p><p class="wt-credit">{md(x["credit"])}</p></li>'
+    thumbs = ''.join(f'<li><a href="{e(x["url"])}"><img src="{B.rel(depth, shots[x["shot"]].get("phone") or shots[x["shot"]]["file"])}" alt="{e(x["name"])}: the live site" loading="lazy" decoding="async"'
+                     + (f' style="object-position:50% {x["thumb_y"]}%"' if x.get('thumb_y') is not None else '') + '>'
+                     f'<span>{e(x["name"])} &#8599;</span></a><p class="wt-role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>'
+                     f'<p class="wt-hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p class="wt-credit">{md(x["credit"])}</p></li>'
                      for x in c['sites'] if x['shot'] < len(shots))
     thumbs = f'<ul class="wthumbs phone-only" aria-label="The owners\' sites">{thumbs}</ul>'  # round 11: on phones, all three owners at a glance
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))

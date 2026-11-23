@@ -707,11 +707,12 @@
     "hero": "chat",
     "shot": 1,
     "strip_below": [
-     1,
      0
     ],
-    "strip_title": "Athena, on the real site",
-    "chat_label": "Athena opens, a director asks"
+    "strip_title": "The Cyber Boardroom, on the real site",
+    "chat_label": "Athena opens, a director asks",
+    "chat_shot": 1,
+    "chat_shot_title": "Athena, on the real site"
    }
   },
   {
@@ -814,7 +815,7 @@
    },
    {
     "k": "What else a director can ask",
-    "t": "The two lines at the top of this page are from Athena's page: her opening line, and one of its five prompt examples. The others: \"Hello, what do you know about me?\", \"What is DORA?\", \"What are my legal responsibilities?\" and \"What is the best way to learn more about cyber security?\" Her answers are written live by the model, so none is quoted here.",
+    "t": "The other prompt examples on Athena's page: \"Hello, what do you know about me?\", \"What is DORA?\", \"What are my legal responsibilities?\" and \"What is the best way to learn more about cyber security?\" Her answers are written live by the model, so none is quoted here.",
     "s": [
      2
     ],

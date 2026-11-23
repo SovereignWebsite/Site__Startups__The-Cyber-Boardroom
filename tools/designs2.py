@@ -178,7 +178,11 @@ def band(F, depth, d, p):
         if b.get('flow_anim') and len(samples) >= 3:  # round 15: one file travelling through the zones (illustration, desktop, no motion if reduced)
             packet = ('<div class="zlane" aria-hidden="true"><div class="zpacket">'
                       + ''.join(f'<span class="zp zp{i + 1}">{e(t)}</span>' for i, t in enumerate(samples[:3])) + '</div></div>')
-        flow = packet + f'<ol class="bflow">{items}</ol>' + (f'<p class="bnote">{md(b["flow_note"])}</p>' if b.get('flow_note') else '')
+        note = ''
+        if b.get('flow_note'):
+            note = (f'<p class="bnote"><span class="desk-only">{md(b["flow_note"])}</span><span class="phone-only">{md(b["flow_note_phone"])}</span></p>'
+                    if b.get('flow_note_phone') else f'<p class="bnote">{md(b["flow_note"])}</p>')
+        flow = packet + f'<ol class="bflow">{items}</ol>' + note
         cols = ''
     if b.get('chat'):  # round 8: the columns as a conversation, speech bubbles left and right; a col with "note" sits below
         bub = '' if d.get('cfg', {}).get('hero') == 'chat' else ''.join(f'<li class="bub {"bub-r" if c.get("side") == "right" else "bub-l"}"><b>{e(c["k"])}</b><p>{md(c["t"])}{B.cite(F, c.get("s"), p)}</p></li>'
@@ -220,6 +224,17 @@ def band(F, depth, d, p):
 
 
 
+
+
+def before_after(F, depth, p):
+    """Round 16: a real before and after from an owner's own commit history."""
+    x = F.get('beforeafter')
+    if not x:
+        return ''
+    fig = ''.join(f'<figure><img src="{B.rel(depth, y["img"])}" width="{y["w"]}" height="{y["h"]}" alt="{e(y["cap"])}" loading="lazy" decoding="async">'
+                  f'<figcaption>{e(y["cap"])}</figcaption></figure>' for y in (x['before'], x['after']))
+    return (f'<section class="ba" aria-labelledby="{p}ba"><h2 id="{p}ba" class="s">{e(x["title"])}</h2><p>{md(x["text"])}{B.cite(F, x.get("s"), p)}</p>'
+            f'<div class="ba-pair">{fig}</div><p><a href="{e(x["link"])}">{e(x["link_label"])} &#8599;</a></p></section>')
 
 
 # ---------------------------------------------------------------- engine: the terminal (sgit)
@@ -849,10 +864,12 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
 .wthumbs{list-style:none;margin:1rem 0 1.2rem;padding:0;gap:1.4rem;grid-template-columns:1fr}.wt-role{margin:.2rem 0 0;color:var(--acc);font-weight:700}.wt-credit{margin:.1rem 0 0;color:var(--muted)}.wt-hand{margin:.3rem 0 0;border-left:4px solid var(--acc);padding:.2rem .7rem}@media (max-width:40rem){.wthumbs.phone-only{display:grid}}
-.wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}.wthumbs img{display:block;width:100%;height:220px;object-fit:cover;object-position:top;margin:0}
+.wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}.wthumbs img{display:block;width:100%;height:190px;object-fit:cover;object-position:top;margin:0}
 .wthumbs a > span{display:block;line-height:1.25;padding:.55rem .8rem;font-size:1.05rem}
 .exhibit .shot-phonelink{display:none!important}
-@media (max-width:40rem){.wall{display:none}.shead .btns{justify-content:center}.shead .next-note{text-align:center}}"""
+@media (max-width:40rem){.wall{display:none}.shead .btns{justify-content:center}.shead .next-note{text-align:center}}
+.ba{margin:2rem 0}.ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:44rem}.ba figure{margin:0}.ba img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line)}.ba figcaption{margin-top:.4rem}
+@media (max-width:40rem){.ba-pair{gap:.6rem}.ba{margin:1.4rem 0}}"""
     fb = facts_blocks(F, p, depth)
     ex = []
     for x in c['sites']:
@@ -871,7 +888,7 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
     body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p>{thumbs}<div class="btns">{btns}</div>'
             + (f'<p class="next-note">{md(F["next_note"]["t"])}{B.cite(F, F["next_note"].get("s"), p)}</p>' if F.get('next_note') else '')
             + '</section>'
-            f'<div class="wall" id="{p}sites">{"".join(ex)}</div></div>{band(F, depth, d, p)}<div class="wrap">'
+            f'<div class="wall" id="{p}sites">{"".join(ex)}</div>{before_after(F, depth, p)}</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 class="s" id="{p}how">How each one was made</h2>{fb["how"]}'
             f'<h2 class="s" id="{p}what">What Sovereign Website is</h2>{fb["what"]}'
             f'<h2 class="s" id="{p}products">The family</h2>{fb["products"]}'

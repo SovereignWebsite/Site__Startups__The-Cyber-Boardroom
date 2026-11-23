@@ -669,7 +669,8 @@ DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in s
     '.ihero,.ghero{padding-bottom:1.4rem!important}.bquote{margin:1rem 0!important}.tl-note{margin:.3rem 0 0}'
     '.foot{padding:.6rem 1rem 1.2rem!important;line-height:1.45!important}.foot p{margin:.4rem 0!important}.designs-foot{padding:.5rem 0!important;margin:0 0 .5rem!important}'
     '.designs-foot ul{gap:.3rem .35rem!important;margin:.2rem 0 .3rem!important}.designs-foot li a{padding:.15rem .6rem!important}.next{margin:1.6rem 0!important;padding:1rem!important}'
-    'main .wrap > p{margin-top:.55rem;margin-bottom:.55rem}.sources > p{margin:.4rem 0}}')
+    'main .wrap > p{margin-top:.55rem;margin-bottom:.55rem}.sources > p{margin:.4rem 0}'
+    '.flow li{display:grid!important;grid-template-columns:2.2rem 1fr;column-gap:.6rem;align-items:start}.flow li::before{grid-row:1 / span 3;margin:0!important}.flow li > *{grid-column:2}}')
 
 
 def palette(F, light, dark):

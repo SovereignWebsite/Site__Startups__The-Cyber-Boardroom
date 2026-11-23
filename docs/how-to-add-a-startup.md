@@ -26,7 +26,7 @@ Copy the facts file of an existing startup site and replace every value. The key
 | `identity` | Logo (`logo_img` or `logo_html`), and `shots`: screenshots of its live site taken with Playwright, each with its page URL, caption and a phone crop |
 | `description`, `headline`, `lede`, `visit` | Meta description, home headline, opening paragraph, the closing line pointing to the company |
 | `quote` | The company's own one-line description, exact, with its source |
-| `what`, `story`, `for_whom` | Paragraphs and bullets, each `{"t": text, "s": [source ids]}` |
+| `what`, `story`, `for_whom` | Paragraphs and bullets, each `{"t": text, "s": [source ids]}`. Source numbers are not shown inside sentences: each section ends with one line, "Sources: 2, 7, 13", linking to the sources list |
 | `how` | Steps of how it works: `{"title", "t", "s"}` |
 | `products` | Parts of the offer: `{"name", "short", "url", "t", "s"}`; `short` labels the diagram |
 | `timeline` | Dated events: `{"date": "YYYY-MM-DD" or "YYYY-MM", "label", "s"}` |
@@ -51,7 +51,7 @@ python3 tools/thumbs.py         # turns thumbnails into .webp
 
 `shots.js` also makes the 1200x630 share card (`site/img/share-card.jpg`) that link previews need. It reports any page wider than the screen and any request to another host; both must be empty. Then look at the screenshots yourself, on a phone width and in dark mode.
 
-The build makes: `index.html` (the home design), `designs/<key>.html` for all five, the seeded `start/`, `agents/`, `admin/`, `designs/index.html` (all designs), `favicon.svg`, `llms.txt`, and `docs/sources.md`. Every page has the site's own navigation at the top with "Choose a design", and one small, muted "Sovereign Website" pop-up at the top right listing the startups and the family (Dinis Cruz, 20 November 2026: the site is about its subject; the family stays in a pop-up menu). No scripts, no cookies, no tracking, no third-party requests.
+The build makes: `index.html` (the home design), `designs/<key>.html` for all five, the seeded `start/`, `agents/`, `admin/`, `designs/index.html` (all designs), `favicon.svg`, `llms.txt`, and `docs/sources.md`. Every page has the site's own navigation at the top, the five designs as links at the start of the footer and on `designs/` (design.b, 23 November 2026: these are Dinis Cruz's own companies, so the chooser stays out of the visitor's header), and one small, muted "Sovereign Website" pop-up at the top right listing the startups and the family (Dinis Cruz, 20 November 2026: the site is about its subject; the family stays in a pop-up menu). No scripts, no cookies, no tracking, no third-party requests.
 
 Use the Factory's CI from `seed/site-template/.github/` (SovereignWebsite__Factory, dev). On every push to dev it builds, checks link previews, links, em dashes, the family strip, leaks, HTML validity and accessibility (axe), then deploys and tags. Confirm a green run and the tag after each push.
 

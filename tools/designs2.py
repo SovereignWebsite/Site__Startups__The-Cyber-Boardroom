@@ -247,6 +247,7 @@ body{font:1.06rem/1.65 "Iowan Old Style",Charter,Georgia,serif}
 .blk{position:relative;margin:2.6rem 0;padding:1.4rem 1.5rem;background:var(--card);border:1px solid var(--line);border-radius:14px}
 .blk h2{font:800 1.4rem/1.2 ui-sans-serif,system-ui,sans-serif;margin:0 0 .8rem}
 .blk .id{font:.75rem ui-monospace,Menlo,monospace;color:var(--muted);margin:0 0 .6rem}
+.blk .srcline{position:relative;z-index:1;background:#0d1117;color:#c9d1d9;display:inline-block;padding:.1rem .6rem;border-radius:6px}
 .blk .ct{position:absolute;inset:0;border-radius:14px;background:#0d1117;color:#3fb950;font:.8rem/1.45 ui-monospace,Menlo,monospace;padding:1.2rem 1.4rem;word-break:break-all;overflow:hidden;pointer-events:none;opacity:0}
 @supports (animation-timeline:view()){
  .blk .ct{opacity:1;animation:open linear both;animation-timeline:view();animation-range:entry 0% entry 90%}

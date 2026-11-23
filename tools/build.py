@@ -65,6 +65,7 @@ def load():
 
 # ---------------------------------------------------------------- helpers
 CITED = set()
+CURRENT = ['']
 
 
 def cite(F, ids, prefix):
@@ -76,8 +77,8 @@ def cite(F, ids, prefix):
         if i not in F['_src']:
             sys.exit(f'unknown source id {i}')
         CITED.add(i)
-        out.append(f'<a href="#{prefix}src-{i}" class="cite" aria-label="source {i}">{i}</a>')
-    return '<sup class="cites">' + ''.join(out) + '</sup>'
+        out.append(f'<!--C:{prefix}:{i}-->')
+    return ''.join(out)
 
 
 def md(text):
@@ -291,15 +292,41 @@ def sources(F, prefix, heading='Sources'):
     return f'<!--SOURCES:{prefix}:{heading}-->'
 
 
+def source_lines(html):
+    """Replace the inline source tokens with one line at the end of each section: "Sources: 2, 7, 13" (design.b, 23 Nov 2026).
+    A section ends at its closing tag, where the next h2 starts, or at the end of main."""
+    out, pending, prefix = [], [], ''
+    def flush():
+        nonlocal pending
+        if not pending:
+            return ''
+        ids = sorted(set(pending), key=int)
+        pending = []
+        links = ', '.join(f'<a href="#{prefix}src-{i}" aria-label="source {i}">{i}</a>' for i in ids)
+        return f'<p class="srcline">Sources: {links}</p>'
+    pos = 0
+    for m in re.finditer(r'<!--C:([^:]*):(\d+)-->|<h2[\s>]|</section>|</article>|</main>', html):
+        out.append(html[pos:m.start()])
+        if m.group(1) is not None or m.group(2):
+            prefix = m.group(1)
+            pending.append(m.group(2))
+        else:
+            out.append(flush())
+            out.append(m.group(0))
+        pos = m.end()
+    out.append(html[pos:])
+    return ''.join(out)
+
+
 def fill_sources(F, html):
     def one(m):
         prefix, heading = m.group(1), m.group(2)
         li = ''.join(f'<li id="{prefix}src-{s["id"]}"><a href="{e(s["url"])}">{e(s["title"])}</a>'
                      f' <span class="acc">read {e(fmt_date(s["accessed"]))}</span></li>' for s in F['sources'] if s['id'] in CITED)
         return (f'<section class="sources" aria-labelledby="{prefix}h-src"><h2 id="{prefix}h-src">{heading}</h2>'
-                f'<p>Every fact on this page comes from the company\'s own public pages, listed here by the numbers in the text. '
+                f'<p>Every fact on this page comes from the company\'s own public pages, listed here. Each section ends with the numbers of its sources. '
                 f'Any diagram on this page was drawn for this site from those facts.</p><ol>{li}</ol></section>')
-    return re.sub(r'<!--SOURCES:([^:]*):([^>]*)-->', one, html)
+    return source_lines(re.sub(r'<!--SOURCES:([^:]*):([^>]*)-->', one, html))
 
 
 # ---------------------------------------------------------------- chrome
@@ -314,6 +341,9 @@ a{color:var(--link)}
 .skip{position:absolute;left:-999px;top:0}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.srcline{font:.82rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted);margin:.6rem 0 1rem;opacity:.95}
+.srcline a{color:inherit;display:inline-block;min-width:24px;text-align:center}
+.band-full .srcline,.ihero .srcline,.ghero .srcline,.chathead .srcline,.seal .srcline{color:#d6d6d2}
 sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}
 sup.cites a{text-decoration:none;display:inline-block;min-width:24px;text-align:center}
 sup.cites a:hover{text-decoration:underline}
@@ -371,6 +401,11 @@ sup.cites a:hover{text-decoration:underline}
 .top .family-credit li a:hover{text-decoration:none;color:var(--fam-strong)}
 .foot{font:.85rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted);max-width:76rem;margin:0 auto;padding:1rem 1rem 2.5rem}
 .foot p{margin:0 0 .4rem}
+.designs-foot{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:.8rem 0;margin:0 0 1rem}
+.designs-foot ul{list-style:none;margin:.3rem 0 .5rem;padding:0;display:flex;flex-wrap:wrap;gap:.3rem .5rem}
+.designs-foot li a{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.25rem .8rem;text-decoration:none;color:var(--fg);min-height:24px}
+.designs-foot li a:hover{border-color:var(--link)}
+.designs-foot li a[aria-current]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .foot a{color:var(--muted)}
 .foot .sws-version{opacity:1;color:var(--fg);border-color:var(--muted)}
 
@@ -469,10 +504,7 @@ def nav(F, key, depth, links):
     return (f'<header class="top"><nav class="top-row" aria-label="{e(F["name"])}">'
             f'<a class="brand" href="{rel(depth, "index.html")}">{logo(F, depth) or e(F["name"])}<small>{e(F["kicker"])}</small></a>'
             f'<ul>{lis}<li><a class="visit" href="{e(F["url"])}">Visit {e(F["url_label"])} &#8599;</a></li></ul>'
-            f'<details class="pick"><summary>Choose a design</summary><div class="pick-cards">'
-            f'<p class="sr">The same facts in five designs.</p><ul>{"".join(cards)}</ul>'
-            f'<p class="all"><a href="{rel(depth, "designs/index.html")}">All designs</a> &middot; the home page uses {e(home_note)}.</p>'
-            f'</div></details>{fam_menu(F)}</nav></header>\n')
+            f'{fam_menu(F)}</nav></header>\n')
 
 
 SEED = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'seed')
@@ -495,9 +527,16 @@ def fam_menu(F):
                          '<li class="family-gap"><a href="/admin/">How this site was made</a></li>' + st)
 
 
+def design_links(F, depth):
+    """The design chooser, in the footer (design.b, 23 Nov 2026): these are Dinis's own companies, not an owner choosing."""
+    li = ''.join(f'<li><a href="{rel(depth, page_path(k, F))}"' + (' aria-current="page"' if k == CURRENT[0] else '') + f'>{e(n)}</a></li>' for k, n, _ in DESIGNS)
+    return (f'<nav class="designs-foot" aria-label="Designs"><p>This page in five designs, the same facts in each:</p><ul>{li}</ul>'
+            f'<p><a href="{rel(depth, "designs/index.html")}">See them all side by side</a></p></nav>')
+
+
 def foot(F, depth):
     built = F.get('updated', '')
-    return (f'<footer class="foot"><p>An independent brochure about {e(F["name"])}, made from its own public pages. '
+    return (f'<footer class="foot">{design_links(F, depth)}<p>An independent brochure about {e(F["name"])}, made from its own public pages. '
             f'For the real thing, go to <a href="{e(F["url"])}">{e(F["url_label"])}</a>.</p>'
             f'<p>Facts last checked {e(fmt_date(built))}. Text licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; '
             f'names and marks belong to their owners. No cookies, no tracking, no scripts. '
@@ -1053,11 +1092,13 @@ def main():
         path = page_path(k, F)
         depth = path.count('/')
         CITED.clear()
+        CURRENT[0] = k
         page = gens[k](F, depth)
         with open(os.path.join(SITE, path), 'w') as f:
             f.write(fill_sources(F, page))
     # the home design is also reachable at its own address: it is a copy
     CITED.clear()
+    CURRENT[0] = F['home']
     page = gens[F['home']](F, 1)
     with open(os.path.join(SITE, 'designs', f'{F["home"]}.html'), 'w') as f:
         f.write(fill_sources(F, page))
@@ -1074,6 +1115,7 @@ def main():
         os.makedirs(os.path.join(SITE, key), exist_ok=True)
         with open(os.path.join(SITE, key, 'index.html'), 'w') as f:
             CITED.clear()
+            CURRENT[0] = key
             f.write(fill_sources(F, seed_page(F, key, label)))
     with open(os.path.join(SITE, 'policy', 'abp.json'), 'w') as f:
         f.write(subst(F, seed_file('policy-abp.json')))

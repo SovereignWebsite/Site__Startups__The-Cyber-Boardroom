@@ -430,9 +430,10 @@
     "caption": "Athena's page on thecyberboardroom.com, with her opening line",
     "phone": "img/real/athena-phone.webp",
     "phone_w": 780,
-    "phone_h": 940,
+    "phone_h": 738,
     "phone_taken": "2026-11-23",
-    "taken": "2026-11-23"
+    "taken": "2026-11-23",
+    "phone_caption": "The five prompt examples on Athena's page, on a phone"
    }
   ]
  },
@@ -794,25 +795,28 @@
   "title": "Athena opens. A director asks.",
   "cols": [
    {
-    "k": "Athena opens",
+    "k": "Athena",
     "t": "\"I'm Athena, your personal AI cyber security advisor. What cyber security topic would you like to explore today?\"",
     "s": [
      2
-    ]
+    ],
+    "side": "left"
    },
    {
-    "k": "A director asks",
-    "t": "\"What questions should I ask my CISO?\" (one of the prompt examples on Athena's page)",
+    "k": "A director",
+    "t": "\"What questions should I ask my CISO?\"",
     "s": [
      2
-    ]
+    ],
+    "side": "right"
    },
    {
     "k": "What else a director can ask",
-    "t": "\"Hello, what do you know about me?\" \"What is DORA?\" \"What are my legal responsibilities?\" \"What is the best way to learn more about cyber security?\" (the other prompt examples on Athena's page). Her answers are written live by the model, so none is quoted here.",
+    "t": "Both lines are from Athena's page: her opening line, and one of its five prompt examples. The others: \"Hello, what do you know about me?\", \"What is DORA?\", \"What are my legal responsibilities?\" and \"What is the best way to learn more about cyber security?\" Her answers are written live by the model, so none is quoted here.",
     "s": [
      2
-    ]
+    ],
+    "note": true
    }
   ],
   "quote": {
@@ -821,6 +825,7 @@
    "s": [
     18
    ]
-  }
+  },
+  "chat": true
  }
 }

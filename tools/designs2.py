@@ -35,7 +35,18 @@ BAND_CSS = """
 .zico{fill:none;stroke:var(--bandacc,#5eead4);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .zsample{margin-top:auto;display:block;padding:.5rem .7rem;border-radius:8px;background:rgba(255,255,255,.08);color:#e4e4e0;font:600 .9rem ui-monospace,Menlo,monospace;overflow-wrap:anywhere}
 .bzone:not(:last-child)::after{content:"";position:absolute;left:50%;bottom:-2.2rem;width:2px;height:2.2rem;background:var(--bandacc,#5eead4)}
-@media (min-width:56rem){.bzone:not(:last-child)::after{left:auto;right:-3rem;top:50%;bottom:auto;width:3rem;height:2px}}"""
+@media (min-width:56rem){.bzone:not(:last-child)::after{left:auto;right:-3rem;top:50%;bottom:auto;width:3rem;height:2px}}
+.kring-fig{margin:1.4rem 0}.kring{display:block;width:100%;max-width:46rem;margin:0 auto;fill:none;stroke:var(--bandacc,#5eead4);stroke-width:5;stroke-linecap:round}
+.kring .kr-link{stroke-width:3;opacity:.8}.kring .kr-hole{fill:currentColor;stroke:none;color:var(--bandacc,#5eead4)}.kring .kr-n{fill:#fff;stroke:none;font:800 34px system-ui,sans-serif}
+.kr-list{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:1.2rem}@media (min-width:48rem){.kr-list{grid-template-columns:repeat(3,1fr);text-align:center}}
+.kr-list b{display:block;font:800 1.2rem var(--headfont,system-ui),system-ui,sans-serif;color:#fff;margin-bottom:.3rem}.kr-list span{color:#e4e4e0}
+.kr-num{display:inline-grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--bandacc,#5eead4);color:#111;font-size:1rem;margin-right:.3rem}
+@media (max-width:40rem){.kring .kr-n{font-size:40px}}
+.bchat{list-style:none;margin:1.6rem 0;padding:0;display:flex;flex-direction:column;gap:1.4rem;max-width:52rem}
+.bub{position:relative;max-width:min(36rem,92%);padding:1rem 1.2rem;border-radius:20px;font-size:1.15rem;line-height:1.5}
+.bub b{display:block;font:700 .95rem system-ui,sans-serif;margin-bottom:.3rem}.bub p{margin:0}
+.bub-l{align-self:flex-start;background:#f4f1ee;color:#1d2428;border-bottom-left-radius:4px}
+.bub-r{align-self:flex-end;background:var(--bandacc,#5eead4);color:#06201c;border-bottom-right-radius:4px}"""
 
 
 def setup(build):
@@ -143,7 +154,7 @@ def band(F, depth, d, p):
         return ''
     cols = ''.join(f'<div class="bcol"><b>{e(c["k"])}</b><span>{md(c["t"])}{B.cite(F, c.get("s"), p)}</span></div>' for c in b.get('cols', []))
     flow = ''
-    if b.get('flow'):  # round 7: the columns drawn as zones joined by arrows (sgit: machine, server, read key)
+    if b.get('flow') and not b.get('chat'):  # round 7: the columns drawn as zones joined by arrows (sgit: machine, server, read key)
         icons = {
             'machine': '<rect x="10" y="10" width="44" height="30" rx="3"/><path d="M4 48 H60 L54 40 H10 Z"/><path d="M20 22 h12 M20 29 h20" />',
             'server': '<rect x="12" y="6" width="40" height="14" rx="3"/><rect x="12" y="25" width="40" height="14" rx="3"/><rect x="12" y="44" width="40" height="12" rx="3"/><path d="M20 13 h4 M20 32 h4 M20 50 h4"/>',
@@ -153,6 +164,12 @@ def band(F, depth, d, p):
                         f'<b>{e(c["k"])}</b><span>{md(c["t"])}{B.cite(F, c.get("s"), p)}</span>'
                         + (f'<code class="zsample" aria-hidden="true">{e(c["sample"])}</code>' if c.get('sample') else '') + '</li>' for c in b.get('cols', []))
         flow = f'<ol class="bflow">{items}</ol>' + (f'<p class="bnote">{md(b["flow_note"])}</p>' if b.get('flow_note') else '')
+        cols = ''
+    if b.get('chat'):  # round 8: the columns as a conversation, speech bubbles left and right; a col with "note" sits below
+        bub = ''.join(f'<li class="bub {"bub-r" if c.get("side") == "right" else "bub-l"}"><b>{e(c["k"])}</b><p>{md(c["t"])}{B.cite(F, c.get("s"), p)}</p></li>'
+                      for c in b.get('cols', []) if not c.get('note'))
+        notes = ''.join(f'<p class="bnote">{md(c["t"])}{B.cite(F, c.get("s"), p)}</p>' for c in b.get('cols', []) if c.get('note'))
+        flow = f'<ol class="bchat">{bub}</ol>{notes}'
         cols = ''
     nums = ''.join(f'<div class="bnum"><b>{e(n["n"])}</b><span>{md(n["l"])}{B.cite(F, n.get("s"), p)}</span><small>{e(n.get("when", ""))}</small></div>' for n in b.get('nums', []))
     code = ''
@@ -167,6 +184,19 @@ def band(F, depth, d, p):
     keys = ''
     if b.get('keys'):
         keys = '<div class="bkeys">' + ''.join(f'<div class="bkey"><svg class="keyico" viewBox="0 0 64 32" width="56" height="28" aria-hidden="true" focusable="false"><circle cx="14" cy="16" r="11" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="14" cy="16" r="3.5" fill="currentColor"/><path d="M25 16 H60 M48 16 V25 M56 16 V23" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg><b>{e(k)}</b><span>{md(v)}</span></div>' for k, v in b['keys']) + '</div>'
+        if b.get('keys_s'):
+            keys += f'<p class="bnote">{md(b["keys_note"])}{B.cite(F, b.get("keys_s"), p)}</p>'
+    if b.get('keys') and b.get('ring'):  # round 8: the keys drawn on one ring, each labelled with what it opens
+        xs = [110, 300, 490]
+        draw = ''.join(
+            f'<path d="M300 62 Q{(300 + x) / 2:.0f} {95 if x != 300 else 80} {x} 118" class="kr-link"/>'
+            f'<circle cx="{x}" cy="146" r="30" class="kr-head"/><circle cx="{x}" cy="146" r="9" class="kr-hole"/>'
+            f'<path d="M{x} 176 V300 M{x} 250 h22 M{x} 276 h16" class="kr-shaft"/>'
+            f'<text x="{x - 44}" y="152" class="kr-n">{i + 1}</text>' for i, x in enumerate(xs))
+        svg = (f'<svg class="kring" viewBox="0 0 600 310" role="img" aria-label="Three keys on one ring: {", ".join(e(k) for k, _ in b["keys"])}">'
+               f'<circle cx="300" cy="40" r="26" class="kr-ring"/>{draw}</svg>')
+        labels = ''.join(f'<li><b><span class="kr-num">{i + 1}</span> {e(k)}</b><span>{md(v)}</span></li>' for i, (k, v) in enumerate(b['keys']))
+        keys = f'<figure class="kring-fig">{svg}<ol class="kr-list">{labels}</ol></figure>'
         if b.get('keys_s'):
             keys += f'<p class="bnote">{md(b["keys_note"])}{B.cite(F, b.get("keys_s"), p)}</p>'
     hf = F['brand'].get('headfont')
@@ -410,7 +440,7 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
     body.append(f'<div class="two" id="{p}what"><div><h2>What it is</h2>{fb["what"]}</div><div><h2>Who it is for</h2>{fb["for"]}</div></div>')
     body.append(f'<h2 id="{p}how">How it works</h2>{fb["how"]}')
     body.append(f'<h2 id="{p}products">What it offers</h2>{fb["products"]}')
-    body.append(f'<h2 id="{p}story">Key dates</h2>{B.svg_timeline(F)}{fb["timeline"]}')
+    body.append(f'<h2 id="{p}story">Key dates</h2>{B.timeline_list(F, p, "tl-list tl-rail")}')
     body.append(next_step(F, depth))
     body.append(fb['sources'] + '</div>')
     return page(F, d['key'], depth, f'{F["name"]}: {d["name"]}', F['description'], css,
@@ -669,7 +699,7 @@ body{font:1.05rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .agents li::before{content:"";position:absolute;right:.9rem;top:.9rem;width:.7rem;height:.7rem;border-radius:50%;background:#2fb36b;animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:.25}}
 .agents b{display:block}.agents span{color:var(--muted);font-size:.93rem}
-.stopbar{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;justify-content:space-between;margin-top:1.4rem;border:2px solid var(--acc);border-radius:14px;padding:.7rem 1rem;background:var(--card)}
+.stopbar{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;justify-content:space-between;margin:1.2rem 0;border:2px solid var(--acc);border-radius:14px;padding:.7rem 1rem;background:var(--card)}
 .stopbar a{background:#c81e4a;color:#fff;font-weight:800;border-radius:999px;padding:.4rem 1.1rem;text-decoration:none}
 .stopbar .resume{display:none;background:var(--fg);color:var(--bg)}
 .halted{display:none;font-weight:700;color:#c81e4a}
@@ -694,8 +724,8 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
     body = (f'<div class="wrap"><section class="chero"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p><div class="btns">{btns}</div></section>'
             f'<section class="cellbox" id="cell-stop" aria-label="One cell, drawn: a conductor and its agents inside your environment"><span class="env">Your environment</span>'
             f'<div class="cond"><i>C</i><b>The conductor</b><span style="color:var(--muted)">hands out the work and keeps the record</span></div>'
-            f'<ul class="agents">{agents}</ul><p class="halted">{e(c["halted"])}</p>'
-            f'<div class="stopbar"><span>{e(c["stopline"])}</span><span><a class="go" href="#cell-stop">Stop</a><a class="resume" href="#{p}what">Resume</a></span></div></section>'
+            f'<div class="stopbar"><span>{e(c["stopline"])}</span><span><a class="go" href="#cell-stop">Stop</a><a class="resume" href="#{p}what">Resume</a></span></div>'
+            f'<p class="halted">{e(c["halted"])}</p><ul class="agents">{agents}</ul></section>'
             f'<p style="font-size:.85rem;color:var(--muted)">{e(c["caption"])}</p>'
             + (f'<section class="realshot" aria-labelledby="{p}real"><h2 id="{p}real">{e(c.get("shot_title", "The real thing"))}</h2>'
                f'<div class="realshot-in strip">{"".join(B.shot(F, depth, k) for k in (c["shot"] if isinstance(c["shot"], list) else [c["shot"]]))}</div></section>' if c.get('shot') is not None else '')

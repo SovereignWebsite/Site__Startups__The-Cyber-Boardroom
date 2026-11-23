@@ -143,7 +143,7 @@ def shot(F, depth, n=0, cls='shot', lazy=True):
             + (f'<picture><source media="(max-width: 40rem)" srcset="{rel(depth, x["phone"])}" width="{x["phone_w"]}" height="{x["phone_h"]}">' if x.get('phone') else '')
             + f'<img src="{rel(depth, x["file"])}" width="1200" height="750" alt="Screenshot: {e(x["caption"])}"{ld}>'
             + ('</picture>' if x.get('phone') else '') + '</a>'
-            f'<figcaption>{e(x["caption"])}. {("<span class=cap-desk>Desktop screenshot taken " + e(fmt_date(x.get("taken", F["updated"]))) + "</span><span class=cap-phone>Phone screenshot taken " + e(fmt_date(x["phone_taken"])) + "</span>") if x.get("phone_taken") else "Screenshot taken " + e(fmt_date(x.get("taken", F["updated"])))}; '
+            f'<figcaption>{(("<span class=cap-desk>" + e(x["caption"]) + ". </span><span class=cap-phone>" + e(x["phone_caption"]) + ". </span>") if x.get("phone_caption") else e(x["caption"]) + ". ")}{("<span class=cap-desk>Desktop screenshot taken " + e(fmt_date(x.get("taken", F["updated"]))) + "</span><span class=cap-phone>Phone screenshot taken " + e(fmt_date(x["phone_taken"])) + "</span>") if x.get("phone_taken") else "Screenshot taken " + e(fmt_date(x.get("taken", F["updated"])))}; '
             f'<a href="{e(x["url"])}">open the real page &#8599;</a></figcaption></figure>')
 
 
@@ -199,6 +199,15 @@ def svg_timeline(F, cls='tl-svg'):
 
 def timeline_list(F, prefix, cls='tl-list'):
     ev = sorted(F.get('timeline', []), key=lambda x: x['date'])
+    if 'tl-rail' in cls:  # round 8: a drawn rail, each event spaced by its real gap from the one before (capped)
+        prev, items = None, []
+        for x in ev:
+            gap = 0 if prev is None else min(max(date_num(x['date']) - date_num(prev), 0), 90)
+            prev = x['date']
+            items.append(f'<li style="--gap:{gap}"><time datetime="{e(x["date"])}">{e(fmt_date(x["date"]))}</time> '
+                         f'<span>{md(x["label"])}{cite(F, x.get("s"), prefix)}</span></li>')
+        return (f'<ol class="{cls}">{"".join(items)}</ol>'
+                f'<p class="tl-note">Spaced by the time between dates, up to three months. Drawn for this site from the dates the company publishes.</p>')
     items = ''.join(f'<li><time datetime="{e(x["date"])}">{e(fmt_date(x["date"]))}</time> '
                     f'<span>{md(x["label"])}{cite(F, x.get("s"), prefix)}</span></li>' for x in ev)
     return f'<ol class="{cls}">{items}</ol>'
@@ -407,8 +416,9 @@ a{color:var(--link)}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .cap-phone{display:none}@media (max-width:40rem){.cap-desk{display:none}.cap-phone{display:inline}}
+.tl-rail{list-style:none;margin:1rem 0 1rem .6rem;padding:0 0 0 1.6rem;border-left:3px solid var(--acc);position:relative}.tl-rail li{position:relative;margin-top:calc(.6rem + var(--gap,0) * .045rem);padding-left:.4rem}.tl-rail li::before{content:'';position:absolute;left:calc(-2.1rem - 1.5px);top:.35rem;width:1rem;height:1rem;border-radius:50%;background:var(--acc);border:3px solid var(--bg,#fff)}.tl-rail time{display:block;font-weight:800}.tl-note{font-size:.9rem;color:var(--muted)}
 .srcline,main p.srcline{grid-column:1/-1;font:.875rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:inherit;opacity:.9;margin:1.25rem 0 0;padding:0;max-width:none}
-.srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:6px 8px;margin:-6px -4px;text-align:center}
+.srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:6px 2px 6px 8px;margin:-6px 0 -6px -2px;text-align:right}
 sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}
 sup.cites a{text-decoration:none;display:inline-block;min-width:24px;text-align:center}
 sup.cites a:hover{text-decoration:underline}
@@ -623,7 +633,7 @@ DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in s
     'main figcaption,main figcaption *,main small,main time,main label,.figs .d,.bnum small,.bnum span,.cards p,.flow span,.part span,'
     '.next-k,.tl-list span,.chart li,.sources ol,.sources p,.sources .acc,.figs li span,.cond span,.cellbox li span,.cellbox .env,'
     '.kick,.by,.pq footer,.bquote footer,.box h2,.sess-h span,.srv,.srv b,.blk p.id,.m .who,.win p,.prompts a,.acard-k,.acard-c,'
-    '.chips li,.stamp,.agenda b,.sig,.offer .tag,.ex-id,.sheet span,.formf b,main p[style*="font-size"]{font-size:15px!important}'
+    '.chips li,.stamp,.agenda b,.sig,.offer .tag,.ex-id,.sheet span,.formf b,.tl-note,main p[style*="font-size"]{font-size:15px!important}'
     '.gap text{font-size:27px!important}.gap .small{font-size:26px!important}'
     # Round 7 (design.b): the footer and the family menu too, kept quiet by colour and weight, not size.
     '.foot,.foot p,.foot a,.designs-foot li a,.family-credit,.family-credit .family-head,.family-credit li a,.foot .sws-version{font-size:15px!important}}')

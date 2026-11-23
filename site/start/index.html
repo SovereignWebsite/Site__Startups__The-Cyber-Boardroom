@@ -36,8 +36,9 @@ a{color:var(--link)}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .cap-phone{display:none}@media (max-width:40rem){.cap-desk{display:none}.cap-phone{display:inline}}
+.tl-rail{list-style:none;margin:1rem 0 1rem .6rem;padding:0 0 0 1.6rem;border-left:3px solid var(--acc);position:relative}.tl-rail li{position:relative;margin-top:calc(.6rem + var(--gap,0) * .045rem);padding-left:.4rem}.tl-rail li::before{content:'';position:absolute;left:calc(-2.1rem - 1.5px);top:.35rem;width:1rem;height:1rem;border-radius:50%;background:var(--acc);border:3px solid var(--bg,#fff)}.tl-rail time{display:block;font-weight:800}.tl-note{font-size:.9rem;color:var(--muted)}
 .srcline,main p.srcline{grid-column:1/-1;font:.875rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:inherit;opacity:.9;margin:1.25rem 0 0;padding:0;max-width:none}
-.srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:6px 8px;margin:-6px -4px;text-align:center}
+.srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:6px 2px 6px 8px;margin:-6px 0 -6px -2px;text-align:right}
 sup.cites{font-size:.68em;line-height:0;margin-left:.35em;white-space:nowrap}
 sup.cites a{text-decoration:none;display:inline-block;min-width:24px;text-align:center}
 sup.cites a:hover{text-decoration:underline}
@@ -154,7 +155,7 @@ h2{font-size:1.3rem;margin:2rem 0 .6rem}
 li{margin:.35rem 0}
 code{font:.92em ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:.05rem .3rem}
 pre,blockquote{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;white-space:pre-wrap;overflow-wrap:anywhere}
-@media (prefers-color-scheme:dark){:root{--muted:color-mix(in srgb,var(--fg) 88%,var(--bg))}}@media (max-width:40rem){main p.srcline,.srcline{font-size:15px!important}.srcline a{min-width:24px;min-height:24px}main figcaption,main figcaption *,main small,main time,main label,.figs .d,.bnum small,.bnum span,.cards p,.flow span,.part span,.next-k,.tl-list span,.chart li,.sources ol,.sources p,.sources .acc,.figs li span,.cond span,.cellbox li span,.cellbox .env,.kick,.by,.pq footer,.bquote footer,.box h2,.sess-h span,.srv,.srv b,.blk p.id,.m .who,.win p,.prompts a,.acard-k,.acard-c,.chips li,.stamp,.agenda b,.sig,.offer .tag,.ex-id,.sheet span,.formf b,main p[style*="font-size"]{font-size:15px!important}.gap text{font-size:27px!important}.gap .small{font-size:26px!important}.foot,.foot p,.foot a,.designs-foot li a,.family-credit,.family-credit .family-head,.family-credit li a,.foot .sws-version{font-size:15px!important}}</style>
+@media (prefers-color-scheme:dark){:root{--muted:color-mix(in srgb,var(--fg) 88%,var(--bg))}}@media (max-width:40rem){main p.srcline,.srcline{font-size:15px!important}.srcline a{min-width:24px;min-height:24px}main figcaption,main figcaption *,main small,main time,main label,.figs .d,.bnum small,.bnum span,.cards p,.flow span,.part span,.next-k,.tl-list span,.chart li,.sources ol,.sources p,.sources .acc,.figs li span,.cond span,.cellbox li span,.cellbox .env,.kick,.by,.pq footer,.bquote footer,.box h2,.sess-h span,.srv,.srv b,.blk p.id,.m .who,.win p,.prompts a,.acard-k,.acard-c,.chips li,.stamp,.agenda b,.sig,.offer .tag,.ex-id,.sheet span,.formf b,.tl-note,main p[style*="font-size"]{font-size:15px!important}.gap text{font-size:27px!important}.gap .small{font-size:26px!important}.foot,.foot p,.foot a,.designs-foot li a,.family-credit,.family-credit .family-head,.family-credit li a,.foot .sws-version{font-size:15px!important}}</style>
 </head>
 <body class="d-start">
 <a class="skip" href="#main">Skip to content</a>

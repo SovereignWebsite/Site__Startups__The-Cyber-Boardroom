@@ -865,7 +865,7 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
 
 .wthumbs{list-style:none;margin:1rem 0 1.2rem;padding:0;gap:1.4rem;grid-template-columns:1fr}.wt-role{margin:.2rem 0 0;color:var(--acc);font-weight:700}.wt-credit{margin:.1rem 0 0;color:var(--muted)}.wt-hand{margin:.3rem 0 0;border-left:4px solid var(--acc);padding:.2rem .7rem}@media (max-width:40rem){.wthumbs.phone-only{display:grid}}
 .wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}.wthumbs img{display:block;width:100%;height:190px;object-fit:cover;object-position:top;margin:0}
-.wthumbs a > span{display:block;line-height:1.25;padding:.55rem .8rem;font-size:1.05rem}
+.wthumbs a > span{display:block;line-height:1.25;padding:.55rem .8rem 0;font-size:1.05rem}.wthumbs a > span:last-child{padding-bottom:.55rem}.wt-host{display:block;padding:.1rem .8rem .55rem;font-weight:400;font-size:15px;color:var(--muted);overflow-wrap:anywhere}.wt-does{margin:.4rem 0 0}.sr-status{font-weight:700;margin:.6rem 0 0}
 .exhibit .shot-phonelink{display:none!important}
 @media (max-width:40rem){.wall{display:none}.shead .btns{justify-content:center}.shead .next-note{text-align:center}}
 .ba{margin:2rem 0}.ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:44rem}.ba figure{margin:0}.ba img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line)}.ba figcaption{margin-top:.4rem}
@@ -877,17 +877,22 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
                   f'<div><h2><a href="{e(x["url"])}" style="color:var(--fg)">{e(x["name"])}</a></h2><p class="role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>'
                   f'<p class="hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p>{md(x["credit"])}</p></div></article>')
     shots = (F.get('identity') or {}).get('shots') or []
-    thumbs = ''.join(f'<li><a href="{e(x["url"])}"><img src="{B.rel(depth, shots[x["shot"]].get("phone") or shots[x["shot"]]["file"])}" alt="{e(x["name"])}: the live site" loading="lazy" decoding="async"'
-                     + (f' style="object-position:50% {x["thumb_y"]}%"' if x.get('thumb_y') is not None else '') + '>'
-                     f'<span>{e(x["name"])} &#8599;</span></a>'
+    host = lambda u: u.split('//', 1)[-1].rstrip('/')
+    thumbs = ''.join(f'<li><a href="{e(x["url"])}"><img src="{B.rel(depth, x.get("work_img") or shots[x["shot"]].get("phone") or shots[x["shot"]]["file"])}" alt="{e(x.get("work_alt") or x["name"] + ": the live site")}" loading="lazy" decoding="async"'
+                     + (' style="object-position:50% 0"' if x.get('work_img') else f' style="object-position:50% {x["thumb_y"]}%"' if x.get('thumb_y') is not None else '') + '>'
+                     f'<span>{e(x["name"])} &#8599;</span>'
+                     + (f'<small class="wt-host">{e(host(x["url"]))}</small>' if x.get('does') else '') + '</a>'
+                     + (f'<p class="wt-does">{md(x["does"])}</p>' if x.get('does') else '')
                      + (f'<p class="wt-role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p>' if not x.get('thumb_role_hidden') else B.cite(F, x.get("s"), p))
                      + f'<p class="wt-hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p class="wt-credit">{md(x["credit"])}</p></li>'
                      for x in c['sites'] if x['shot'] < len(shots))
     thumbs = f'<ul class="wthumbs phone-only" aria-label="The owners\' sites">{thumbs}</ul>'  # round 11: on phones, all three owners at a glance
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
-    body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p>{thumbs}<div class="btns">{btns}</div>'
+    body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p>'
+            + (f'<p class="sr-status">{md(c["status"]["t"])}{B.cite(F, c["status"].get("s"), p)}</p>' if c.get('status') else '')
+            + f'<div class="btns">{btns}</div>'
             + (f'<p class="next-note">{md(F["next_note"]["t"])}{B.cite(F, F["next_note"].get("s"), p)}</p>' if F.get('next_note') else '')
-            + '</section>'
+            + f'{thumbs}</section>'
             f'<div class="wall" id="{p}sites">{"".join(ex)}</div>{before_after(F, depth, p)}</div>{band(F, depth, d, p)}<div class="wrap">'
             f'<h2 class="s" id="{p}how">How each one was made</h2>{fb["how"]}'
             f'<h2 class="s" id="{p}what">What Sovereign Website is</h2>{fb["what"]}'

@@ -220,13 +220,15 @@ def timeline_list(F, prefix, cls='tl-list'):
     ev = sorted(F.get('timeline', []), key=lambda x: x['date'])
     if 'tl-rail' in cls:  # round 8: a drawn rail, each event spaced by its real gap from the one before (capped)
         prev, items = None, []
-        for x in ev:
-            gap = 0 if prev is None else min(max(date_num(x['date']) - date_num(prev), 0), 90)
+        gaps = [0] + [min(max(date_num(b['date']) - date_num(a['date']), 0), 90) for a, b in zip(ev, ev[1:])]
+        k = max(1.0, min(14.0, 320.0 / max(sum(gaps), 1)))  # px per day: short spans spread out, long ones fit (round 17)
+        for x, g in zip(ev, gaps):
+            gap = round(g * k); pgap = round(g * min(k * .8, 120.0 / max(sum(gaps), 1)))  # phones: same order, a fixed 120 px budget
             prev = x['date']
             src = F['_src'].get(x['s'][0]) if x.get('s') else None  # the date links to the page it comes from
             when = e(fmt_date(x["date"]))
             when = f'<a href="{e(src["url"])}">{when}</a>' if src else when
-            items.append(f'<li style="--gap:{gap}"><time datetime="{e(x["date"])}">{when}</time> '
+            items.append(f'<li style="--gap:{gap}px;--pgap:{pgap}px"><time datetime="{e(x["date"])}">{when}</time> '
                          f'<span>{md(x["label"])}{cite(F, x.get("s"), prefix)}</span></li>')
         return (f'<ol class="{cls}">{"".join(items)}</ol>'
                 f'<p class="tl-note">Drawn to scale by date (gaps over three months shortened), from the dates the company publishes.</p>')
@@ -438,7 +440,7 @@ a{color:var(--link)}
 .skip:focus{left:1rem;top:1rem;background:var(--bg);color:var(--fg);padding:.5rem .8rem;z-index:9}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .cap-phone{display:none}.shot-phonelink{display:none}.phone-only{display:none}.moreshots{margin:1rem 0}.moreshots summary{cursor:pointer;font-weight:700;padding:.6rem 0;min-height:24px}.moreshots .strip{display:grid;gap:1.4rem;margin-top:.6rem}@media (max-width:40rem){.desk-only{display:none!important}.phone-only{display:block}.cap-desk{display:none}.cap-phone{display:inline}.shot-deskonly{display:none}.shot-phonelink{display:block}}
-.tl-list.tl-rail{list-style:none;margin:1rem 0 1rem .6rem;padding:0 0 0 1.6rem;border-left:3px solid var(--acc);position:relative}.tl-list.tl-rail li{position:relative;margin:calc(8px + var(--gap,0) * 1px) 0 0;padding-left:.4rem}.tl-list.tl-rail li:first-child{margin-top:0}.tl-list.tl-rail li::before{content:'';position:absolute;left:calc(-2.1rem - 1.5px);top:.35rem;width:1rem;height:1rem;border-radius:50%;background:var(--acc);border:3px solid var(--bg,#fff)}.tl-list.tl-rail time{display:block;font-weight:800}.tl-list.tl-rail time a{color:inherit}.tl-note{font-size:.9rem;color:var(--muted)}
+.tl-list.tl-rail{list-style:none;margin:1rem 0 1rem .6rem;padding:0 0 0 1.6rem;border-left:3px solid var(--acc);position:relative}.tl-list.tl-rail li{position:relative;margin:calc(8px + var(--gap,0px)) 0 0;padding-left:.4rem}.tl-list.tl-rail li:first-child{margin-top:0}.tl-list.tl-rail li::before{content:'';position:absolute;left:calc(-2.1rem - 1.5px);top:.35rem;width:1rem;height:1rem;border-radius:50%;background:var(--acc);border:3px solid var(--bg,#fff)}.tl-list.tl-rail time{display:block;font-weight:800}.tl-list.tl-rail time a{color:inherit}.tl-note{font-size:.9rem;color:var(--muted)}
 .shot-label{font-weight:800;margin:0 0 .5rem;font-size:1.05rem}
 .srcline,main p.srcline{grid-column:1/-1;font:.875rem/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:inherit;opacity:.9;margin:1.25rem 0 0;padding:0;max-width:none}
 .srcline a{color:inherit;display:inline-block;min-width:24px;min-height:24px;padding:6px 2px 6px 8px;margin:-6px 0 -6px -2px;text-align:right}
@@ -664,7 +666,7 @@ DARK_TEXT_CSS = '@media (prefers-color-scheme:dark){:root{--muted:color-mix(in s
     '.sources li{margin:.15rem 0!important;line-height:1.4}.sources ol{margin:.4rem 0}'
     '.bnums{grid-template-columns:1fr 1fr!important;gap:1.2rem .9rem!important}.bnum b{font-size:2.3rem!important}'
     '.kset{grid-template-columns:repeat(3,1fr)!important;gap:.7rem!important}.kkey{width:40px;height:100px}.kset b{font-size:1rem!important}.kset span{font-size:15px}'
-    '.tl-list.tl-rail li{margin-top:calc(4px + var(--gap,0) * .15px)!important}.tl-list.tl-rail li:first-child{margin-top:0!important}'
+    '.tl-list.tl-rail li{margin-top:calc(4px + var(--pgap,0px))!important}.tl-list.tl-rail li:first-child{margin-top:0!important}'
     '.bflow{gap:1.4rem!important}.bzone{padding:.9rem 1rem 1rem!important}.bzone:not(:last-child)::after{bottom:-1.4rem!important;height:1.4rem!important}'
     '.flow,.cards,.figs{gap:.7rem!important}.flow li,.cards li,.figs li,.part,.bcol{padding:.8rem .9rem!important}'
     'main h2{margin-top:1.9rem!important;margin-bottom:.7rem!important}.band-full{padding-top:2rem!important;padding-bottom:2rem!important}'

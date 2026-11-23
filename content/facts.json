@@ -704,12 +704,14 @@
      1
     ],
     "sub": "\"The Cyber Boardroom's mission is to help you understand your organisation's cyber security agenda, as well as fulfil your duties as a board member.\"",
-    "hero": "shot",
+    "hero": "chat",
     "shot": 1,
     "strip_below": [
+     1,
      0
     ],
-    "strip_title": "Athena, on the real site"
+    "strip_title": "Athena, on the real site",
+    "chat_label": "Athena opens, a director asks"
    }
   },
   {
@@ -792,7 +794,7 @@
   ]
  },
  "band": {
-  "title": "Athena opens. A director asks.",
+  "title": "What else a director can ask",
   "cols": [
    {
     "k": "Athena",
@@ -812,7 +814,7 @@
    },
    {
     "k": "What else a director can ask",
-    "t": "Both lines are from Athena's page: her opening line, and one of its five prompt examples. The others: \"Hello, what do you know about me?\", \"What is DORA?\", \"What are my legal responsibilities?\" and \"What is the best way to learn more about cyber security?\" Her answers are written live by the model, so none is quoted here.",
+    "t": "The two lines at the top of this page are from Athena's page: her opening line, and one of its five prompt examples. The others: \"Hello, what do you know about me?\", \"What is DORA?\", \"What are my legal responsibilities?\" and \"What is the best way to learn more about cyber security?\" Her answers are written live by the model, so none is quoted here.",
     "s": [
      2
     ],

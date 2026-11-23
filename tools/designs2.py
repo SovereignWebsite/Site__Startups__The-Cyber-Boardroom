@@ -50,7 +50,8 @@ BAND_CSS = """
 .kset{list-style:none;margin:1.6rem 0;padding:0;display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));text-align:center}
 .kset li{display:flex;flex-direction:column;align-items:center;gap:.5rem}
 .kkey{fill:none;stroke:var(--bandacc,#5eead4);stroke-width:7;stroke-linecap:round;margin-bottom:.4rem}.kkey .kk-hole{fill:var(--bandacc,#5eead4);stroke:none}
-.kset b{font:800 1.3rem var(--headfont,system-ui),system-ui,sans-serif;color:#fff}.kset span{color:#ececea;max-width:20rem}"""
+.kset b{font:800 1.3rem var(--headfont,system-ui),system-ui,sans-serif;color:#fff}.kset span{color:#ececea;max-width:20rem}
+.hero-chat{margin:0;max-width:34rem}.hero-chat .bub{font-size:1.1rem}"""
 
 
 def setup(build):
@@ -170,10 +171,10 @@ def band(F, depth, d, p):
         flow = f'<ol class="bflow">{items}</ol>' + (f'<p class="bnote">{md(b["flow_note"])}</p>' if b.get('flow_note') else '')
         cols = ''
     if b.get('chat'):  # round 8: the columns as a conversation, speech bubbles left and right; a col with "note" sits below
-        bub = ''.join(f'<li class="bub {"bub-r" if c.get("side") == "right" else "bub-l"}"><b>{e(c["k"])}</b><p>{md(c["t"])}{B.cite(F, c.get("s"), p)}</p></li>'
+        bub = '' if d.get('cfg', {}).get('hero') == 'chat' else ''.join(f'<li class="bub {"bub-r" if c.get("side") == "right" else "bub-l"}"><b>{e(c["k"])}</b><p>{md(c["t"])}{B.cite(F, c.get("s"), p)}</p></li>'
                       for c in b.get('cols', []) if not c.get('note'))
         notes = ''.join(f'<p class="bnote">{md(c["t"])}{B.cite(F, c.get("s"), p)}</p>' for c in b.get('cols', []) if c.get('note'))
-        flow = f'<ol class="bchat">{bub}</ol>{notes}'
+        flow = (f'<ol class="bchat">{bub}</ol>' if bub else '') + notes
         cols = ''
     if b.get('merge_figures'):  # round 9: the company's published figures join the band's own numbers, one section
         b = dict(b, nums=list(b.get('nums', [])) + [{'n': f['value'], 'l': f['label'], 's': f.get('s'),
@@ -397,11 +398,18 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
 .sharecard{{background:linear-gradient(135deg,#0f5a63,#0a3d44);color:#fff;border-radius:18px;padding:2.4rem 2rem;max-width:44rem}}
 .sharecard b{{display:block;font:700 clamp(2rem,6vw,3.4rem)/1.05 system-ui,sans-serif}}
 .sharecard span{{display:block;font-size:1.3rem;margin-top:.6rem;opacity:.92}}
-"""
+
+.ihero .wrap > div > .shot{{background:color-mix(in srgb,var(--heroacc) 14%,var(--herobg));border:1px solid color-mix(in srgb,var(--heroacc) 35%,transparent);border-radius:18px;padding:1rem 1rem .8rem}}
+.ihero .wrap > div > .shot figcaption::before{{content:"On the real site: ";font-weight:700}}
+.ihero p.sub:empty{{display:none}}"""
     fb = facts_blocks(F, p, depth)
     hero_right = ''
     if c.get('hero') == 'shot':
         hero_right = B.shot(F, depth, c.get('shot', 0), lazy=False)
+    elif c.get('hero') == 'chat':  # round 13: the band's conversation, live in the hero
+        bub = ''.join(f'<li class="bub {"bub-r" if x.get("side") == "right" else "bub-l"}"><b>{e(x["k"])}</b><p>{md(x["t"])}{B.cite(F, x.get("s"), p)}</p></li>'
+                      for x in (F.get('band') or {}).get('cols', []) if not x.get('note'))
+        hero_right = f'<ol class="bchat hero-chat" aria-label="{e(c.get("chat_label", "A conversation"))}">{bub}</ol>'
     elif c.get('hero') == 'strip':
         hero_right = '<div class="strip">' + ''.join(B.shot(F, depth, k, lazy=False) for k in c['strip'][:2]) + '</div>'
     elif c.get('hero') == 'sharecard':
@@ -440,7 +448,8 @@ h2{{font:{c.get('h2_font', '800 clamp(1.5rem,3.5vw,2.2rem)/1.15 system-ui,sans-s
         cards = ''.join(f'<li><b>{e(x["n"])}</b><span>{md(x["l"])}{B.cite(F, x.get("s"), p)}</span><small>{e(x["when"])}</small></li>' for x in c['cards'])
         body.append(f'<h2 id="{p}figs">{e(c.get("cards_title", "In its own numbers"))}</h2><ul class="bigfigs">{cards}</ul>')
     if c.get('strip_below'):
-        body.append(f'<h2 id="{p}real" class="desk-only">{e(c.get("strip_title", "On the real site"))}</h2>' + B.more_shots(F, depth, c['strip_below'], lead=0))
+        lead = 0 if c.get('hero') in ('shot', 'strip') else 1  # the hero already shows one screenshot on phones, or none
+        body.append(f'<h2 id="{p}real"{"" if lead else " class=desk-only"}>{e(c.get("strip_title", "On the real site"))}</h2>' + B.more_shots(F, depth, c['strip_below'], lead=lead))
     body.append(f'<div class="two" id="{p}what"><div><h2>What it is</h2>{fb["what"]}</div><div><h2>Who it is for</h2>{fb["for"]}</div></div>')
     body.append(f'<h2 id="{p}how">How it works</h2>{fb["how"]}')
     body.append(f'<h2 id="{p}products">What it offers</h2>{fb["products"]}')
@@ -629,7 +638,7 @@ body{font:1.05rem/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sa
 .gap svg{width:100%;max-width:40rem}
 .gap .reach{fill:#2b2a27;stroke:#8a8780;stroke-width:2}
 .gap .auth{fill:#0d0d0c;stroke:#f7f6f2;stroke-width:3}
-.gap .delta{fill:url(#g-hatch)}.gap .grant{fill:#0d0d0c;stroke:#f7f6f2;stroke-width:4}
+.gap .delta{fill:url(#g-hatch)}.gap .grant{fill:#0d0d0c;stroke:#f7f6f2;stroke-width:4}.gap .pill{fill:#0d0d0c}
 .gap .barrier{stroke:#ffd166;stroke-width:6;stroke-dasharray:960;stroke-dashoffset:960;animation:draw 1.2s .4s ease-out forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 .gap text{font:800 25px ui-sans-serif,system-ui,sans-serif;fill:#f7f6f2}
@@ -651,23 +660,23 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 ui-sans-serif,system-ui,sans-serif;m
 .chart .bt{height:1rem;background:var(--line);border-radius:4px;overflow:hidden}.chart .bb{display:block;height:100%;background:var(--acc)}.chart .bv{text-align:right;font-weight:700}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
-.gap .onfill{paint-order:stroke;stroke:#0d3b2a;stroke-width:6px;stroke-linejoin:round}.gap text.onfill{fill:#fff}
-@media (max-width:40rem){.parts{grid-template-columns:1fr 1fr!important;gap:.6rem!important}.part b{font-size:1.05rem!important}}"""
+.gap .onfill{paint-order:stroke;stroke:#0d3b2a;stroke-width:6px;stroke-linejoin:round}.gap text.onfill{fill:#fff}"""
     fb = facts_blocks(F, p, depth)
     how = F['how']
     cols = ['#8a8780', '#f7f6f2', '#1a7f5a', '#ffd166']
     parts = ''.join(f'<div class="part" style="--c:{cols[i % 4]}"><b>{e(h["title"])}</b><span>{md(h["t"])}{B.cite(F, h.get("s"), p)}</span></div>' for i, h in enumerate(how))
-    svg = ('<figure class="gap"><svg viewBox="0 0 640 440" role="img" aria-label="The gap: the grant is everything the agent can reach; inside it sits the mandate, what you authorised; '
-           'the rest of the grant, in green, is the delta; a barrier is drawn round the mandate.">'
+    svg = ('<figure class="gap"><svg viewBox="0 0 640 540" role="img" aria-label="The gap: the grant is everything the agent can reach; inside it sits the mandate, what you authorised; '
+           'the rest of the grant, hatched in green, is the delta; a barrier is drawn round the mandate.">'
            '<defs><pattern id="g-hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#1a7f5a"/><rect width="5" height="14" fill="#22c55e"/></pattern></defs>'
-           '<rect x="6" y="6" width="628" height="428" rx="30" class="grant"/>'
-           '<path d="M50 26 H590 a22 22 0 0 1 22 22 V392 a22 22 0 0 1 -22 22 H50 a22 22 0 0 1 -22 -22 V48 a22 22 0 0 1 22 -22 Z M70 130 V362 a26 26 0 0 0 26 26 H276 a26 26 0 0 0 26 -26 V156 a26 26 0 0 0 -26 -26 H96 a26 26 0 0 0 -26 26 Z" fill-rule="evenodd" class="delta"/>'
-           '<rect x="82" y="150" width="208" height="222" rx="22" class="auth"/>'
-           '<rect x="70" y="138" width="232" height="246" rx="28" fill="none" class="barrier"/>'
-           '<text x="48" y="64" class="onfill">The grant</text><text x="48" y="94" class="small onfill">everything the agent can reach</text>'
-           '<text x="98" y="200">The mandate</text><text x="104" y="230" class="small">what you</text><text x="104" y="256" class="small">authorised</text>'
-           '<text x="350" y="250">The delta</text><text x="350" y="282" class="small">reach nobody</text><text x="350" y="310" class="small">authorised</text>'
-           '<text x="80" y="412" class="small" style="fill:#ffd166">the barrier, round the mandate</text></svg>'
+           '<rect x="6" y="6" width="628" height="528" rx="30" class="grant"/>'
+           '<text x="34" y="52">The grant</text><text x="34" y="84" class="small">everything the agent can reach</text>'
+           '<path d="M50 108 H590 a22 22 0 0 1 22 22 V452 a22 22 0 0 1 -22 22 H50 a22 22 0 0 1 -22 -22 V130 a22 22 0 0 1 22 -22 Z M70 204 V398 a26 26 0 0 0 26 26 H276 a26 26 0 0 0 26 -26 V204 a26 26 0 0 0 -26 -26 H96 a26 26 0 0 0 -26 26 Z" fill-rule="evenodd" class="delta"/>'
+           '<rect x="82" y="190" width="208" height="222" rx="22" class="auth"/>'
+           '<rect x="70" y="178" width="232" height="246" rx="28" fill="none" class="barrier"/>'
+           '<text x="98" y="240">The mandate</text><text x="104" y="272" class="small">what you</text><text x="104" y="298" class="small">authorised</text>'
+           '<rect x="332" y="244" width="262" height="114" rx="14" class="pill"/>'
+           '<text x="350" y="282">The delta</text><text x="350" y="314" class="small">reach nobody</text><text x="350" y="342" class="small">authorised</text>'
+           '<text x="34" y="512" class="small" style="fill:#ffd166">the barrier, round the mandate</text></svg>'
            '<figcaption style="color:#cfccc4;font-size:.85rem">Drawn for this site from RiskMandate\'s four objects: mandate, grant, delta and barrier.</figcaption></figure>')
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
     body = (f'<div class="ghero"><div class="wrap"><div><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(F["lede"])}</p><div class="btns">{btns}</div></div>{svg}</div></div>'
@@ -726,7 +735,7 @@ h2{font:800 clamp(1.5rem,3.4vw,2.1rem)/1.15 system-ui,sans-serif;margin:2.4rem 0
 .figs{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}.figs li{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8rem}.figs .n{font:800 1.8rem system-ui;color:var(--acc)}.figs .d{font-size:.75rem;color:var(--muted)}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
-@media (max-width:40rem){.agents{grid-template-columns:1fr 1fr!important;gap:.5rem!important}.agents li{padding:.6rem .65rem!important;border-radius:12px}.agents li::before{top:.55rem;right:.55rem;width:.55rem;height:.55rem}.agents b{font-size:15px;padding-right:.8rem}.agents span{font-size:15px!important;line-height:1.35}}"""
+@media (max-width:40rem){.agents{grid-template-columns:1fr!important;gap:.5rem!important}.agents li{padding:.7rem .9rem!important}}"""
     fb = facts_blocks(F, p, depth)
     agents = ''.join(f'<li><b>{e(h["title"])}</b><span>{md(h["t"])}{B.cite(F, h.get("s"), p)}</span></li>' for h in F['how'])
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
@@ -820,10 +829,11 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
 .flow{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));counter-reset:s}.flow li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}.flow li::before{content:counter(s);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:800;margin-bottom:.5rem}.flow b{display:block}.flow span{color:var(--muted);font-size:.95rem}
 .tl-list{padding-left:1.4rem}.tl-list time{font-weight:700;display:block}
 
-.wthumbs{list-style:none;margin:1rem 0 1.2rem;padding:0;gap:.8rem .6rem;grid-template-columns:repeat(2,1fr)}@media (max-width:40rem){.wthumbs.phone-only{display:grid}}
-.wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none}.wthumbs img{display:block;width:100%;height:200px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid var(--line);margin-bottom:.3rem}
+.wthumbs{list-style:none;margin:1rem 0 1.2rem;padding:0;gap:1.4rem;grid-template-columns:1fr}.wt-role{margin:.2rem 0 0;color:var(--acc);font-weight:700}.wt-credit{margin:.1rem 0 0;color:var(--muted)}@media (max-width:40rem){.wthumbs.phone-only{display:grid}}
+.wthumbs a{display:block;color:var(--fg);font-weight:700;font-size:15px;text-decoration:none}.wthumbs img{display:block;width:100%;height:220px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid var(--line);margin-bottom:.3rem}
 .wthumbs span{display:block;line-height:1.25}
-.exhibit .shot-phonelink{display:none!important}"""
+.exhibit .shot-phonelink{display:none!important}
+@media (max-width:40rem){.wall .exhibit{display:none}.shead .btns{justify-content:center}.shead .next-note{text-align:center}}"""
     fb = facts_blocks(F, p, depth)
     ex = []
     for x in c['sites']:
@@ -832,7 +842,8 @@ h2.s,.sources h2{font:700 clamp(1.5rem,3.4vw,2.1rem)/1.15 Georgia,"Iowan Old Sty
                   f'<p class="hand">{md(x["hand"])}{B.cite(F, x.get("hs"), p)}</p><p>{md(x["credit"])}</p></div></article>')
     shots = (F.get('identity') or {}).get('shots') or []
     thumbs = ''.join(f'<li><a href="{e(x["url"])}"><img src="{B.rel(depth, shots[x["shot"]].get("phone") or shots[x["shot"]]["file"])}" alt="{e(x["name"])}: the live site" loading="lazy" decoding="async">'
-                     f'<span>{e(x["name"])} &#8599;</span></a></li>' for x in c['sites'] if x['shot'] < len(shots))
+                     f'<span>{e(x["name"])} &#8599;</span></a><p class="wt-role">{e(x["role"])}{B.cite(F, x.get("s"), p)}</p><p class="wt-credit">{md(x["credit"])}</p></li>'
+                     for x in c['sites'] if x['shot'] < len(shots))
     thumbs = f'<ul class="wthumbs phone-only" aria-label="The owners\' sites">{thumbs}</ul>'  # round 11: on phones, all three owners at a glance
     btns = ''.join(f'<a class="btn{" primary" if i == 0 else ""}" href="{e(x["url"])}">{e(x["label"])} &#8599;</a>' for i, x in enumerate(F.get('next', [])))
     body = (f'<div class="wrap"><section class="shead"><h1>{c["h1"]}</h1>{oneline(F, p, c["h1"])}<p>{md(c["sub"])}</p>{thumbs}<div class="btns">{btns}</div>'

@@ -1,12 +1,13 @@
 # Site__Startups__The-Cyber-Boardroom
 the-cyber-boardroom.startups.sovereignweb.site: A brochure for The Cyber Boardroom, with links to its own site.
 
-How it is built: `content/facts.json` holds every fact with its public source; `python3 tools/build.py` writes the five designs into `site/`; `node tools/shots.js` and `python3 tools/thumbs.py` make the design thumbnails and share card and check phone and desktop, light and dark. For the owner: `docs/owner.md`, what you can do here yourself. See `docs/how-to-add-a-startup.md`, `docs/sources.md` and `docs/questions.md`.
+How it is built: the main pages (`/`, `/board-packs/`, `/about/`, `/history/`, `/athena/`) come from `content/cbr.json` (every fact with its public source) through `python3 tools/cbr_site.py`, run after `python3 tools/build.py`; this site is being built as the replacement for thecyberboardroom.com (Dinis Cruz, 26 Nov 2026: when the domain moves, change `host` in `content/cbr.json` and `site/CNAME`). The five designs under `/designs/`: `content/facts.json` holds every fact with its public source; `python3 tools/build.py` writes the five designs into `site/`; `node tools/shots.js` and `python3 tools/thumbs.py` make the design thumbnails and share card and check phone and desktop, light and dark. For the owner: `docs/owner.md`, what you can do here yourself. See `docs/how-to-add-a-startup.md`, `docs/sources.md` and `docs/questions.md`.
 
 ## For people working here
 
 - **Live site:** https://the-cyber-boardroom.startups.sovereignweb.site/ (its `/version.json` names the commit that is live).
-- **Kept by:** startups.b, whose status, open work and restart note are at https://startups.agents.sovereignweb.site/factory/dinis-cruz/account-b/ (its own repository: https://github.com/SovereignWebsite/Site__Agent__Startups).
+- **Editor:** cl-6.conductor-cbr@CBR.dinis, the CBR conductor on account F, from 26 Nov 2026 at Dinis Cruz's word ("take that brochure and go to town on it"). Its status: https://github.com/SovereignWebsite/Site__Agent__Conductor/tree/dev/site/factory/dinis-cruz/account-f/cbr
+- **Built by:** startups.b (20 to 25 Nov 2026), who keeps the shared brochure kit (`tools/build.py`, `tools/designs2.py`), whose status, open work and restart note are at https://startups.agents.sovereignweb.site/factory/dinis-cruz/account-b/ (its own repository: https://github.com/SovereignWebsite/Site__Agent__Startups).
 - **Owner:** the company the brochure is about; until ownership is handed over, Dinis Cruz. What the owner can do without waiting on anyone: `docs/owner.md`.
 
 ### Build and check
